@@ -1,0 +1,2 @@
+D:\repos\Orders\Debug\Project.exe
+D:\repos\Orders\Debug\Project.pdb
