@@ -4,18 +4,22 @@ using namespace std;
 class Player {
 #include <vector>
 #include "Map.h"
-//#include "Orders.h"
-//#include "Cards.h"
-//#include "Territory.h"
+#include "Map.cpp"
+#include "Orders.h"
+#include "Cards.h"
 
 public:
 	Player();
 	Player(Player const &otherPlayer);
-//	vector<Territory> toDefend();
-//	vector<Territory> toAttack();
-//	void issueOrder(Order newOrder);
+	Player::~Player();
+	Player::getMyTerritories() { return myTerritories; }
+	Player::getMyHand() { return myHand; }
+	Player::getMyOrders() { return myOrders; }
+	vector<Territory> toDefend();
+	vector<Territory> toAttack();
+	void issueOrder();
 private:
-//	vector<Territory> *myTerritories;
-//	Hand *myHand;
-//	OrdersList *myOrders;
+	vector<Territory> *myTerritories;
+	Hand *myHand;
+	OrdersList *myOrders;
 };
