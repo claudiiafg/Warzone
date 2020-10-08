@@ -3,24 +3,26 @@
 //#include "Orders.h"
 //#include "Cards.h"
 #include "Player.h"
-//#include "Map.cpp"
+#include "Map.cpp"
 
 using namespace std;
-
 
 Player::Player() {}
 
 Player::Player(Player const &otherPlayer) {}
 
-//vector<Territory> toDefend() {
-//    vector<Territory> toDefend{new Territory(), new Territory(), new Territory()};
-//    return toDefend;
-//}
+Player::~Player() {}
 
-//vector<Territory> toAttack() {
-//    return vector<Territory> = {new Territory(), new Territory(), new Territory()};
-//}
+vector<Territory> Player::toDefend() {
+    vector<Territory> toDefend{new Territory("terr1", "cont1"), new Territory("terr2", "cont2"), new Territory("terr3", "cont3")};
+    return toDefend;
+}
 
-//void issueOrder(Order newOrder) {
-//    myOrders.add(newOrder);
-//}
+vector<Territory> Player::toAttack() {
+    return vector<Territory> = {new Territory("terr4", "cont4"), new Territory("terr5", "cont5"), new Territory("terr6", "cont6")};
+}
+
+void Player::issueOrder() {
+    Order newOrder = new Order();
+    myOrders.add(newOrder);
+}
