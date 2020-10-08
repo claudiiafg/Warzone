@@ -1,28 +1,26 @@
+#include <vector>
+#include "Map.h"
+//#include "Orders.h"
+//#include "Cards.h"
+#include "Player.h"
+//#include "Map.cpp"
+
 using namespace std;
 
-class Player {
-	#include <vector>
-	#include "Map.h"
-	#include "Orders.h"
-	#include "Cards.h"
-	#include "Player.h"
 
-	Player() {
-		
-	}
+Player::Player() {}
 
-	Player(Player otherPlayer) {
+Player::Player(Player const &otherPlayer) {}
 
-	}
+//vector<Territory> toDefend() {
+//    vector<Territory> toDefend{new Territory(), new Territory(), new Territory()};
+//    return toDefend;
+//}
 
-	vector<Territory> toDefend() {
-		vector<Territory> toDefend{new Territory(), new Territory(), new Territory()};
-		return toDefend;
-	}
+//vector<Territory> toAttack() {
+//    return vector<Territory> = {new Territory(), new Territory(), new Territory()};
+//}
 
-	vector<Territory> toAttack() {
-		return vector<Territory> = {new Territory(), new Territory(), new Territory() };
-	}
-
-	void issueOrder(Order newOrder) {
-		myOrders.add(newOrder); 
+//void issueOrder(Order newOrder) {
+//    myOrders.add(newOrder);
+//}

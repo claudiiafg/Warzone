@@ -9,6 +9,7 @@
 #include <numeric>
 
 #include "MapLoader.h"
+#include "Map.cpp"
 
 using namespace std;
 namespace fs = std::filesystem;
@@ -25,9 +26,9 @@ void MapLoader::loadMaps() {
 
         // check for all files inside each folder of testing directory
         if (entry.is_directory()) {
-            std::cout << "dir:  " << filenameStr << '\n';
+//            std::cout << "dir:  " << filenameStr << '\n';
             for (const auto & entry : fs::directory_iterator(entry.path())) {
-                cout << entry.path() << endl;
+//                cout << entry.path() << endl;
 
                 // check for file with map data and create MapFiles
                 if(isMapType(entry.path())) {
@@ -41,11 +42,12 @@ void MapLoader::loadMaps() {
 
         // check for all files inside testing directory
         else if (entry.is_regular_file()) {
-            std::cout << "file: " << filenameStr << '\n';
+//            cout << "file: " << filenameStr << '\n';
         }
     }
 
-    getMaps();
+//    getMaps();
+    createMaps();
 }
 
 bool MapLoader::isMapType(string path) {
@@ -95,6 +97,10 @@ void MapLoader::getMaps() {
 
 // call Map class and create
 void MapLoader::createMaps() {
+    for (int i = 0; i < maps.size(); i++) {
+        Map* map = new Map(maps[i].name, maps[i].content);
+        cout << *map << endl;
+    }
 
 }
 
