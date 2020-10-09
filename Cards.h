@@ -1,61 +1,69 @@
 /*
  * Cards.h
- *
- *  Created on: Sep 29, 2020
- *      Author: ian
- */
+ *Ian Down 40035062
+ Assignment 1
+ COMP 345 - D
+ 9 October 2020
+ */ 
 
-#ifndef CARDS_H_
-#define CARDS_H_
-
+#ifndef CARDS_H
+#define CARDS_H
+#include <vector>
 #include <iostream>
 using namespace std;
 
 class Card{
 
-public:
+	public:
+	    Card();
+		string getType();
+		void setType(string x);
 
-    Card(){}
-	string getType(){}
-	void setType(string type){}
-
-private:
-string type;
+	private:
+		string type;
 };
 
-class Deck{
-public:
-
-	Deck(){
-	} 
-    
-
-private:
-	static int nextDraw;
-	Card deck[50];
-
-};
 
 class Hand{
 
-public:
+	public:
+		Hand();
+		void display();
+		Card play(string cardType);
+		void add(Card card);
+		void setBombCount(int x);
+		int getBombCount();
+		int getReinCoun();
+		void setReinCount(int x);
+		int getBlockCount();
+		void setBlockCount(int x);
+		int getAirCount();
+		void setAirCount(int x);
+		int getDiplomCount();
+		void setDipCount(int x);
+		vector<Card> getHand();
+		void setHand(vector<Card> cv);
+	
+	private:
+		int bombCounter;
+		int reinforcementCounter;
+		int blockadeCounter;
+		int airliftCounter;
+		int diplomacyCounter;
+		vector<Card> hand;
+};
 
+class Deck{
+	public:
+		Deck();
+		Card draw();
+		vector<Card> getDeck();
+		void setDeck(vector<Card> cv);
+		void add(Card card);
 
-	Hand(int bombCounter, int reinforcementCounter, int blockadeCounter,
-			int airliftCounter, int diplomacyCounter);
-
-	Card hand[];
-
-	void draw(Deck deck);
-	void display();
-
-private:
-	int bombCounter;
-	int reinforcementCounter;
-	int blockadeCounter;
-	int airliftCounter;
-	int diplomacyCounter;
-
+	private:
+		int nextDraw;
+		vector<Card> deck;
 };
 
 #endif /* CARDS_H_ */
