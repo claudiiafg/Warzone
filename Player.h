@@ -1,25 +1,40 @@
-#pragma once
-using namespace std;
+#ifndef PLAYER_H
+#define PLAYER_H
 
-class Player {
 #include <vector>
 #include "Map.h"
-#include "Map.cpp"
 #include "Orders.h"
 #include "Cards.h"
 
+class Player {
+
 public:
+	//Constructors and Destructors
 	Player();
-	Player(Player const &otherPlayer);
-	Player::~Player();
-	Player::getMyTerritories() { return myTerritories; }
-	Player::getMyHand() { return myHand; }
-	Player::getMyOrders() { return myOrders; }
-	vector<Territory> toDefend();
-	vector<Territory> toAttack();
+	Player(const Player& otherPlayer);
+	~Player();
+
+	//Assignment overload
+	Player& operator= (const Player& p);
+
+	//Accessors
+	vector<Territory*> getMyTerritories() { return playerTerritories; }
+	Hand* getMyHand() { return playerHand; }
+	OrdersList* getMyOrders() { return playerOrders; }
+
+	//Methods
+	vector<Territory*> toDefend();
+	vector<Territory*> toAttack();
 	void issueOrder();
+
+	//Stream overload
+	friend ostream& operator << (ostream& out, const Player& p);
+
 private:
-	vector<Territory> *myTerritories;
-	Hand *myHand;
-	OrdersList *myOrders;
+	//Data members
+	vector<Territory*> playerTerritories;
+	Hand *playerHand;
+	OrdersList *playerOrders;
 };
+
+#endif
