@@ -3,26 +3,38 @@
 
 #include <vector>
 #include "Map.h"
-//#include "Orders.h"
-//#include "Cards.h"
+#include "Orders.h"
+#include "Cards.h"
 
 class Player {
 
 public:
+	//Constructors and Destructors
 	Player();
-//	Player(const Player &otherPlayer) : 
-	Player::~Player();
-	Player::getMyTerritories() { return myTerritories; }
-	Player::getMyHand() { return myHand; }
-	Player::getMyOrders() { return myOrders; }
+	Player(const Player& otherPlayer);
+	~Player();
+
+	//Assignment overload
+	Player& operator= (const Player& p);
+
+	//Accessors
+	vector<Territory*> getMyTerritories() { return playerTerritories; }
+	Hand* getMyHand() { return playerHand; }
+	OrdersList* getMyOrders() { return playerOrders; }
+
+	//Methods
 	vector<Territory*> toDefend();
-	vector<Territory> toAttack();
+	vector<Territory*> toAttack();
 	void issueOrder();
+
+	//Stream overload
 	friend ostream& operator << (ostream& out, const Player& p);
+
 private:
-	vector<Territory*> myTerritories;
-	Hand *myHand;
-	OrdersList *myOrders;
+	//Data members
+	vector<Territory*> playerTerritories;
+	Hand *playerHand;
+	OrdersList *playerOrders;
 };
 
 #endif
