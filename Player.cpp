@@ -6,13 +6,17 @@
 
 using namespace std;
 
-Player::Player() {}
+Player::Player() {
+    vector<Territory*> myTerritories;
+    Hand* myHand = new Hand*;
+    OrdersList* myOrders = new OrdersList*;
+}
 
 Player::Player(Player const &otherPlayer) {
     myTerritories = otherPlayer.myTerritories;
     myHand = otherPlayer.myHand;
     myOrders = otherPlayer.myOrders;
-}
+/}
 
 Player::~Player() {
 

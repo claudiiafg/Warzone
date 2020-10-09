@@ -10,17 +10,17 @@ class Player {
 
 public:
 	Player();
-	Player(const Player &otherPlayer) : 
+//	Player(const Player &otherPlayer) : 
 	Player::~Player();
 	Player::getMyTerritories() { return myTerritories; }
 	Player::getMyHand() { return myHand; }
 	Player::getMyOrders() { return myOrders; }
-	vector<Territory> toDefend();
+	vector<Territory*> toDefend();
 	vector<Territory> toAttack();
 	void issueOrder();
 	friend ostream& operator << (ostream& out, const Player& p);
 private:
-	vector<Territory> *myTerritories;
+	vector<Territory*> myTerritories;
 	Hand *myHand;
 	OrdersList *myOrders;
 };
