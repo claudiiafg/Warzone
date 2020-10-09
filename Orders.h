@@ -24,9 +24,13 @@ public:
 	//	playerID = o2.playerID;
 	//}
 
-	bool validate();
+	virtual bool validate() {
+		return false;
+	}
 
-	void execute();
+	virtual void execute() {
+
+	}
 
 
 
@@ -168,16 +172,16 @@ public:
 		return *this;
 	}
 
-	bool validate(int thePlayerID, int theCountryOwner, int theAttCountryOwner) {
+	bool validate() {
 		bool playerOwnsCountry = false;
 		bool validOpponent = false;
 
 		//check if the player owns the country
-		if (thePlayerID == theCountryOwner) {
+		if (this->playerID == this->countryOwner) {
 			playerOwnsCountry = true;
 		}
 		//
-		if (thePlayerID != theAttCountryOwner) {
+		if (this->playerID != this->attCountryOwner) {
 			validOpponent = true;
 		}
 		//needed: assure the 2 countries and ajdacent
@@ -186,10 +190,10 @@ public:
 		return (playerOwnsCountry && validOpponent);
 	}
 
-	void execute(int thePlayerID, int theCountryOwner, int theAttCountryOwner, string attCountryName) {
+	void execute() {
 
-		if (validate(thePlayerID, theCountryOwner, theAttCountryOwner)) {
-			cout << "Player " << thePlayerID << " bombed " << attCountryName << ".\n";
+		if (validate()) {
+			cout << "Player " << this->playerID << " bombed " << this->attCountryName << ".\n";
 		}
 
 	}
@@ -317,7 +321,7 @@ public:
 };
 
 class OrderList {
-	list <Order> orders;
+	list <Order*> orders;
 
 public:
 
@@ -325,42 +329,46 @@ public:
 	}
 
 	void addOrder(Order* x) {
-		//cout << *x << endl;
-		if (typeid(*x) == typeid(Bomb)) {
-			Bomb b = dynamic_cast<Bomb&>(*x);
-
-			//cout << b << endl;
-			//cout << "yesssss" << endl;
-
-			orders.push_back(b);
-		}
-		//cout << (*x) << endl;
-		//cout << orders.size() << endl;
+			orders.push_back(x);
 	}
 
 	void removeOrder(Order* x) {
-		list <Order> ::iterator it;
-		//cout << *x << endl;
+		list <Order*> ::iterator it;
 		for (it = orders.begin(); it != orders.end(); ++it) {
-			if (typeid(*x) == typeid(Bomb)) {
-				cout << "hello" << endl;
-				cout << *it << endl;
-				//Bomb b = dynamic_cast<Bomb&>(*it);
-				//cout << b << endl;
+			if (*it = x) {
+				orders.remove(x);
+				break;
 			}
-			//cout << *it << endl;
-			//if (orders[i] == *x ) {
-			//	cout << "dfsdfsdf" << endl;
-			//}
-			//cout << dynamic_cast<Bomb*>(&orders[i]) << endl;
-			//cout << *x << endl;
 		}
-
-		//orders.remove(*x);
-		//cout << *i << " has been removed." << endl;
 	}
 
+	//string move must be "up" or "down"
+	void moveOrder(Order* x, string move) {
+		list <Order*> ::iterator it;
+		int counter;
+		for (it = orders.begin(); it != orders.end(); ++it) {
+			cout << &orders.begin() << endl;
+			//find location of order
+			//counter += 1;
+			//if (*it = x) {
 
+			//}
+		}
+	}
+
+	void viewOrderList() {
+		list <Order*> ::iterator it;
+		for (it = orders.begin(); it != orders.end(); ++it) {
+				cout << *(*it) << endl;
+		}
+	}
+
+	void executeOrderList() {
+		list <Order*> ::iterator it;
+		for (it = orders.begin(); it != orders.end(); ++it) {
+			(*it)->execute();
+		}
+	}
 
 
 	////copy constructor
@@ -414,5 +422,8 @@ int main()
 	player1Orders.addOrder(bombPtr1);
 	player1Orders.addOrder(bombPtr2);
 	//player1Orders.removeOrder(bombPtr1);
+	//player1Orders.viewOrderList();
+	//player1Orders.executeOrderList();
+	player1Orders.moveOrder(bombPtr1, "up");
 }
 
