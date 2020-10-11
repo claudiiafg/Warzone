@@ -10,15 +10,19 @@ class Territory;
 class Player {
 
 public:
-	//Constructors and Destructors
+	//Constructors
 	Player();
+	Player(vector<Territory*> playerTerritories, Hand* playerHand, OrderList* playerOrders);
 	Player(const Player& otherPlayer);
+
+
+	//Destructor
 	~Player();
 
-    // Forward declaration
+    //Forward declaration
     Territory getTerritory();
 
-	//Assignment overload
+	//Assignment operator overload
 	Player& operator= (const Player& p);
 
 	//Accessors
@@ -26,19 +30,20 @@ public:
 	Hand* getMyHand() { return playerHand; }
 	OrderList* getMyOrders() { return playerOrders; }
 
-	//Methods
+	//Required Methods
 	vector<Territory *> toDefend();
 	vector<Territory *> toAttack();
 	void issueOrder();
 
-	//Stream overload
+	//Stream operator overload
 	friend ostream& operator << (ostream& out, const Player& p);
 
 protected:
+	//Helper data members
     Territory* t;
 
 private:
-	//Data members
+	//Required data members
 	vector<Territory *> playerTerritories;
 	Hand *playerHand;
 	OrderList *playerOrders;

@@ -1,0 +1,9 @@
+# ninja log v5
+13	175	624137525	CMakeFiles/Warzone_Map.dir/MapDriver.cpp.obj	8bff9807b5745d34
+6	986	624137526	CMakeFiles/Warzone_Card.dir/CardDriver.cpp.obj	676624a602da1733
+0	1032	624137526	CMakeFiles/Warzone_MapLoader.dir/MapLoaderDriver.cpp.obj	353f408639dd49e1
+9	1076	624137526	CMakeFiles/Warzone_Card.dir/Cards.cpp.obj	f73b8ada937dfcc6
+1076	1535	624137527	Warzone_Card.exe	29f9ae31b4388510
+16	1957	624137527	CMakeFiles/Warzone_Map.dir/Map.cpp.obj	145cb89ffe845218
+6	1068	624138092	CMakeFiles/Warzone_Player.dir/Player.cpp.obj	d3227aab4dc532d4
+5	652	624138126	Warzone_Player.exe	27eea6851782b448
