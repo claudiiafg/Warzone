@@ -31,8 +31,8 @@ void MapLoader::loadMaps() {
 //                cout << entry.path() << endl;
 
                 // check for file with map data and create MapFiles
-                if(isMapType(entry.path())) {
-                    vector<string> content = getContent(entry.path());
+                if(isMapType(entry.path().filename().string())) { //Needs to be fixed
+                    vector<string> content = getContent(entry.path().filename().string()); //Needs to be fixed
                     string name = entry.path().filename().string();
                     MapFile newFile(name, content);
                     maps.push_back(newFile);

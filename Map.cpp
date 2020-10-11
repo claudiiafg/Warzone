@@ -139,7 +139,7 @@ ostream &operator<<(ostream &os, const Continent &n) {
 
 Territory::Territory(string territoryString, string borderString) {
     armiesNumber = 0;
-    owner = Player();
+    owner = *new Player*();
 
     //seperate strings by spaces
     regex ws_re("\\s+");
@@ -203,11 +203,11 @@ void Territory::setArmiesNumber(int amount) {
     armiesNumber = amount;
 }
 
-Player Territory::getOwner() {
+Player* Territory::getOwner() {
     return owner;
 }
 
-void Territory::setOwner(Player _owner) {
+void Territory::setOwner(Player* _owner) {
     owner = _owner;
 }
 

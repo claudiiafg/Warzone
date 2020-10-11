@@ -30,7 +30,7 @@ public:
 class Territory{
 public:
     //constructor
-    explicit Territory(string territoryString, string borderString);
+    Territory(string territoryString, string borderString);
     Territory(const Territory& otherTerritory);
 
     //attributes
@@ -43,8 +43,8 @@ public:
     bool isAdjacentNode(string _node);
     int getArmies();
     void setArmiesNumber(int amount);
-    Player getOwner();
-    void setOwner(Player _owner);
+    Player* getOwner();
+    void setOwner(Player* _owner);
     friend ostream& operator<<(ostream &os, const  Territory& n);
 
 private:
@@ -52,7 +52,7 @@ private:
     string continentID;
     vector<string> adjacent;                // adjacent nodes
     int armiesNumber;
-    Player owner;
+    Player* owner;
 };
 
 
