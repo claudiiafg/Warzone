@@ -2,12 +2,7 @@
 // Created by Claudia on 2020-10-07.
 //
 
-
 #include "Map.h"
-#include "Player.cpp"
-#include <regex>
-#include <string>
-#include <typeinfo>
 
 //MAP>>>>>>>>>>>>>>>>>>>>>>>>>
 
@@ -171,6 +166,16 @@ Territory::Territory(string territoryString, string borderString) {
             adjacent.push_back(result[i]);
         }
     }
+}
+
+Territory::Territory(const Territory& otherTerritory) {
+    armiesNumber = otherTerritory.armiesNumber;
+    owner = otherTerritory.owner;
+    id = otherTerritory.id;
+    name = otherTerritory.name;
+    continentID = otherTerritory.continentID;
+    adjacent = otherTerritory.adjacent;
+
 }
 
 string Territory::getContinentID() {

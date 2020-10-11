@@ -1,9 +1,5 @@
 #include "Player.h"
-#include <vector>
-#include <iostream>
-#include "Map.h"
-#include "Orders.h"
-#include "Cards.h"
+#include "Map.cpp"
 
 using namespace std;
 
@@ -12,15 +8,15 @@ Player::Player() : playerTerritories(), playerHand(nullptr), playerOrders(nullpt
 
 Player::Player(const Player &otherPlayer) {
     for (int i = 0; i < otherPlayer.playerTerritories.size(); i++) {
-        playerTerritories.at(i) = new Territory * (otherPlayer.playerTerritories.at(i));
+        playerTerritories.at(i) = *new Territory * (otherPlayer.playerTerritories.at(i));
     }
 
-    playerHand = new Hand * (otherPlayer.playerHand);
-    playerOrders = new OrdersList * (otherPlayer.playerOrders);
+    playerHand = *new Hand * (otherPlayer.playerHand);
+    playerOrders = *new OrderList * (otherPlayer.playerOrders);
   }
 
 Player::~Player() {
-    for (int i = 0; i < otherPlayer.playerTerritories.size(); i++) {
+    for (int i = 0; i < playerTerritories.size(); i++) {
         delete playerTerritories.at(i);
     }
     delete playerHand;
@@ -32,18 +28,18 @@ Player& Player::operator= (const Player& otherPlayer) {
         if (playerTerritories.at(i) != NULL) {
             delete playerTerritories.at(i);
         }
-        playerTerritories.at(i) = new Territory*(otherPlayer.playerTerritories.at(i));
+        playerTerritories.at(i) = *new Territory*(otherPlayer.playerTerritories.at(i));
     }
  
     if (playerHand != NULL) {
         delete playerHand;
     }
-    playerHand = new Hand*(otherPlayer.playerHand);
+    playerHand = *new Hand*(otherPlayer.playerHand);
 
     if (playerOrders != NULL) {
         delete playerOrders;
     }
-    playerOrders= new OrdersList*(otherPlayer.playerOrders);
+    playerOrders= *new OrderList*(otherPlayer.playerOrders);
 }
 
 vector<Territory*> Player::toDefend() {
@@ -57,8 +53,9 @@ vector<Territory*> Player::toAttack() {
 }
 
 void Player::issueOrder() {
-    Order newOrder = new Order();
-    playerOrders.add(newOrder);
+    Order *newOrder = new Order();
+    playerOrders->addOrder(newOrder);
+    delete newOrder;
 }
 
 
@@ -70,8 +67,8 @@ ostream& operator<<(ostream &out, const Player &p) {
         out << p.playerTerritories.at(i) << ' ';
     }
 
-    out << "\nOrders: " << p.playerOrders()
-    << "\nHand: " << p.playerHand() << "\n";
+    out << "\nOrders: " << p.playerOrders
+    << "\nHand: " << p.playerHand << "\n";
 
     return out;
 }

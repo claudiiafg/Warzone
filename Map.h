@@ -9,6 +9,7 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <regex>
 #include "Player.h"
 
 using namespace std;
@@ -30,6 +31,7 @@ class Territory{
 public:
     //constructor
     explicit Territory(string territoryString, string borderString);
+    Territory(const Territory& otherTerritory);
 
     //attributes
     string name;

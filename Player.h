@@ -2,9 +2,10 @@
 #define PLAYER_H
 
 #include <vector>
-#include "Map.h"
-#include "Orders.h"
-#include "Cards.h"
+#include "Orders.cpp"
+#include "Cards.cpp"
+
+class Territory;
 
 class Player {
 
@@ -14,27 +15,33 @@ public:
 	Player(const Player& otherPlayer);
 	~Player();
 
+    // Forward declaration
+    Territory getTerritory();
+
 	//Assignment overload
 	Player& operator= (const Player& p);
 
 	//Accessors
-	vector<Territory*> getMyTerritories() { return playerTerritories; }
+	vector<Territory *> getMyTerritories() { return playerTerritories; }
 	Hand* getMyHand() { return playerHand; }
-	OrdersList* getMyOrders() { return playerOrders; }
+	OrderList* getMyOrders() { return playerOrders; }
 
 	//Methods
-	vector<Territory*> toDefend();
-	vector<Territory*> toAttack();
+	vector<Territory *> toDefend();
+	vector<Territory *> toAttack();
 	void issueOrder();
 
 	//Stream overload
 	friend ostream& operator << (ostream& out, const Player& p);
 
+protected:
+    Territory* t;
+
 private:
 	//Data members
-	vector<Territory*> playerTerritories;
+	vector<Territory *> playerTerritories;
 	Hand *playerHand;
-	OrdersList *playerOrders;
+	OrderList *playerOrders;
 };
 
 #endif

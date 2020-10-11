@@ -8,5 +8,6 @@ set(CMAKE_CXX_STANDARD 17)
 # add the executable
 add_executable(Warzone_MapLoader MapLoaderDriver.cpp MapLoader.cpp)
 add_executable(Warzone_Map MapDriver.cpp Map.cpp)
-add_executable(Warzone_Player PlayerDriver.cpp Player.cpp)
+add_executable(Warzone_Player Player.cpp)
+add_executable(Warzone_Card CardDriver.cpp Cards.cpp)
 

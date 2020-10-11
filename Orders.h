@@ -24,9 +24,9 @@ public:
 	//	playerID = o2.playerID;
 	//}
 
-	virtual bool validate() {
-		return false;
-	}
+	virtual bool validate() {return false;}
+    virtual bool validate(int thePlayerID, int theCountryOwner, int theUnits) {return false;}
+    virtual bool validate(int thePlayerID, int theCountryOwner, int theUnits, int theAttUnits) {return false;}
 
 	virtual void execute() {
 
@@ -66,7 +66,7 @@ public:
 		playerID = d2.playerID;
 	}
 
-	bool validate(int thePlayerID, int theCountryOwner, int theUnits) {
+	bool validate(int thePlayerID, int theCountryOwner, int theUnits) override {
 		bool playerOwnsCountry = false;
 		bool validUnits = false;
 
@@ -107,7 +107,7 @@ public:
 		attUnits = theAttUnits;
 	}
 
-	bool validate(int thePlayerID, int theCountryOwner, int theUnits, int theAttUnits) {
+	bool validate(int thePlayerID, int theCountryOwner, int theUnits, int theAttUnits) override {
 		bool playerOwnsCountry = false;
 		bool validUnitsToMoveOrAtt = false;
 
@@ -172,7 +172,7 @@ public:
 		return *this;
 	}
 
-	bool validate() {
+	bool validate() override {
 		bool playerOwnsCountry = false;
 		bool validOpponent = false;
 
@@ -190,7 +190,7 @@ public:
 		return (playerOwnsCountry && validOpponent);
 	}
 
-	void execute() {
+	void execute() override {
 
 		if (validate()) {
 			cout << "Player " << this->playerID << " bombed " << this->attCountryName << ".\n";
@@ -335,7 +335,7 @@ public:
 	void removeOrder(Order* x) {
 		list <Order*> ::iterator it;
 		for (it = orders.begin(); it != orders.end(); ++it) {
-			if (*it = x) {
+			if (*it == x) {
 				orders.remove(x);
 				break;
 			}
@@ -345,9 +345,9 @@ public:
 	//string move must be "up" or "down"
 	void moveOrder(Order* x, string move) {
 		list <Order*> ::iterator it;
-		int counter;
+//		int counter;
 		for (it = orders.begin(); it != orders.end(); ++it) {
-			cout << &orders.begin() << endl;
+//			cout << &orders.begin() << endl;
 			//find location of order
 			//counter += 1;
 			//if (*it = x) {
