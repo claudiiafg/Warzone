@@ -15,48 +15,55 @@ using namespace std;
 
 class Continent{
 public:
-    //constructor
+    // constructor
+    Continent();
     Continent(string pos, string continentsString);
     Continent(const Continent& _c);
 
-    //Destructor
+    // destructor
     ~Continent();
 
-    //attributes
+    // attributes
     string name;
-    string id;                            // node number
+    string id;  // node number
+    vector <string> adjacent;
 
-    //methods
+    // operators
     friend ostream& operator<<(ostream &os, const Continent& n);
+    Continent& operator = (const Continent& _file);
 };
 
 class Territory{
 public:
-    //constructor
+    // constructor
+    Territory();
     Territory(string territoryString, string borderString);
     Territory(const Territory& otherTerritory);
 
-    //Destructor
+    // destructor
     ~Territory();
 
-    //attributes
+    // attributes
     string name;
-    string id;                             // node number
+    string id;  // node number
 
-    //methods
+    // methods
     string getContinentID();
-    vector<string*> getAdjacentNodes();
+    vector<string> getAdjacentNodes();
     bool isAdjacentNode(string _node);
     int getArmies();
     void setArmiesNumber(int amount);
     Player* getOwner();
     void setOwner(Player* _owner);
+
+    // operators
     friend ostream& operator<<(ostream &os, const  Territory& n);
+    Territory& operator = (const Territory& _file);
 
 private:
-    //attributes
+    // attributes
     string continentID;
-    vector<string*> adjacent;                // adjacent nodes
+    vector<string> adjacent;   // adjacent nodes
     int armiesNumber;
     Player* owner;
 };
@@ -64,30 +71,34 @@ private:
 
 class Map{
 public:
-    //constructor
+    // constructors
     Map();
     Map(string _name, vector<string> mapData);
     Map(const Map& _m);
 
-    //Destructor
+    // destructor
     ~Map();
 
-    //attributes
+    // attributes
     string name;
     vector<Continent*> continents;
     vector<Territory*> territories;
 
-    //methods
-    bool validate();                        //  whether the map contains all necessary info
+    // methods
+    bool validate();    //  whether the map contains all necessary info
     vector<Territory*> getTerritories();
     vector<Continent*> getContinents();
     Territory* getTerritoryById(string territoryID);
+    Continent* getContinentById(string id);
     vector<Territory*> getAdjacentTerritories(string territoryID);
+    vector<Territory*> getTerritoriesByContinentId(string id);
+
+    // operators
     friend ostream& operator<<(ostream &os, const  Map& n);
+    Map& operator = (const Map& _file);
 
 private:
-
-    //methods
+    // methods
     void setTerritories(vector<string> _territoriesData, vector<string> _bordersData);
     void setContinents(vector<string> _continentsData);
 

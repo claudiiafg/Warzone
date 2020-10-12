@@ -43,6 +43,7 @@ void MapLoader::loadMaps() {
     }
 }
 
+// validate map type
 bool MapLoader::isMapType(const string& path) {
     //get file extension
     string ext = path.substr(path.find_last_of('.'));
