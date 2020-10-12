@@ -6,8 +6,11 @@
 
 using namespace std;
 
-//Orders:
+/////////////////////////////////////////////////////////////////////////////
+///   ORDERS					   	                                      ///
+/////////////////////////////////////////////////////////////////////////////
 
+	//Default constructor
 	Order::Order() {
 	}
 
@@ -20,10 +23,12 @@ using namespace std;
 		return *this;
 	}
 
+	//Validates an order
 	bool Order::validate() {
 		return false;
 	}
 
+	//Executes an order
 	void Order::execute() {
 	}
 
@@ -32,8 +37,11 @@ using namespace std;
 		return out;
 	}
 
-//Deploy:
+/////////////////////////////////////////////////////////////////////////////
+///   DEPLOY					   	                                      ///
+/////////////////////////////////////////////////////////////////////////////
 
+	//Overloaded constructor
 	Deploy::Deploy(int thePlayerID, string theCountryName, int theCountryOwner, int theUnits) {
 		countryOwner = theCountryOwner;
 		countryName = theCountryName;
@@ -59,6 +67,7 @@ using namespace std;
 		return *this;
 	}
 
+	//Validates a deploy order
 	bool Deploy::validate() {
 		bool playerOwnsCountry = false;
 		bool validUnits = false;
@@ -72,6 +81,7 @@ using namespace std;
 		return (playerOwnsCountry && validUnits);
 	}
 
+	//Executes a deploy order
 	void Deploy::execute() {
 
 		if (validate()) {
@@ -87,8 +97,11 @@ using namespace std;
 		return out;
 	}
 
-//Advance
+/////////////////////////////////////////////////////////////////////////////
+///   ADVANCE					   	                                      ///
+/////////////////////////////////////////////////////////////////////////////
 
+	//Overloaded constructor
 	Advance::Advance(int thePlayerID, string theCountryName, int theCountryOwner, int theUnits, int theAttCountryOwner, string theAttCountryName, int theAttUnits) {
 		playerID = thePlayerID;
 		countryOwner = theCountryOwner;
@@ -123,6 +136,7 @@ using namespace std;
 		return *this;
 	}
 
+	//Validates an advance order
 	bool Advance::validate() {
 		bool playerOwnsCountry = false;
 		bool validUnitsToMoveOrAtt = false;
@@ -141,6 +155,7 @@ using namespace std;
 		return (playerOwnsCountry && validUnitsToMoveOrAtt);
 	}
 
+	//Executes an advance order
 	void Advance::execute() {
 
 		if (validate()) {
@@ -164,8 +179,11 @@ using namespace std;
 		return out;
 	}
 
-//Bomb
+/////////////////////////////////////////////////////////////////////////////
+///   BOMB					   	                                          ///
+/////////////////////////////////////////////////////////////////////////////
 
+	//Overloaded constructor
 	Bomb::Bomb(int thePlayerID, string theCountryName, int theCountryOwner, int theAttCountryOwner, string theAttCountryName) {
 		playerID = thePlayerID;
 		countryOwner = theCountryOwner;
@@ -194,6 +212,7 @@ using namespace std;
 		return *this;
 	}
 
+	//Validates a bomb order
 	bool Bomb::validate() {
 		bool playerOwnsCountry = false;
 		bool validOpponent = false;
@@ -212,6 +231,7 @@ using namespace std;
 		return (playerOwnsCountry && validOpponent);
 	}
 
+	//Executes a bomb order
 	void Bomb::execute() {
 		if (validate()) {
 			cout << "Player " << this->playerID << " bombed " << this->attCountryName << ".\n";
@@ -225,8 +245,11 @@ using namespace std;
 		return out;
 	}
 
-//Blockade
+/////////////////////////////////////////////////////////////////////////////
+///   BLOCKADE					   	                                      ///
+/////////////////////////////////////////////////////////////////////////////
 
+	//Overloaded constructor
 	Blockade::Blockade(int thePlayerID, string theCountryName, int theCountryOwner, int theUnits) {
 		playerID = thePlayerID;
 		countryOwner = theCountryOwner;
@@ -252,6 +275,7 @@ using namespace std;
 		return *this;
 	}
 
+	//Validates a blockade order
 	bool Blockade::validate() {
 		bool playerOwnsCountry = false;
 		bool validUnits = false;
@@ -265,6 +289,7 @@ using namespace std;
 		return (playerOwnsCountry && validUnits);
 	}
 
+	//Executes a blockade order
 	void Blockade::execute() {
 
 		if (validate()) {
@@ -281,8 +306,11 @@ using namespace std;
 		return out;
 	}
 
-//Airlift
+/////////////////////////////////////////////////////////////////////////////
+///   AIRLIFT					   	                                      ///
+/////////////////////////////////////////////////////////////////////////////
 
+	//Overloaded constructor
 	Airlift::Airlift(int thePlayerID, string theCountryName, int theCountryOwner, int theUnits, int theAttCountryOwner, string theAttCountryName, int theAttUnits) {
 		playerID = thePlayerID;
 		countryOwner = theCountryOwner;
@@ -317,6 +345,7 @@ using namespace std;
 		return *this;
 	}
 
+	//Validates an airlift order
 	bool Airlift::validate() {
 		bool playerOwnsCountry = false;
 		bool validUnitsToMoveOrAtt = false;
@@ -334,6 +363,7 @@ using namespace std;
 		return (playerOwnsCountry && validUnitsToMoveOrAtt);
 	}
 
+	//Executes an airlift order
 	void Airlift::execute() {
 
 		if (validate()) {
@@ -356,8 +386,11 @@ using namespace std;
 		return out;
 	}
 
-//Negotiate
+/////////////////////////////////////////////////////////////////////////////
+///   NEGOTIATE					   	                                      ///
+/////////////////////////////////////////////////////////////////////////////
 
+	//Overloaded constructor
 	Negotiate::Negotiate(int thePlayerID, int theOtherPlayer) {
 		playerID = thePlayerID;
 		otherPlayer = theOtherPlayer;
@@ -377,6 +410,7 @@ using namespace std;
 		return *this;
 	}
 
+	//Validates a negotiate order
 	bool Negotiate::validate() {
 		bool validOpponent = false;
 
@@ -387,12 +421,12 @@ using namespace std;
 		return (validOpponent);
 	}
 
+	//Executes a negotiate order
 	void Negotiate::execute() {
 
 		if (validate()) {
 			cout << "Player " << playerID << " and Player " << otherPlayer << " are now negotiating" << ".\n";
 		}
-
 	}
 
 	ostream& operator<<(std::ostream& out, const Negotiate& b)
@@ -401,11 +435,24 @@ using namespace std;
 		return out;
 	}
 
-//OrderList
+/////////////////////////////////////////////////////////////////////////////
+///   ORDERLIST					   	                                      ///
+/////////////////////////////////////////////////////////////////////////////
 
+	//Default Constructor
 	OrderList::OrderList() {
 	}
 
+	//destructor
+	OrderList::~OrderList() {
+		list <Order*> ::iterator it;
+		for (it = orders.begin(); it != orders.end(); ++it) {
+			delete* it;
+		}
+		orders.clear();
+	}
+
+	//Add order to list
 	void OrderList::addOrder(Order* x) {
 		orders.push_back(x);
 	}
@@ -420,7 +467,7 @@ using namespace std;
 		}
 	}
 
-
+	//Swap order x with order y in the list
 	void OrderList::swapOrder(Order* x, Order* y) {
 		list <Order*> ::iterator it;
 		list <Order*> ::iterator jt;
@@ -445,6 +492,7 @@ using namespace std;
 		}
 	}
 
+	//Move order up or down in the list
 	void OrderList::moveOrder(Order* x, string move) {
 		list <Order*> ::iterator it;
 		list <Order*> ::iterator hold_it;
@@ -482,6 +530,7 @@ using namespace std;
 		}
 	}
 
+	//View the list of orders
 	void OrderList::viewOrderList() {
 		list <Order*> ::iterator it;
 		for (it = orders.begin(); it != orders.end(); ++it) {
@@ -489,9 +538,12 @@ using namespace std;
 		}
 	}
 
+	//Execute orders then deletes pointers to objects and clears list
 	void OrderList::executeOrderList() {
 		list <Order*> ::iterator it;
 		for (it = orders.begin(); it != orders.end(); ++it) {
 			(*it)->execute();
+			delete *it;
 		}
+		orders.clear();
 	}
