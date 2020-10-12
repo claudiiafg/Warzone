@@ -3,10 +3,27 @@
 //
 
 //using namespace std;
-//#include "Map.h"
+#include <iostream>
+#include "Map.h"
+#include "MapLoader.cpp"
 
-//int main(){
-//
-//
-//    return 0;
-//}
+int main(){
+
+    MapLoader loader;
+    loader.loadMaps();
+    vector<MapFile*> rawMaps = loader.getMaps();
+    vector<Map*> maps;
+
+    for (int i = 0; i < rawMaps.size(); i++) {
+        Map* map = new Map(rawMaps[i]->name, rawMaps[i]->content);
+        maps.push_back(map);
+        cout << *map << endl;
+    }
+
+    for (int i = 0; i < maps.size(); i++) {
+        delete maps[i];
+    }
+
+
+    return 0;
+}

@@ -2,8 +2,7 @@
 // Created by Claudia on 2020-10-05.
 //
 
-#ifndef WARZONE_MAPLOADER_H
-#define WARZONE_MAPLOADER_H
+#pragma once
 
 #include <fstream>
 #include <vector>
@@ -14,10 +13,19 @@ using namespace std;
 
 class MapFile{
 public:
+    // constructor
+    MapFile(string _name, vector<string> fullContent);
+    MapFile(const MapFile& _file);
+
+    // destructor
+    ~MapFile();
+
     string name;
     vector<string> content;
-    MapFile(string _name, vector<string> fullContent);
+
+    // operator
     friend ostream& operator<<(ostream &os, const  MapFile& n);
+    MapFile& operator = (const MapFile& _file);
 };
 
 
@@ -26,17 +34,17 @@ class MapLoader{
 
 public:
     MapLoader();
-    void loadMaps();                 // starts loading process
+
+    void loadMaps();    // starts loading process
+    vector<MapFile*> getMaps();  // gets files from directory, checks validity and sets each map as MapFile
+
 
 private:
-    vector<MapFile> maps;           // all maps to create / load
-    void getMaps();                 // gets files from directory, checks validity and sets each map as MapFile
-    bool isMapType(string path);    // check validity of map
-    vector<string> getContent(string path); // get file content
-    void createMaps();              // create map (call Map class)
+    vector<MapFile*> maps;   // all maps to create / load
+    static bool isMapType(const string& path);  // check validity of map
+    static vector<string> getContent(const string& path);   // get files content
+
+    // operator
+    friend ostream& operator<<(ostream &os, const  MapLoader& l);
+    MapLoader& operator = (const MapLoader& loader);
 };
-
-
-
-
-#endif //WARZONE_MAPLOADER_H

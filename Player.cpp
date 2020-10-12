@@ -1,5 +1,4 @@
 #include "Player.h"
-#include "Map.cpp"
 
 using namespace std;
 
@@ -8,7 +7,7 @@ Player::Player() : playerTerritories(), playerHand(nullptr), playerOrders(nullpt
 }
 
 //Parametrized constructor
-Player::Player(vector<Territory*> playerTerritories, Hand* playerHand, OrderList* playerOrders) : playerTerritories(), playerHand(nullptr), playerOrders(nullptr) {
+Player::Player(vector<Territory*> playerTerritories, Hand* playerHand, OrderList* playerOrders) : playerTerritories(playerTerritories), playerHand(playerHand), playerOrders(playerOrders) {
 }
 
 //Copy constructor
@@ -23,13 +22,13 @@ Player::Player(const Player &otherPlayer) {
 
 //= operator overload
 Player& Player::operator= (const Player& otherPlayer) { //Delete any values already present and assign new ones
-    for (int i = 0; i < otherPlayer.playerTerritories.size(); i++) { 
+    for (int i = 0; i < otherPlayer.playerTerritories.size(); i++) {
         if (playerTerritories.at(i) != NULL) {
             delete playerTerritories.at(i);
         }
         playerTerritories.at(i) = *new Territory*(otherPlayer.playerTerritories.at(i));
     }
- 
+
     if (playerHand != NULL) {
         delete playerHand;
     }
@@ -56,12 +55,14 @@ Player::~Player() {
 
 //Required methods
 vector<Territory*> Player::toDefend() {
-    vector<Territory*> toDefend{new Territory("terr1", "cont1"), new Territory("terr2", "cont2"), new Territory("terr3", "cont3")}; //Create arbitrary list for now
+//    vector<Territory*> toDefend{new Territory("terr1", "cont1"), new Territory("terr2", "cont2"), new Territory("terr3", "cont3")}; //Create arbitrary list for now
+    vector<Territory*> toDefend;
     return toDefend;
 }
 
 vector<Territory*> Player::toAttack() {
-    vector<Territory*> toAttack{new Territory("terr4", "cont4"), new Territory("terr5", "cont5"), new Territory("terr6", "cont6")}; //Create arbitrary list for now
+//    vector<Territory*> toAttack{new Territory("terr4", "cont4"), new Territory("terr5", "cont5"), new Territory("terr6", "cont6")}; //Create arbitrary list for now
+    vector<Territory*> toAttack;
     return toAttack;
 }
 
@@ -74,7 +75,7 @@ void Player::issueOrder() {
 //Stream operator overload
 ostream& operator<<(ostream &out, const Player &p) {
     out << "\nTerritories: ";
-    
+
     for (int i = 0; i < p.playerTerritories.size(); i++) {
         out << p.playerTerritories.at(i) << ' ';
     }
