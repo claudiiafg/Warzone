@@ -47,6 +47,21 @@ Map::Map(string _name, vector<string> mapData) {
     validate();
 }
 
+Map::Map(const Map& _m){
+    name = _m.name;
+    territories = _m.territories;
+    continents = _m.continents;
+}
+
+Map::~Map() {
+    for (int i = 0; i < territories.size(); i++) {
+        delete territories[i];
+    }
+    for (int i = 0; i < continents.size(); i++) {
+        delete continents[i];
+    }
+}
+
 bool Map::validate() {
     cout << ">>>>>>>>>>>>Map successfully created>>>>>>>>>>" << endl;
     return true;
@@ -62,7 +77,7 @@ vector<Continent*> Map::getContinents() {
 
 Territory* Map::getTerritoryById(string territoryID) {
     for (int i = 0; i < territories.size(); i++) {
-        if(*territories[i]->id == territoryID) {
+        if(territories[i]->id == territoryID) {
             return territories[i];
         }
     }
@@ -73,7 +88,7 @@ Territory* Map::getTerritoryById(string territoryID) {
 vector<Territory*> Map::getAdjacentTerritories(string territoryID) {
     vector<Territory*> tempList;
     for (int i = 0; i < territories.size(); i++) {
-        if(*territories[i]->id == territoryID) {
+        if(territories[i]->id == territoryID) {
             vector<string*> nodesStrings = territories[i]->getAdjacentNodes();
             for (int i = 0; i < nodesStrings.size(); i++) {
                 tempList.push_back(getTerritoryById(reinterpret_cast<basic_string<char> &&>(nodesStrings[i])));
@@ -88,23 +103,33 @@ void Map::setTerritories(vector<string> _territoriesData, vector<string> _border
     for (int i = 0; i < _territoriesData.size(); i++) {
         Territory *tempTer = new Territory(_territoriesData[i], _bordersData[i]);
         territories.push_back(tempTer);
-        delete tempTer;
     }
 }
 
 void Map::setContinents(vector<string> _continentsData) {
     for (int i = 0; i < _continentsData.size(); i++) {
-        Continent *tempCont = new Continent(to_string(i+1), _continentsData[i]);
+        Continent *tempCont = new Continent(to_string(i + 1), _continentsData[i]);
         continents.push_back(tempCont);
-        delete tempCont;
     }
 
 }
 
 ostream &operator<<(ostream &os, Map &n) {
-    os << "Map " << n.name ;
+    os << "Map " << *n.name ;
     os << " has " << n.getContinents().size() << " continents";
-    os << " and " << n.getTerritories().size()<< " territories";
+    os << " and " << n.getTerritories().size()<< " territories" << endl;
+
+    os << endl;
+    os << " The continent's are:"<< endl;
+    for(int i = 0; i < n.getContinents().size(); i++) {
+        os << *n.getContinents()[i];
+    }
+
+    os << endl;
+    os << " The territories' are:"<< endl;
+    for(int i = 0; i < n.getTerritories().size(); i++) {
+        os << *n.getTerritories()[i];
+    }
     return os;
 }
 
@@ -112,24 +137,27 @@ ostream &operator<<(ostream &os, Map &n) {
 //CONTINENT>>>>>>>>>>>>>>>>>>>>>>>>>
 
 Continent::Continent(string pos, string continentsString) {
-    id = &pos;
+    id = pos;
 
     //seperate string by spaces
     regex ws_re("\\s+");
     vector<string> result{
-            sregex_token_iterator(continentsString.begin(), continentsString.end(), ws_re, -1), {}
+    sregex_token_iterator(continentsString.begin(), continentsString.end(), ws_re, -1), {}
     };
 
-    //result is in form [name, (useless info for now...)]
-        for (int i = 0; i < result.size(); i++) {
-            if(i == 0) {
-                name = &result[i];
-            }
-        }
+    name = result[0];
+}
+
+Continent::Continent(const Continent& _c){
+    id = _c.id;
+    name = _c.name;
+}
+
+Continent::~Continent() {
 
 }
 
-ostream &operator<<(ostream &os, const Continent &n) {
+ostream &operator<<(ostream &os, const Continent& n) {
     os << "Continent " << n.name << endl;
     return os;
 }
@@ -145,22 +173,15 @@ Territory::Territory(string territoryString, string borderString) {
     //seperate strings by spaces
     regex ws_re("\\s+");
     vector<string> result{
-            sregex_token_iterator(territoryString.begin(), territoryString.end(), ws_re, -1), {}
+    sregex_token_iterator(territoryString.begin(), territoryString.end(), ws_re, -1), {}
     };
     vector<string> bordersResult{
-            sregex_token_iterator(borderString.begin(), borderString.end(), ws_re, -1), {}
+    sregex_token_iterator(borderString.begin(), borderString.end(), ws_re, -1), {}
     };
 
-    //result is in form [id, name, continentID, (useless..)]
-    for (int i = 0; i < result.size(); i++) {
-        if (i == 0) {
-            id = new string(result[i]);
-        } else if (i == 1) {
-            name = new string(result[i]);
-        } else if (i == 2) {
-            continentID = new string(result[i]);
-        }
-    }
+    id = result[0];
+    name = result[1];
+    continentID = result[2];
 
     for (int i = 0; i < bordersResult.size(); i++) {
         if (i > 0) {
@@ -179,8 +200,12 @@ Territory::Territory(const Territory& otherTerritory) {
 
 }
 
+Territory::~Territory() {
+
+}
+
 string Territory::getContinentID() {
-    return *continentID;
+    return continentID;
 }
 
 vector<string*> Territory::getAdjacentNodes() {
@@ -213,8 +238,8 @@ void Territory::setOwner(Player* _owner) {
 }
 
 ostream &operator<<(ostream &os, const Territory &n) {
-    os << "Territory: " << n.name << endl;
-    os << "has " << n.adjacent.size() << " adjacent territories" << endl;
+    os << "Territory " << n.name;
+    os << " has " << n.adjacent.size() << " adjacent territories" << endl;
     return os;
 }
 

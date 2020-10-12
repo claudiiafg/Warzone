@@ -13,9 +13,15 @@ using namespace std;
 
 class MapFile{
 public:
+    //constructor
+    MapFile(string _name, vector<string> fullContent);
+    MapFile(const MapFile& _file);
+
+    //destructor
+    ~MapFile();
+
     string name;
     vector<string> content;
-    MapFile(string _name, vector<string> fullContent);
     friend ostream& operator<<(ostream &os, const  MapFile& n);
 };
 
@@ -25,6 +31,7 @@ class MapLoader{
 
 public:
     MapLoader();
+
     void loadMaps();                 // starts loading process
     vector<MapFile> getMaps();       // gets files from directory, checks validity and sets each map as MapFile
 

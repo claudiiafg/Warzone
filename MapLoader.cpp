@@ -93,4 +93,13 @@ ostream& operator<<(ostream &os, const MapFile& n) {
     return os << "Maps available: " << n.name << endl;
 }
 
+MapFile::MapFile(const MapFile& _file) {
+    name =_file.name;
+    content = _file.content;
+}
+
+MapFile::~MapFile() {
+
+}
+
 

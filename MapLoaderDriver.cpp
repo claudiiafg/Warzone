@@ -2,7 +2,7 @@
 // Created by Claudia on 2020-10-05.
 //
 
-using namespace std;
+//using namespace std;
 #include <iostream>
 #include "MapLoader.h"
 #include "Map.cpp"
@@ -17,7 +17,6 @@ int main(){
         Map* map = new Map(rawMaps[i].name, rawMaps[i].content);
         cout << *map << endl;
     }
-
 
 
     return 0;

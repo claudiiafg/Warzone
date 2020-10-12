@@ -17,13 +17,17 @@ class Continent{
 public:
     //constructor
     Continent(string pos, string continentsString);
+    Continent(const Continent& _c);
+
+    //Destructor
+    ~Continent();
 
     //attributes
-    string *name;
-    string *id;                            // node number
+    string name;
+    string id;                            // node number
 
     //methods
-    friend ostream& operator<<(ostream &os, const  Continent& n);
+    friend ostream& operator<<(ostream &os, const Continent& n);
 };
 
 class Territory{
@@ -32,9 +36,12 @@ public:
     Territory(string territoryString, string borderString);
     Territory(const Territory& otherTerritory);
 
+    //Destructor
+    ~Territory();
+
     //attributes
-    string *name;
-    string *id;                             // node number
+    string name;
+    string id;                             // node number
 
     //methods
     string getContinentID();
@@ -48,7 +55,7 @@ public:
 
 private:
     //attributes
-    string *continentID;
+    string continentID;
     vector<string*> adjacent;                // adjacent nodes
     int armiesNumber;
     Player* owner;
@@ -60,6 +67,10 @@ public:
     //constructor
     Map();
     Map(string _name, vector<string> mapData);
+    Map(const Map& _m);
+
+    //Destructor
+    ~Map();
 
     //attributes
     string *name;
