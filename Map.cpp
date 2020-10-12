@@ -29,15 +29,15 @@ Map::Map(string _name, vector<string> mapData) {
     }
 
     // get all continent strings from map data
-    vector<string> continents;
+    vector<string> tempContinents;
     for (size_t i = (contI + 1); i < (terrI - 1); ++i){
-        continents.push_back(mapData[i]);
+        tempContinents.push_back(mapData[i]);
     }
 
     // get all country strings from map data
-    vector<string> territories;
+    vector<string> tempTerritories;
     for (size_t i = (terrI + 1); i < (borderI - 1); ++i){
-        territories.push_back(mapData[i]);
+        tempTerritories.push_back(mapData[i]);
     }
 
     // get nodes per country from map data
@@ -46,8 +46,8 @@ Map::Map(string _name, vector<string> mapData) {
         borders.push_back(mapData[i]);
     }
 
-    setTerritories(territories, borders);
-    setContinents(continents);
+    setTerritories(tempTerritories, borders);
+    setContinents(tempContinents);
     validate();
 }
 
@@ -60,11 +60,11 @@ Map::Map(const Map& _m){
 
 // destructor
 Map::~Map() {
-    for (int i = 0; i < territories.size(); i++) {
-        delete territories[i];
+    for (auto & territorie : territories) {
+        delete territorie;
     }
-    for (int i = 0; i < continents.size(); i++) {
-        delete continents[i];
+    for (auto & continent : continents) {
+        delete continent;
     }
 }
 
@@ -100,36 +100,36 @@ void Map::setContinents(vector<string> _continentsData) {
         continents.push_back(tempCont);
     }
 
-    for (int i = 0; i < continents.size(); i++) {
+    for (auto & continent : continents) {
         vector<string> adjacentCont;
         // find each continent's territories
-        vector<Territory*> terr = getTerritoriesByContinentId(continents[i]->id);
+        vector<Territory*> terr = getTerritoriesByContinentId(continent->id);
 
-        for (int j = 0; j < terr.size(); j++) {
+        for (auto & j : terr) {
             // find each territory adjacent nodes
-            vector<Territory*> adjacentTerr = getAdjacentTerritories(terr[j]->id);
+            vector<Territory*> adjacentTerr = getAdjacentTerritories(j->id);
 
-            for (int k = 0; k < adjacentTerr.size(); k++) {
+            for (auto & k : adjacentTerr) {
                 // push continent of adjacent territories of the continent's territories
-                if(!(std::find(adjacentCont.begin(), adjacentCont.end(), adjacentTerr[k]->getContinentID()) != adjacentCont.end()) &&
-                adjacentTerr[k]->getContinentID() != continents[i]->id) {
-                    adjacentCont.push_back(adjacentTerr[k]->getContinentID());
+                if(!(std::find(adjacentCont.begin(), adjacentCont.end(), k->getContinentID()) != adjacentCont.end()) &&
+                k->getContinentID() != continent->id) {
+                    adjacentCont.push_back(k->getContinentID());
                 }
             }
         }
         cout << endl;
 
         // set continent of adjacent territories of the continent's territories, as the continents adjacent territorries
-        continents[i]->adjacent = adjacentCont;
+        continent->adjacent = adjacentCont;
     }
 }
 
 
 // get territory object by its id
 Territory* Map::getTerritoryById(string territoryID) {
-    for (int i = 0; i < territories.size(); i++) {
-        if(territories[i]->id == territoryID) {
-            return territories[i];
+    for (auto & territorie : territories) {
+        if(territorie->id == territoryID) {
+            return territorie;
         }
     }
     return NULL;
@@ -137,9 +137,9 @@ Territory* Map::getTerritoryById(string territoryID) {
 
 // get continent object by its id
 Continent* Map::getContinentById(string id){
-    for (int i = 0; i < continents.size(); i++) {
-        if(continents[i]->id == id) {
-            return continents[i];
+    for (auto & continent : continents) {
+        if(continent->id == id) {
+            return continent;
         }
     }
     return NULL;
@@ -148,9 +148,9 @@ Continent* Map::getContinentById(string id){
 // get all territory objects of a continent
 vector<Territory*> Map::getTerritoriesByContinentId(string id){
     vector<Territory*> terr;
-    for (int i = 0; i < territories.size(); i++) {
-        if(territories[i]->getContinentID() == id) {
-            terr.push_back(territories[i]);
+    for (auto & territorie : territories) {
+        if(territorie->getContinentID() == id) {
+            terr.push_back(territorie);
         }
     }
     return terr;
@@ -160,11 +160,11 @@ vector<Territory*> Map::getTerritoriesByContinentId(string id){
 // get all Territories adjacent to a specific territory
 vector<Territory*> Map::getAdjacentTerritories(string territoryID) {
     vector<Territory*> tempList;
-    for (int i = 0; i < territories.size(); i++) {
-        if(territories[i]->id == territoryID) {
-            vector<string> nodesStrings = territories[i]->getAdjacentNodes();
-            for (int i = 0; i < nodesStrings.size(); i++) {
-                tempList.push_back(getTerritoryById(reinterpret_cast<basic_string<char> &&>(nodesStrings[i])));
+    for (auto & territorie : territories) {
+        if(territorie->id == territoryID) {
+            vector<string> nodesStrings = territorie->getAdjacentNodes();
+            for (auto & nodesString : nodesStrings) {
+                tempList.push_back(getTerritoryById(reinterpret_cast<basic_string<char> &&>(nodesString)));
             }
         }
     }
@@ -179,20 +179,23 @@ ostream &operator<<(ostream &os, const Map &n) {
 
     os << endl;
     os << " The continent's are:"<< endl;
-    for(int i = 0; i < n.continents.size(); i++) {
-        os << *(n.continents[i]);
+    for(auto continent : n.continents) {
+        os << *continent;
     }
 
     os << endl;
     os << " The territories' are:"<< endl;
-    for(int i = 0; i < n.territories.size(); i++) {
-        os << *(n.territories[i]);
+    for(auto territorie : n.territories) {
+        os << *territorie;
     }
     return os;
 }
 
 // assignment operator
 Map& Map::operator = (const Map& _file) {
+    name = _file.name;
+    continents = _file.continents;
+    territories = _file.territories;
     return *this;
 }
 
@@ -240,6 +243,9 @@ ostream &operator<<(ostream &os, const Continent& n) {
 
 // assignment operator
 Continent& Continent::operator = (const Continent& _file) {
+    name = _file.name;
+    id = _file.id;
+    adjacent = _file.adjacent;
     return *this;
 }
 
@@ -305,9 +311,9 @@ int Territory::getArmies() {
 }
 
 // check if nodes are adjacent
-bool Territory::isAdjacentNode(string _node) {
-    for (int i = 0; i < adjacent.size(); i++) {
-        if(adjacent[i] == _node) {
+bool Territory::isAdjacentNode(const string& _node) {
+    for (auto & i : adjacent) {
+        if(i == _node) {
             return true;
         }
     }
@@ -347,6 +353,12 @@ ostream &operator<<(ostream &os, const Territory &n) {
 
 // assignment operator
 Territory& Territory::operator = (const Territory& _file) {
+    name = _file.name;
+    id = _file.id;
+    continentID = _file.continentID;
+    adjacent = _file.adjacent;
+    armiesNumber = _file.armiesNumber;
+    owner = _file.owner;
     return *this;
 }
 

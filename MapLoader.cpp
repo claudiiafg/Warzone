@@ -28,7 +28,7 @@ void MapLoader::loadMaps() {
                     cout << "->VALID Map: " << entry.path().filename().string() << endl;
                     vector<string> content = getContent(entry.path());
                     string name = entry.path().filename().string();
-                    maps.push_back(*new MapFile(name, content));
+                    maps.push_back(new MapFile(name, content));
                 } else {
                     cout << "->Invalid: " << entry.path().filename().string() << endl;
                 }
@@ -84,12 +84,23 @@ vector<string> MapLoader::getContent(const string& path) {
 }
 
 // prints and returns maps available
-vector<MapFile> MapLoader::getMaps() {
-    for(vector<int>::size_type i = 0; i != maps.size(); i++) {
-        cout << maps[i] << endl;
+vector<MapFile*> MapLoader::getMaps() {
+    for(int i = 0; i != maps.size(); i++) {
+        cout << *maps[i] << endl;
     }
     return maps;
 
+}
+
+// streams insertion operator
+ostream& operator<<(ostream &os, const MapLoader& n) {
+    return os << "Files loaded: " << n.maps.size() << endl;
+}
+
+// assignment operator
+MapLoader& MapLoader::operator = (const MapLoader& loader){
+    maps = loader.maps;
+    return *this;
 }
 
 // MapFile constructor -> creates valid map files to be turned into Graphs
@@ -111,6 +122,8 @@ ostream& operator<<(ostream &os, const MapFile& n) {
 
 // assignment operator
 MapFile& MapFile::operator = (const MapFile& _file) {
+    name = _file.name;
+    content = _file.content;
     return *this;
 }
 

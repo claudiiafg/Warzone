@@ -50,7 +50,7 @@ public:
     // methods
     string getContinentID();
     vector<string> getAdjacentNodes();
-    bool isAdjacentNode(string _node);
+    bool isAdjacentNode(const string& _node);
     int getArmies();
     void setArmiesNumber(int amount);
     Player* getOwner();
@@ -64,8 +64,8 @@ private:
     // attributes
     string continentID;
     vector<string> adjacent;   // adjacent nodes
-    int armiesNumber;
-    Player* owner;
+    int armiesNumber{};
+    Player* owner{};
 };
 
 
@@ -85,7 +85,7 @@ public:
     vector<Territory*> territories;
 
     // methods
-    bool validate();    //  whether the map contains all necessary info
+    static bool validate();    //  whether the map contains all necessary info
     vector<Territory*> getTerritories();
     vector<Continent*> getContinents();
     Territory* getTerritoryById(string territoryID);
