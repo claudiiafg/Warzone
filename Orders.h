@@ -1,12 +1,12 @@
 #pragma once
 
+using namespace std;
 #include <iostream>
 #include <list>
 #include <iterator>
 
-using namespace std;
-
-class Order{
+class Order
+{
 public:
 
 	//Default Constructor

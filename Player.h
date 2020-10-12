@@ -1,40 +1,52 @@
-#ifndef PLAYER_H
-#define PLAYER_H
+#pragma once
 
 #include <vector>
-#include "Map.h"
-#include "Orders.h"
-#include "Cards.h"
+#include "Orders.cpp"
+
+class Hand;
+
+
+class Territory;
 
 class Player {
 
 public:
-	//Constructors and Destructors
+	//Constructors
 	Player();
+	Player(vector<Territory*> playerTerritories, Hand* playerHand, OrderList* playerOrders);
 	Player(const Player& otherPlayer);
+
+
+	//Destructor
 	~Player();
 
-	//Assignment overload
+    //Forward declaration
+    Territory getTerritory();
+
+	//Assignment operator overload
 	Player& operator= (const Player& p);
 
 	//Accessors
-	vector<Territory*> getMyTerritories() { return playerTerritories; }
+	vector<Territory *> getMyTerritories() { return playerTerritories; }
 	Hand* getMyHand() { return playerHand; }
-	OrdersList* getMyOrders() { return playerOrders; }
+	OrderList* getMyOrders() { return playerOrders; }
 
-	//Methods
-	vector<Territory*> toDefend();
-	vector<Territory*> toAttack();
+	//Required Methods
+	vector<Territory *> toDefend();
+	vector<Territory *> toAttack();
 	void issueOrder();
 
-	//Stream overload
-	friend ostream& operator << (ostream& out, const Player& p);
+	//Stream operator overload
+	 friend ostream& operator << (ostream& out, const Player& p);
+
+protected:
+	//Helper data members
+    Territory* t;
 
 private:
-	//Data members
-	vector<Territory*> playerTerritories;
+	//Required data members
+	vector<Territory *> playerTerritories;
 	Hand *playerHand;
-	OrdersList *playerOrders;
+	OrderList *playerOrders;
 };
 
-#endif
