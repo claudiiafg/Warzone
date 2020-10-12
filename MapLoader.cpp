@@ -27,8 +27,7 @@ void MapLoader::loadMaps() {
                 if(isMapType(entry.path().filename().string())) { //Needs to be fixed
                     vector<string> content = getContent(entry.path().filename().string()); //Needs to be fixed
                     string name = entry.path().filename().string();
-                    MapFile newFile(name, content);
-                    maps.push_back(newFile);
+                    maps.push_back(*new MapFile(name, content));
                 }
             }
         }
@@ -38,9 +37,6 @@ void MapLoader::loadMaps() {
 //            cout << "file: " << filenameStr << '\n';
         }
     }
-
-//    getMaps();
-    createMaps();
 }
 
 bool MapLoader::isMapType(string path) {
@@ -81,19 +77,11 @@ vector<string> MapLoader::getContent(string path) {
 }
 
 // print maps ready to load
-void MapLoader::getMaps() {
+vector<MapFile> MapLoader::getMaps() {
     for(vector<int>::size_type i = 0; i != maps.size(); i++) {
         cout << maps[i] << endl;
     }
-
-}
-
-// call Map class and create
-void MapLoader::createMaps() {
-    for (int i = 0; i < maps.size(); i++) {
-        Map* map = new Map(maps[i].name, maps[i].content);
-        cout << map << endl;
-    }
+    return maps;
 
 }
 

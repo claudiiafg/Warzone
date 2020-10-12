@@ -66,6 +66,7 @@ Territory* Map::getTerritoryById(string territoryID) {
             return territories[i];
         }
     }
+    return NULL;
 }
 
 //get all Territories adjacent to a specific territory

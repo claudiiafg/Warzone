@@ -8,7 +8,6 @@
 #include <vector>
 #include <string>
 #include <iostream>
-#include "Map.h"
 
 using namespace std;
 
@@ -27,11 +26,11 @@ class MapLoader{
 public:
     MapLoader();
     void loadMaps();                 // starts loading process
+    vector<MapFile> getMaps();       // gets files from directory, checks validity and sets each map as MapFile
+
 
 private:
     vector<MapFile> maps;           // all maps to create / load
-    void getMaps();                 // gets files from directory, checks validity and sets each map as MapFile
     bool isMapType(string path);    // check validity of map
     vector<string> getContent(string path); // get file content
-    void createMaps();              // create map (call Map class)
 };

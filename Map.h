@@ -58,6 +58,7 @@ private:
 class Map{
 public:
     //constructor
+    Map();
     Map(string _name, vector<string> mapData);
 
     //attributes
