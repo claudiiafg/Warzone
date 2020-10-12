@@ -21,9 +21,10 @@ class Card{
 
 	public:
 	    Card();
+		Card(const Card &oldCard);
 		string getType();
 		void setType(string x);
-
+		friend ostream& cardStream(ostream& cs, const Card c);
 	private:
 		string type;
 };
@@ -33,12 +34,13 @@ class Hand{
 
 	public:
 		Hand();
+		Hand(const Hand &oldHand);
 		void display();
 		Card play(string cardType);
 		void add(Card card);
 		void setBombCount(int x);
 		int getBombCount();
-		int getReinCoun();
+		int getReinCount();
 		void setReinCount(int x);
 		int getBlockCount();
 		void setBlockCount(int x);
@@ -48,6 +50,7 @@ class Hand{
 		void setDipCount(int x);
 		vector<Card> getHand();
 		void setHand(vector<Card> cv);
+		friend ostream& handStream(ostream& hs, const Hand h);
 	
 	private:
 		int bombCounter;
@@ -61,10 +64,12 @@ class Hand{
 class Deck{
 	public:
 		Deck();
+		Deck(const Deck &oldDeck);
 		Card draw();
 		vector<Card> getDeck();
 		void setDeck(vector<Card> cv);
 		void add(Card card);
+		friend ostream& deckStream(ostream& ds, const Deck d);
 
 	private:
 		int nextDraw;
