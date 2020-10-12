@@ -177,10 +177,6 @@ void Deck::setDeck(vector <Card> cv) {
     deck = cv;
 }
 
-void Deck::setDeck(vector <Card> cv) {
-    deck = cv;
-}
-
 void Deck::add(Card card) {
     deck.insert(deck.begin(), card);
 }
@@ -256,16 +252,6 @@ Card Hand::play(string cardType) {
     }
 }
 
-cout << "You don't have any " + cardType + "s in your hand!\n\n";
-return
-newCard;
-}
-
-cout << "You don't have any " + cardType + "s in your hand!\n\n";
-return
-oldCard;
-}
-
 /**
  * Adds a new card to the hand from the deck (Complementary to "draw" function)
  * */
@@ -280,14 +266,6 @@ void Hand::add(Card card) {
     catch (int e) {
         cout << "Error: No more cards left in the deck!";
     }
-}
-
-}
-catch (
-int e
-) {
-cout << "Error: No more cards left in the deck!";
-}
 }
 
 /**
@@ -323,55 +301,11 @@ int Hand::getBombCount() {
     return bombCounter;
 }
 
-int Hand::getBombCount() {
-    return bombCounter;
-}
-
 void Hand::setBombCount(int x) {
     bombCounter = x;
 }
 
 int Hand::getReinCount() {
-    return reinforcementCounter;
-}
-
-void Hand::setReinCount(int x) {
-    reinforcementCounter = x;
-}
-
-int Hand::getBlockCount() {
-    return blockadeCounter;
-}
-
-void Hand::setBlockCount(int x) {
-    blockadeCounter = x;
-}
-
-int Hand::getAirCount() {
-    return airliftCounter;
-}
-
-void Hand::setAirCount(int x) {
-    airliftCounter = x;
-}
-
-int Hand::getDiplomCount() {
-    return diplomacyCounter;
-}
-
-void Hand::setDipCount(int x) {
-    diplomacyCounter = x;
-}
-
-vector <Card> Hand::getHand() {
-    return hand;
-}
-
-void Hand::setHand(vector <Card> cv) {
-    hand = cv;
-}
-
-int Hand::getReinCoun() {
     return reinforcementCounter;
 }
 
