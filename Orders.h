@@ -1,3 +1,5 @@
+#pragma once
+
 #include <iostream>
 #include <list>
 #include <iterator>
@@ -7,6 +9,7 @@ using namespace std;
 class Order{
 public:
 
+	//Default Constructor
 	Order();
 
 	//Copy constructor
@@ -15,8 +18,10 @@ public:
 	//Assignment operator
 	Order& operator = (const Order& d2);
 
+	//Validates an order
 	virtual bool validate();
 
+	//Executes an order
 	virtual void execute();
 
 	friend std::ostream& operator<<(std::ostream& out, const Order& b);
@@ -31,6 +36,7 @@ class Deploy : public Order {
 
 
 public:
+	//Overloaded constructor
 	Deploy(int thePlayerID, string theCountryName, int theCountryOwner, int theUnits);
 
 	//Copy constructor
@@ -39,8 +45,10 @@ public:
 	//Assignment operator
 	Deploy& operator = (const Deploy& d2);
 
+	//Validates a deploy order
 	bool validate();
 
+	//Executes a deploy order
 	void execute();
 
 	friend std::ostream& operator<<(std::ostream& out, const Deploy& b);
@@ -56,6 +64,7 @@ class Advance : public Order {
 	int attUnits;
 
 public:
+	//Overloaded constructor
 	Advance(int thePlayerID, string theCountryName, int theCountryOwner, int theUnits, int theAttCountryOwner, string theAttCountryName, int theAttUnits);
 
 	//Copy constructor
@@ -64,8 +73,10 @@ public:
 	//Assignment operator
 	Advance& operator = (const Advance& b);
 
+	//Validates an advance order
 	bool validate();
 
+	//Executes an advance order
 	void execute();
 
 	friend std::ostream& operator<<(std::ostream& out, const Advance& b);
@@ -79,6 +90,7 @@ class Bomb : public Order {
 	string attCountryName;
 
 public:
+	//Overloaded constructor
 	Bomb(int thePlayerID, string theCountryName, int theCountryOwner, int theAttCountryOwner, string theAttCountryName);
 
 	//Copy constructor
@@ -87,8 +99,10 @@ public:
 	//Assignment operator
 	Bomb& operator = (const Bomb& b);
 
+	//Validates a bomb order
 	bool validate();
 
+	//Executes a bomb order
 	void execute();
 
 	friend std::ostream& operator<<(std::ostream& out, const Bomb& b);
@@ -102,6 +116,7 @@ class Blockade : public Order {
 
 
 public:
+	//Overloaded constructor
 	Blockade(int thePlayerID, string theCountryName, int theCountryOwner, int theUnits);
 
 	//Copy constructor
@@ -110,8 +125,10 @@ public:
 	//Assignment operator
 	Blockade& operator = (const Blockade& b);
 
+	//Validates a blockade order
 	bool validate();
 
+	//Executes a blockade order
 	void execute();
 
 	friend std::ostream& operator<<(std::ostream& out, const Blockade& b);
@@ -127,6 +144,7 @@ class Airlift : public Order {
 	int attUnits;
 
 public:
+	//Overloaded constructor
 	Airlift(int thePlayerID, string theCountryName, int theCountryOwner, int theUnits, int theAttCountryOwner, string theAttCountryName, int theAttUnits);
 
 	//Copy constructor
@@ -135,8 +153,10 @@ public:
 	//Assignment operator
 	Airlift& operator = (const Airlift& b);
 
+	//Validates an airlift order
 	bool validate();
 
+	//Executes an airlift order
 	void execute();
 
 	friend std::ostream& operator<<(std::ostream& out, const Airlift& b);
@@ -148,6 +168,7 @@ class Negotiate : public Order {
 	int otherPlayer;
 
 public:
+	//Overloaded constructor
 	Negotiate(int thePlayerID, int theOtherPlayer);
 
 	//Copy constructor
@@ -156,8 +177,10 @@ public:
 	//Assignment operator
 	Negotiate& operator = (const Negotiate& b);
 
+	//Validates a negotiate order
 	bool validate();
 
+	//Executes a negotiate order
 	void execute();
 	
 	friend std::ostream& operator<<(std::ostream& out, const Negotiate& b);
@@ -167,19 +190,27 @@ class OrderList {
 	list <Order*> orders;
 
 public:
-
+	//Default Constructor
 	OrderList();
+	
+	//Destructor
+	~OrderList();
 
+	//Add order to list
 	void addOrder(Order* x);
 
+	//Remove order to list
 	void removeOrder(Order* x);
 
-	
+	//Swap order x with order y in the list
 	void swapOrder(Order* x, Order* y);
 
+	//Move order up or down in the list
 	void moveOrder(Order* x, string move);
 
+	//View the list of orders
 	void viewOrderList();
 
+	//Execute orders then deletes pointers to objects and clears list
 	void executeOrderList();
 };
