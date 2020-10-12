@@ -7,7 +7,7 @@
 //MAP>>>>>>>>>>>>>>>>>>>>>>>>>
 
 Map::Map(string _name, vector<string> mapData) {
-    name = &_name;
+    name = _name;
 
     int contI;
     int terrI;
@@ -99,36 +99,34 @@ vector<Territory*> Map::getAdjacentTerritories(string territoryID) {
 }
 
 void Map::setTerritories(vector<string> _territoriesData, vector<string> _bordersData) {
-
     for (int i = 0; i < _territoriesData.size(); i++) {
-        Territory *tempTer = new Territory(_territoriesData[i], _bordersData[i]);
+        Territory* tempTer = new Territory(_territoriesData[i], _bordersData[i]);
         territories.push_back(tempTer);
     }
 }
 
 void Map::setContinents(vector<string> _continentsData) {
     for (int i = 0; i < _continentsData.size(); i++) {
-        Continent *tempCont = new Continent(to_string(i + 1), _continentsData[i]);
+        Continent* tempCont = new Continent(to_string(i + 1), _continentsData[i]);
         continents.push_back(tempCont);
     }
-
 }
 
-ostream &operator<<(ostream &os, Map &n) {
-    os << "Map " << *n.name ;
-    os << " has " << n.getContinents().size() << " continents";
-    os << " and " << n.getTerritories().size()<< " territories" << endl;
+ostream &operator<<(ostream &os, const Map &n) {
+    os << "Map " << n.name ;
+    os << " has " << n.continents.size() << " continents";
+    os << " and " << n.territories.size()<< " territories" << endl;
 
     os << endl;
     os << " The continent's are:"<< endl;
-    for(int i = 0; i < n.getContinents().size(); i++) {
-        os << *n.getContinents()[i];
+    for(int i = 0; i < n.continents.size(); i++) {
+        os << *(n.continents[i]);
     }
 
     os << endl;
     os << " The territories' are:"<< endl;
-    for(int i = 0; i < n.getTerritories().size(); i++) {
-        os << *n.getTerritories()[i];
+    for(int i = 0; i < n.territories.size(); i++) {
+        os << *(n.territories[i]);
     }
     return os;
 }

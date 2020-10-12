@@ -7,13 +7,15 @@
 using namespace std;
 namespace fs = std::filesystem;
 
-MapLoader::MapLoader(){}
+MapLoader::MapLoader()= default;
 
 //load all files in testing directory
 void MapLoader::loadMaps() {
     std::string path = "../testing";
     for (const auto& entry : fs::directory_iterator(path)) {
         const auto filenameStr = entry.path().filename().string();
+
+        cout << "Files Found:" << endl;
 
         // check for all files inside each folder of testing directory
         if (entry.is_directory()) {
@@ -23,21 +25,25 @@ void MapLoader::loadMaps() {
 
                 // check for file with map data and create MapFiles
                 if(isMapType(entry.path())) {
+                    cout << "->VALID Map: " << entry.path().filename().string() << endl;
                     vector<string> content = getContent(entry.path());
                     string name = entry.path().filename().string();
                     maps.push_back(*new MapFile(name, content));
+                } else {
+                    cout << "->Invalid: " << entry.path().filename().string() << endl;
                 }
             }
         }
 
-        // check for all files inside testing directory
+        // check for all files directly inside testing directory
         else if (entry.is_regular_file()) {
 //            cout << "file: " << filenameStr << '\n';
         }
+        cout << endl;
     }
 }
 
-bool MapLoader::isMapType(string path) {
+bool MapLoader::isMapType(const string& path) {
     //get file extension
     string ext = path.substr(path.find_last_of('.'));
 
@@ -53,17 +59,19 @@ bool MapLoader::isMapType(string path) {
         cout<<"It failed\n"<<strerror(errno)<<endl;
         return false;
     }
-    // Close the file
+
+    // close the file
     PathFile.close();
     return true;
 }
 
 // extract map data
-vector<string> MapLoader::getContent(string path) {
+vector<string> MapLoader::getContent(const string& path) {
     ifstream PathFile(path);
     string lineContent;
     vector<string> vecOfStr;
 
+    // push each line of file into vector of strings (easier to find / parse information)
     while (getline (PathFile, lineContent)) {
         vecOfStr.push_back(lineContent);
     }
@@ -74,7 +82,7 @@ vector<string> MapLoader::getContent(string path) {
     return vecOfStr;
 }
 
-// print maps ready to load
+// prints and returns maps available
 vector<MapFile> MapLoader::getMaps() {
     for(vector<int>::size_type i = 0; i != maps.size(); i++) {
         cout << maps[i] << endl;
@@ -83,23 +91,29 @@ vector<MapFile> MapLoader::getMaps() {
 
 }
 
-// create temporary map files, to create
+// MapFile constructor -> creates valid map files to be turned into Graphs
 MapFile::MapFile(string _name, vector<string> fullContent) {
     name = _name;
     content = fullContent;
 }
 
-ostream& operator<<(ostream &os, const MapFile& n) {
-    return os << "Maps available: " << n.name << endl;
-}
-
+// copy constructor
 MapFile::MapFile(const MapFile& _file) {
     name =_file.name;
     content = _file.content;
 }
 
-MapFile::~MapFile() {
-
+// streams insertion operator
+ostream& operator<<(ostream &os, const MapFile& n) {
+    return os << "Maps available for creation: " << n.name << endl;
 }
+
+// assignment operator
+MapFile& MapFile::operator = (const MapFile& _file) {
+    return *this;
+}
+
+// destructor
+MapFile::~MapFile() = default;
 
 

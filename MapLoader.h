@@ -23,6 +23,7 @@ public:
     string name;
     vector<string> content;
     friend ostream& operator<<(ostream &os, const  MapFile& n);
+    MapFile& operator = (const MapFile& _file);
 };
 
 
@@ -38,6 +39,6 @@ public:
 
 private:
     vector<MapFile> maps;           // all maps to create / load
-    bool isMapType(string path);    // check validity of map
-    vector<string> getContent(string path); // get file content
+    static bool isMapType(const string& path);    // check validity of map
+    static vector<string> getContent(const string& path); // get files content
 };

@@ -73,7 +73,9 @@ public:
     ~Map();
 
     //attributes
-    string *name;
+    string name;
+    vector<Continent*> continents;
+    vector<Territory*> territories;
 
     //methods
     bool validate();                        //  whether the map contains all necessary info
@@ -84,12 +86,10 @@ public:
     friend ostream& operator<<(ostream &os, const  Map& n);
 
 private:
-    //attributes
-    vector<Territory*> territories;
-    vector<Continent*> continents;
 
     //methods
     void setTerritories(vector<string> _territoriesData, vector<string> _bordersData);
     void setContinents(vector<string> _continentsData);
+
 
 };
