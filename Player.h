@@ -15,12 +15,8 @@ public:
 	Player(vector<Territory*> playerTerritories, Hand* playerHand, OrderList* playerOrders);
 	Player(const Player& otherPlayer);
 
-
 	//Destructor
 	~Player();
-
-    //Forward declaration
-    Territory getTerritory();
 
 	//Assignment operator overload
 	Player& operator= (const Player& p);
@@ -37,10 +33,6 @@ public:
 
 	//Stream operator overload
 	friend ostream& operator << (ostream& out, const Player& p);
-
-protected:
-	//Helper data members
-    Territory* t;
 
 private:
 	//Required data members
