@@ -2,13 +2,13 @@
 // Created by Claudia on 2020-10-05.
 //
 
-#ifndef WARZONE_MAPLOADER_H
-#define WARZONE_MAPLOADER_H
+#pragma once
 
 #include <fstream>
 #include <vector>
 #include <string>
 #include <iostream>
+#include "Map.h"
 
 using namespace std;
 
@@ -35,8 +35,3 @@ private:
     vector<string> getContent(string path); // get file content
     void createMaps();              // create map (call Map class)
 };
-
-
-
-
-#endif //WARZONE_MAPLOADER_H

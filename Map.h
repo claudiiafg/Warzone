@@ -1,16 +1,15 @@
 //
 // Created by Claudia on 2020-10-07.
 //
-
-#ifndef WARZONE_MAP_H
-#define WARZONE_MAP_H
+#pragma once
 
 #include <fstream>
 #include <vector>
 #include <string>
 #include <iostream>
 #include <regex>
-#include "Player.h"
+
+class Player;
 
 using namespace std;
 
@@ -20,8 +19,8 @@ public:
     Continent(string pos, string continentsString);
 
     //attributes
-    string name;
-    string id;                            // node number
+    string *name;
+    string *id;                            // node number
 
     //methods
     friend ostream& operator<<(ostream &os, const  Continent& n);
@@ -34,12 +33,12 @@ public:
     Territory(const Territory& otherTerritory);
 
     //attributes
-    string name;
-    string id;                             // node number
+    string *name;
+    string *id;                             // node number
 
     //methods
     string getContinentID();
-    vector<string> getAdjacentNodes();
+    vector<string*> getAdjacentNodes();
     bool isAdjacentNode(string _node);
     int getArmies();
     void setArmiesNumber(int amount);
@@ -49,8 +48,8 @@ public:
 
 private:
     //attributes
-    string continentID;
-    vector<string> adjacent;                // adjacent nodes
+    string *continentID;
+    vector<string*> adjacent;                // adjacent nodes
     int armiesNumber;
     Player* owner;
 };
@@ -62,25 +61,23 @@ public:
     Map(string _name, vector<string> mapData);
 
     //attributes
-    string name;
+    string *name;
 
     //methods
     bool validate();                        //  whether the map contains all necessary info
-    vector<Territory> getTerritories();
-    vector<Continent> getContinents();
-    Territory getTerritoryById(string territoryID);
-    vector<Territory> getAdjacentTerritories(string territoryID);
+    vector<Territory*> getTerritories();
+    vector<Continent*> getContinents();
+    Territory* getTerritoryById(string territoryID);
+    vector<Territory*> getAdjacentTerritories(string territoryID);
     friend ostream& operator<<(ostream &os, const  Map& n);
 
 private:
     //attributes
-    vector<Territory> territories;
-    vector<Continent> continents;
+    vector<Territory*> territories;
+    vector<Continent*> continents;
 
     //methods
     void setTerritories(vector<string> _territoriesData, vector<string> _bordersData);
     void setContinents(vector<string> _continentsData);
 
 };
-
-#endif //WARZONE_MAP_H

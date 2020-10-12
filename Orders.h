@@ -1,10 +1,9 @@
 #pragma once
+
+using namespace std;
 #include <iostream>
 #include <list>
 #include <iterator>
-//#include <vector>
-
-using namespace std;
 
 class Order
 {
@@ -407,23 +406,25 @@ public:
 //}
 
 
-int main()
-{
-	OrderList player1Orders;
-
-	Bomb mybomb1 = Bomb(1, "Quebec", 1, 2, "Ontario");
-	Bomb mybomb2 = Bomb(1, "Manitoba", 1, 2, "Yukon");
-
-	Bomb* bombPtr1 = &mybomb1;
-	Bomb* bombPtr2 = &mybomb2;
-
-	//cout << *bombPtr1 << endl;
-
-	player1Orders.addOrder(bombPtr1);
-	player1Orders.addOrder(bombPtr2);
-	//player1Orders.removeOrder(bombPtr1);
-	//player1Orders.viewOrderList();
-	//player1Orders.executeOrderList();
-	player1Orders.moveOrder(bombPtr1, "up");
-}
+//int main()
+//{
+//	OrderList player1Orders;
+//
+//	Bomb mybomb1 = Bomb(1, "Quebec", 1, 2, "Ontario");
+//	Bomb mybomb2 = Bomb(1, "Manitoba", 1, 2, "Yukon");
+//
+//	Bomb* bombPtr1 = &mybomb1;
+//	Bomb* bombPtr2 = &mybomb2;
+//
+//	//cout << *bombPtr1 << endl;
+//
+//	player1Orders.addOrder(bombPtr1);
+//	player1Orders.addOrder(bombPtr2);
+//	//player1Orders.removeOrder(bombPtr1);
+//	//player1Orders.viewOrderList();
+//	//player1Orders.executeOrderList();
+//	player1Orders.moveOrder(bombPtr1, "up");
+//
+//	return 0;
+//}
 

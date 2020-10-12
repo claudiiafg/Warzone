@@ -7,7 +7,7 @@
 //MAP>>>>>>>>>>>>>>>>>>>>>>>>>
 
 Map::Map(string _name, vector<string> mapData) {
-    name = _name;
+    name = &_name;
 
     int contI;
     int terrI;
@@ -52,30 +52,30 @@ bool Map::validate() {
     return true;
 }
 
-vector<Territory> Map::getTerritories() {
+vector<Territory*> Map::getTerritories() {
     return territories;
 }
 
-vector<Continent> Map::getContinents() {
+vector<Continent*> Map::getContinents() {
     return continents;
 }
 
-Territory Map::getTerritoryById(string territoryID) {
+Territory* Map::getTerritoryById(string territoryID) {
     for (int i = 0; i < territories.size(); i++) {
-        if(territories[i].id == territoryID) {
+        if(*territories[i]->id == territoryID) {
             return territories[i];
         }
     }
 }
 
 //get all Territories adjacent to a specific territory
-vector<Territory> Map::getAdjacentTerritories(string territoryID) {
-    vector<Territory> tempList;
+vector<Territory*> Map::getAdjacentTerritories(string territoryID) {
+    vector<Territory*> tempList;
     for (int i = 0; i < territories.size(); i++) {
-        if(territories[i].id == territoryID) {
-            vector<string> nodesStrings = territories[i].getAdjacentNodes();
+        if(*territories[i]->id == territoryID) {
+            vector<string*> nodesStrings = territories[i]->getAdjacentNodes();
             for (int i = 0; i < nodesStrings.size(); i++) {
-                tempList.push_back(getTerritoryById(nodesStrings[i]));
+                tempList.push_back(getTerritoryById(reinterpret_cast<basic_string<char> &&>(nodesStrings[i])));
             }
         }
     }
@@ -86,7 +86,7 @@ void Map::setTerritories(vector<string> _territoriesData, vector<string> _border
 
     for (int i = 0; i < _territoriesData.size(); i++) {
         Territory *tempTer = new Territory(_territoriesData[i], _bordersData[i]);
-        territories.push_back(*tempTer);
+        territories.push_back(tempTer);
         delete tempTer;
     }
 }
@@ -94,7 +94,7 @@ void Map::setTerritories(vector<string> _territoriesData, vector<string> _border
 void Map::setContinents(vector<string> _continentsData) {
     for (int i = 0; i < _continentsData.size(); i++) {
         Continent *tempCont = new Continent(to_string(i+1), _continentsData[i]);
-        continents.push_back(*tempCont);
+        continents.push_back(tempCont);
         delete tempCont;
     }
 
@@ -111,7 +111,7 @@ ostream &operator<<(ostream &os, Map &n) {
 //CONTINENT>>>>>>>>>>>>>>>>>>>>>>>>>
 
 Continent::Continent(string pos, string continentsString) {
-    id = pos;
+    id = &pos;
 
     //seperate string by spaces
     regex ws_re("\\s+");
@@ -122,7 +122,7 @@ Continent::Continent(string pos, string continentsString) {
     //result is in form [name, (useless info for now...)]
         for (int i = 0; i < result.size(); i++) {
             if(i == 0) {
-                name = result[i];
+                name = &result[i];
             }
         }
 
@@ -153,17 +153,17 @@ Territory::Territory(string territoryString, string borderString) {
     //result is in form [id, name, continentID, (useless..)]
     for (int i = 0; i < result.size(); i++) {
         if (i == 0) {
-            id = result[i];
+            id = new string(result[i]);
         } else if (i == 1) {
-            name = result[i];
+            name = new string(result[i]);
         } else if (i == 2) {
-            continentID = result[i];
+            continentID = new string(result[i]);
         }
     }
 
     for (int i = 0; i < bordersResult.size(); i++) {
         if (i > 0) {
-            adjacent.push_back(result[i]);
+            adjacent.push_back(new string(result[i]));
         }
     }
 }
@@ -179,16 +179,16 @@ Territory::Territory(const Territory& otherTerritory) {
 }
 
 string Territory::getContinentID() {
-    return continentID;
+    return *continentID;
 }
 
-vector<string> Territory::getAdjacentNodes() {
+vector<string*> Territory::getAdjacentNodes() {
     return adjacent;
 }
 
 bool Territory::isAdjacentNode(string _node) {
     for (int i = 0; i < adjacent.size(); i++) {
-        if(adjacent[i] == _node) {
+        if(*adjacent[i] == _node) {
             return true;
         }
     }

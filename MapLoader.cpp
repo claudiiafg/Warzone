@@ -2,14 +2,7 @@
 // Created by Claudia on 2020-10-05.
 //
 
-#include <iostream>
-#include <filesystem>
-#include <vector>
-#include <string>
-#include <numeric>
-
 #include "MapLoader.h"
-#include "Map.cpp"
 
 using namespace std;
 namespace fs = std::filesystem;
@@ -99,7 +92,7 @@ void MapLoader::getMaps() {
 void MapLoader::createMaps() {
     for (int i = 0; i < maps.size(); i++) {
         Map* map = new Map(maps[i].name, maps[i].content);
-        cout << *map << endl;
+        cout << map << endl;
     }
 
 }

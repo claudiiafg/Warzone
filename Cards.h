@@ -4,12 +4,17 @@
  Assignment 1
  COMP 345 - D
  9 October 2020
- */ 
+ */
 
-#ifndef CARDS_H
-#define CARDS_H
+#pragma once
+
 #include <vector>
 #include <iostream>
+#include <stdio.h>
+#include <stdlib.h>
+#include <iostream>
+#include <vector>
+#include <exception>
 using namespace std;
 
 class Card{
@@ -66,4 +71,3 @@ class Deck{
 		vector<Card> deck;
 };
 
-#endif /* CARDS_H_ */

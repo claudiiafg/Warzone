@@ -1,9 +1,10 @@
-#ifndef PLAYER_H
-#define PLAYER_H
+#pragma once
 
 #include <vector>
-#include "Orders.cpp"
-#include "Cards.cpp"
+#include "Orders.h"
+
+class Hand;
+
 
 class Territory;
 
@@ -36,7 +37,7 @@ public:
 	void issueOrder();
 
 	//Stream operator overload
-	friend ostream& operator << (ostream& out, const Player& p);
+	 friend ostream& operator << (ostream& out, const Player& p);
 
 protected:
 	//Helper data members
@@ -49,4 +50,3 @@ private:
 	OrderList *playerOrders;
 };
 
-#endif
