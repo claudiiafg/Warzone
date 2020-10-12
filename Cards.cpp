@@ -35,6 +35,14 @@ Card::Card(){
          }
 }
 
+Card::Card(const Card &oldCard){
+        type = oldCard.type;
+}
+
+ostream& cardStream(ostream& cs, const Card c){
+        cout << "Card type: " << c.type;
+}
+
 string Card::getType(){
         return type;
 }
@@ -43,7 +51,9 @@ void Card::setType(string x){
         type = x;
 }       
 
-
+/**
+ * Initializes 50 pseudo-random cards and sorts them into a vector
+ * */
 Deck::Deck(){
         Card Card1 ; Card Card2 ; Card Card3 ; Card Card4 ;  Card Card5 ;  Card Card6 ; Card Card7 ; Card Card8 ; Card Card9 ;  Card Card10 ;
         deck.push_back(Card1);      deck.push_back(Card2);      deck.push_back(Card3);      deck.push_back(Card4);       deck.push_back(Card5);       deck.push_back(Card6);      deck.push_back(Card7);      deck.push_back(Card8);      deck.push_back(Card9);       deck.push_back(Card10);
@@ -57,7 +67,20 @@ Deck::Deck(){
         deck.push_back(Card41);       deck.push_back(Card42);       deck.push_back(Card43);       deck.push_back(Card44);        deck.push_back(Card45);        deck.push_back(Card46);       deck.push_back(Card47);       deck.push_back(Card48);       deck.push_back(Card49);        deck.push_back(Card50);
 }
 
-	
+
+Deck::Deck(const Deck &oldDeck){
+        for(int i = 0; i < oldDeck.deck.size(); i++){
+                deck.at(i) = oldDeck.deck.at(i);
+        }
+}
+
+ ostream& deckStream(ostream& ds, const Deck d){
+         cout << "Cards left in the deck: \n";
+         for(int i = 0; i < d.deck.size(); i++){
+                 Card temp = d.deck.at(i);
+                 cout << temp.getType() << "\n";
+         }
+ }
 
          vector<Card> Deck::getDeck(){
                  return deck;
@@ -74,14 +97,14 @@ Deck::Deck(){
  */
 
         Card Deck::draw(){
-                Card newCard;
+                Card oldCard;
                 if(deck.size() == 0){
-                        return newCard;
+                        return oldCard;
                 }
                 cout << "You got " << deck.back().getType() << "!\n\n";
-                newCard = deck.back();
+                oldCard = deck.back();
                 deck.pop_back();
-                return newCard;
+                return oldCard;
         }
 
 Hand::Hand(){
@@ -97,24 +120,46 @@ Hand::Hand(){
         diplomacyCounter = 0;
 }
 
+Hand::Hand(const Hand &oldHand){
+        for(int i = 0; 0 < oldHand.hand.size(); i++){
+                hand.at(i) = oldHand.hand.at(i);
+        }
+        bombCounter = oldHand.bombCounter;
+        reinforcementCounter = oldHand.reinforcementCounter;
+        blockadeCounter = oldHand.blockadeCounter;
+        airliftCounter = oldHand.airliftCounter;
+        diplomacyCounter = oldHand.diplomacyCounter;
+}
+
+ostream& handStream(ostream& hs, const Hand h){
+        cout << "Cards in hand: \n";
+        for(int i = 0; i < h.hand.size(); i++){
+                Card temp = h.hand.at(i);
+                cout << temp.getType() << "\n";
+
+        }
+}
         /**
          * Plays a card, returns it to the deck and erases it from the hand 
          */
         Card Hand::play(string cardType){
-        Card newCard;
+        Card oldCard;
         for(int i = 0; i < hand.size(); i++){
                 if(hand.at(i).getType() == cardType){
-                newCard = hand.at(i);
+                oldCard = hand.at(i);
                 cout << "You played " << cardType << "! \n\n";
                 hand.erase(hand.begin()+i);
-                return newCard;
+                return oldCard;
                 }      
         }
 
         cout << "You don't have any " + cardType + "s in your hand!\n\n";
-                return newCard;
+                return oldCard;
         }
 
+        /**
+         * Adds a new card to the hand from the deck (Complementary to "draw" function)
+         * */
         void Hand::add(Card card){
                 try{
                 hand.push_back(card);
@@ -164,7 +209,7 @@ Hand::Hand(){
 	void Hand::setBombCount(int x){
                 bombCounter = x;
         }
-	int Hand::getReinCoun(){
+	int Hand::getReinCount(){
                 return reinforcementCounter;
         }
 	void Hand::setReinCount(int x){
