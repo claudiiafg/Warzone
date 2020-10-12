@@ -3,9 +3,9 @@
 //
 
 using namespace std;
-#include "MapLoader.h"
-#include "Map.h"
 #include <iostream>
+#include "MapLoader.h"
+#include "Map.cpp"
 
 int main(){
 
@@ -14,8 +14,8 @@ int main(){
     vector<MapFile> rawMaps = loader.getMaps();
 
     for (int i = 0; i < rawMaps.size(); i++) {
-//        Map* map = new Map(rawMaps[i].name, rawMaps[i].content);
-        cout << rawMaps.size() << endl;
+        Map* map = new Map(rawMaps[i].name, rawMaps[i].content);
+        cout << *map << endl;
     }
 
 

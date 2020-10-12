@@ -22,13 +22,13 @@ Player::Player(const Player &otherPlayer) {
 
 //= operator overload
 Player& Player::operator= (const Player& otherPlayer) { //Delete any values already present and assign new ones
-    for (int i = 0; i < otherPlayer.playerTerritories.size(); i++) { 
+    for (int i = 0; i < otherPlayer.playerTerritories.size(); i++) {
         if (playerTerritories.at(i) != NULL) {
             delete playerTerritories.at(i);
         }
         playerTerritories.at(i) = *new Territory*(otherPlayer.playerTerritories.at(i));
     }
- 
+
     if (playerHand != NULL) {
         delete playerHand;
     }
@@ -75,7 +75,7 @@ void Player::issueOrder() {
 //Stream operator overload
 ostream& operator<<(ostream &out, const Player &p) {
     out << "\nTerritories: ";
-    
+
     for (int i = 0; i < p.playerTerritories.size(); i++) {
         out << p.playerTerritories.at(i) << ' ';
     }
