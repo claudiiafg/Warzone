@@ -8,137 +8,69 @@ using namespace std;
 class Order
 {
 public:
-	// playerID;
 
-	Order() {
-		//playerID = -1;
-	}
+	Order();
 
-	//Order(int thePlayerID){
-	//	playerID = thePlayerID;
-	//}
+	//Copy constructor
+	Order(const Order& b);
 
-	////copy constructor
-	//Order(const Order& o2) {
-	//	playerID = o2.playerID;
-	//}
+	//Assignment operator
+	Order& operator = (const Order& d2);
 
-	virtual bool validate() {return false;}
-    virtual bool validate(int thePlayerID, int theCountryOwner, int theUnits) {return false;}
-    virtual bool validate(int thePlayerID, int theCountryOwner, int theUnits, int theAttUnits) {return false;}
+	virtual bool validate();
 
-	virtual void execute() {
+	virtual void execute();
 
-	}
+	friend std::ostream& operator<<(std::ostream& out, const Order& b);
 
-
-
-	friend std::ostream& operator<<(std::ostream& out, const Order& b)
-	{
-		return b.print(out);
-	}
-
-	virtual std::ostream& print(std::ostream& out) const
-	{
-		//out << "Order";
-		return out;
-	}
 };
 
 class Deploy : public Order {
-	int countryOwner;
-	string countryName;
-	int units;
 	int playerID;
+	string countryName;
+	int countryOwner;
+	int units;
+
 
 public:
-	Deploy(int thePlayerID, string theCountryName, int theCountryOwner, int theUnits) {
-		countryOwner = theCountryOwner;
-		countryName = theCountryName;
-		units = theUnits;
-	}
+	Deploy(int thePlayerID, string theCountryName, int theCountryOwner, int theUnits);
 
-	Deploy(const Deploy& d2) {
-		countryOwner = d2.countryOwner;
-		countryName = d2.countryName;
-		units = d2.units;
-		playerID = d2.playerID;
-	}
+	//Copy constructor
+	Deploy(const Deploy& d2);
 
-	bool validate(int thePlayerID, int theCountryOwner, int theUnits) override {
-		bool playerOwnsCountry = false;
-		bool validUnits = false;
+	//Assignment operator
+	Deploy& operator = (const Deploy& d2);
 
-		if (thePlayerID == theCountryOwner) {
-			playerOwnsCountry = true;
-		}
-		if (theUnits >= 3) {
-			validUnits = true;
-		}
-		return (playerOwnsCountry && validUnits);
-	}
+	bool validate();
 
-	void execute(int thePlayerID, int theCountryOwner, string theCountryName, int theUnits) {
+	void execute();
 
-		if (validate(thePlayerID, theCountryOwner, theUnits)) {
-			cout << "Player " << thePlayerID << " has deployed " << theUnits << " units to " << theCountryName << ".\n";
-		}
-
-	}
+	friend std::ostream& operator<<(std::ostream& out, const Deploy& b);
 };
 
 class Advance : public Order {
-	int countryOwner;
-	string countryName;
-	int units;
 	int playerID;
+	string countryName;
+	int countryOwner;
+	int units;
 	int attCountryOwner;
 	string attCountryName;
 	int attUnits;
 
 public:
-	Advance(int thePlayerID, string theCountryName, int theCountryOwner, int theUnits, int theAttCountryOwner, string theAttCountryName, int theAttUnits) {
-		countryOwner = theCountryOwner;
-		countryName = theCountryName;
-		units = theUnits;
-		attCountryOwner = theAttCountryOwner;
-		attCountryName = theAttCountryName;
-		attUnits = theAttUnits;
-	}
+	Advance(int thePlayerID, string theCountryName, int theCountryOwner, int theUnits, int theAttCountryOwner, string theAttCountryName, int theAttUnits);
 
-	bool validate(int thePlayerID, int theCountryOwner, int theUnits, int theAttUnits) override {
-		bool playerOwnsCountry = false;
-		bool validUnitsToMoveOrAtt = false;
+	//Copy constructor
+	Advance(const Advance& b);
 
-		//check if the player owns the country
-		if (thePlayerID == theCountryOwner) {
-			playerOwnsCountry = true;
-		}
-		//check if player has more 1 or more units to attack with and if they are advancing with valid units
-		if (attUnits >= 1 && attUnits <= theUnits) {
-			validUnitsToMoveOrAtt = true;
-		}
-		//needed: assure the 2 countries and ajdacent
-		//needed: check if players are negotiating
+	//Assignment operator
+	Advance& operator = (const Advance& b);
 
-		return (playerOwnsCountry && validUnitsToMoveOrAtt);
-	}
+	bool validate();
 
-	void execute(int thePlayerID, int theCountryOwner, string theCountryName, int theUnits, int theAttUnits, int attCountryOwner, string attCountryName) {
+	void execute();
 
-		if (validate(thePlayerID, theCountryOwner, theUnits, theAttUnits)) {
-
-			if (thePlayerID == attCountryOwner) {
-				cout << "Player " << thePlayerID << " moved " << theUnits << " units to " << theCountryName << ".\n";
-			}
-			else {
-				cout << "Player " << thePlayerID << " is attacking  " << attCountryOwner << " with " << theUnits << " units at " << attCountryName << ".\n";
-			}
-		}
-
-	}
-
-
+	friend std::ostream& operator<<(std::ostream& out, const Advance& b);
 };
 
 class Bomb : public Order {
@@ -149,174 +81,88 @@ class Bomb : public Order {
 	string attCountryName;
 
 public:
-	Bomb(int thePlayerID, string theCountryName, int theCountryOwner, int theAttCountryOwner, string theAttCountryName) {
-		playerID = thePlayerID;
-		countryOwner = theCountryOwner;
-		countryName = theCountryName;
-		attCountryOwner = theAttCountryOwner;
-		attCountryName = theAttCountryName;
-	}
+	Bomb(int thePlayerID, string theCountryName, int theCountryOwner, int theAttCountryOwner, string theAttCountryName);
 
-	Bomb(const Bomb& b) {
-		playerID = b.playerID;
-		countryOwner = b.countryOwner;
-		countryName = b.countryName;
-		attCountryOwner = b.attCountryOwner;
-		attCountryName = b.attCountryName;
-		cout << "Copy constructor called " << endl;
-	}
+	//Copy constructor
+	Bomb(const Bomb& b);
 
-	Bomb& operator = (const Bomb& b) {
-		cout << "Assignment operator called " << endl;
-		return *this;
-	}
+	//Assignment operator
+	Bomb& operator = (const Bomb& b);
 
-	bool validate() override {
-		bool playerOwnsCountry = false;
-		bool validOpponent = false;
+	bool validate();
 
-		//check if the player owns the country
-		if (this->playerID == this->countryOwner) {
-			playerOwnsCountry = true;
-		}
-		//
-		if (this->playerID != this->attCountryOwner) {
-			validOpponent = true;
-		}
-		//needed: assure the 2 countries and ajdacent
-		//needed: check if players are negotiating
+	void execute();
 
-		return (playerOwnsCountry && validOpponent);
-	}
-
-	void execute() override {
-
-		if (validate()) {
-			cout << "Player " << this->playerID << " bombed " << this->attCountryName << ".\n";
-		}
-
-	}
-
-	virtual std::ostream& print(std::ostream& out) const override
-	{
-		out << "bomb(" << playerID << ", " << countryOwner << ", " << countryName << ", " << attCountryOwner << ", " << attCountryName << ")";
-		return out;
-	}
+	friend std::ostream& operator<<(std::ostream& out, const Bomb& b);
 };
 
 class Blockade : public Order {
-	int countryOwner;
-	string countryName;
-	int units;
 	int playerID;
+	string countryName;
+	int countryOwner;
+	int units;
+
 
 public:
-	Blockade(int thePlayerID, string theCountryName, int theCountryOwner, int theUnits) {
-		countryOwner = theCountryOwner;
-		countryName = theCountryName;
-		units = theUnits;
-	}
+	Blockade(int thePlayerID, string theCountryName, int theCountryOwner, int theUnits);
 
-	bool validate(int thePlayerID, int theCountryOwner, int theUnits) {
-		bool playerOwnsCountry = false;
-		bool validUnits = false;
+	//Copy constructor
+	Blockade(const Blockade& b);
 
-		if (thePlayerID == theCountryOwner) {
-			playerOwnsCountry = true;
-		}
-		if (theUnits >= 0) {
-			validUnits = true;
-		}
-		return (playerOwnsCountry && validUnits);
-	}
+	//Assignment operator
+	Blockade& operator = (const Blockade& b);
 
-	void execute(int thePlayerID, int theCountryOwner, string theCountryName, int theUnits) {
+	bool validate();
 
-		if (validate(thePlayerID, theCountryOwner, theUnits)) {
-			cout << "Player " << thePlayerID << " has blockaded " << theCountryName << ".\n";
-			//logic to return that the player no longer owns the country and that the units have tripled
-		}
+	void execute();
 
-	}
+	friend std::ostream& operator<<(std::ostream& out, const Blockade& b);
 };
 
 class Airlift : public Order {
-	int countryOwner;
-	string countryName;
-	int units;
 	int playerID;
+	string countryName;
+	int countryOwner;
+	int units;
 	int attCountryOwner;
 	string attCountryName;
 	int attUnits;
 
 public:
-	Airlift(int thePlayerID, string theCountryName, int theCountryOwner, int theUnits, int theAttCountryOwner, string theAttCountryName, int theAttUnits) {
-		countryOwner = theCountryOwner;
-		countryName = theCountryName;
-		units = theUnits;
-		attCountryOwner = theAttCountryOwner;
-		attCountryName = theAttCountryName;
-		attUnits = theAttUnits;
-	}
+	Airlift(int thePlayerID, string theCountryName, int theCountryOwner, int theUnits, int theAttCountryOwner, string theAttCountryName, int theAttUnits);
 
-	bool validate(int thePlayerID, int theCountryOwner, int theUnits, int theAttUnits) {
-		bool playerOwnsCountry = false;
-		bool validUnitsToMoveOrAtt = false;
+	//Copy constructor
+	Airlift(const Airlift& b);
 
-		//check if the player owns the country
-		if (thePlayerID == theCountryOwner) {
-			playerOwnsCountry = true;
-		}
-		//check if player has more 1 or more units to attack with and if they are advancing with valid units
-		if (attUnits >= 1 && attUnits <= theUnits) {
-			validUnitsToMoveOrAtt = true;
-		}
-		//needed: check if players are negotiating
+	//Assignment operator
+	Airlift& operator = (const Airlift& b);
 
-		return (playerOwnsCountry && validUnitsToMoveOrAtt);
-	}
+	bool validate();
 
-	void execute(int thePlayerID, int theCountryOwner, string theCountryName, int theUnits, int theAttUnits, int attCountryOwner, string attCountryName) {
+	void execute();
 
-		if (validate(thePlayerID, theCountryOwner, theUnits, theAttUnits)) {
-
-			if (thePlayerID == attCountryOwner) {
-				cout << "Player " << thePlayerID << " airlifted " << theUnits << " units to " << theCountryName << ".\n";
-			}
-			else {
-				cout << "Player " << thePlayerID << " is attacking  " << attCountryOwner << " with " << theUnits << " units at " << attCountryName << " via airlift" << ".\n";
-			}
-		}
-
-	}
+	friend std::ostream& operator<<(std::ostream& out, const Airlift& b);
 
 };
 
 class Negotiate : public Order {
+	int playerID;
 	int otherPlayer;
 
 public:
-	Negotiate(int thePlayerID, int theOtherPlayer) {
-		otherPlayer = theOtherPlayer;
-	}
+	Negotiate(int thePlayerID, int theOtherPlayer);
 
-	bool validate(int thePlayerID, int theOtherPlayer) {
-		bool validOpponent = false;
+	//Copy constructor
+	Negotiate(const Negotiate& b);
 
-		if (thePlayerID != theOtherPlayer) {
-			validOpponent = true;
-		}
+	//Assignment operator
+	Negotiate& operator = (const Negotiate& b);
 
-		return (validOpponent);
-	}
+	bool validate();
 
-	void execute(int thePlayerID, int theOtherPlayer) {
-
-		if (validate(thePlayerID, theOtherPlayer)) {
-			cout << "Player " << thePlayerID << " and Player  " << theOtherPlayer << " are now negotiating" << ".\n";
-		}
-
-	}
+	void execute();
+	
+	friend std::ostream& operator<<(std::ostream& out, const Negotiate& b);
 };
 
 class OrderList {
@@ -324,107 +170,18 @@ class OrderList {
 
 public:
 
-	OrderList() {
-	}
+	OrderList();
 
-	void addOrder(Order* x) {
-			orders.push_back(x);
-	}
+	void addOrder(Order* x);
 
-	void removeOrder(Order* x) {
-		list <Order*> ::iterator it;
-		for (it = orders.begin(); it != orders.end(); ++it) {
-			if (*it == x) {
-				orders.remove(x);
-				break;
-			}
-		}
-	}
+	void removeOrder(Order* x);
 
-	//string move must be "up" or "down"
-	void moveOrder(Order* x, string move) {
-		list <Order*> ::iterator it;
-//		int counter;
-		for (it = orders.begin(); it != orders.end(); ++it) {
-//			cout << &orders.begin() << endl;
-			//find location of order
-			//counter += 1;
-			//if (*it = x) {
+	
+	void swapOrder(Order* x, Order* y);
 
-			//}
-		}
-	}
+	void moveOrder(Order* x, string move);
 
-	void viewOrderList() {
-		list <Order*> ::iterator it;
-		for (it = orders.begin(); it != orders.end(); ++it) {
-				cout << *(*it) << endl;
-		}
-	}
+	void viewOrderList();
 
-	void executeOrderList() {
-		list <Order*> ::iterator it;
-		for (it = orders.begin(); it != orders.end(); ++it) {
-			(*it)->execute();
-		}
-	}
-
-
-	////copy constructor
-	//Order(const Order& o2) {
-	//	playerID = o2.playerID;
-	//}
-
-
-
-
-	//void executeList(list <Order> o) {
-	//	list <Order> ::iterator it;
-	//	for (it = o.begin(); it != o.end(); ++it) {
-
-	//	}
-	//		
-	//	cout << '\n';
-	//}
-
-
+	void executeOrderList();
 };
-//void showList(list <Order> o) {
-//	list <Order> ::iterator it;
-//	for (it = o.begin(); it != o.end(); ++it)
-//		cout << *it << endl;
-//	cout << '\n';
-//}
-
-//std::ostream& operator<<(std::ostream& out, const Order& b)
-//{
-//	if (typeid(b).name() == "class Bomb") {
-//		out << typeid(b).name();
-//	}
-//	out << typeid(b).name();
-//	return out;
-//}
-
-
-//int main()
-//{
-//	OrderList player1Orders;
-//
-//	Bomb mybomb1 = Bomb(1, "Quebec", 1, 2, "Ontario");
-//	Bomb mybomb2 = Bomb(1, "Manitoba", 1, 2, "Yukon");
-//
-//	Bomb* bombPtr1 = &mybomb1;
-//	Bomb* bombPtr2 = &mybomb2;
-//
-//	//cout << *bombPtr1 << endl;
-//
-//	player1Orders.addOrder(bombPtr1);
-//	player1Orders.addOrder(bombPtr2);
-//	//player1Orders.removeOrder(bombPtr1);
-//	//player1Orders.viewOrderList();
-//	//player1Orders.executeOrderList();
-//	player1Orders.moveOrder(bombPtr1, "up");
-//
-//	return 0;
-//}
-
