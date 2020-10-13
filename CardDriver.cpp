@@ -9,14 +9,15 @@
 #include <vector>
 using namespace std;
 int main(){
-
 cout << "Welcome to the world's greatest card displayer! \n\n";
 
-Hand hand;
-Deck deck;
-for(int i = 1; i > 0;){
+Hand *hand = new Hand();
+Deck *deck = new Deck();
+
+int menu = 0;
+
+while(menu != 4) {
     cout << "What do you want to do? \n 1. Play a card \n 2. Draw a card \n 3. Display your hand \n 4. Quit \n";
-    int menu = 0;
     cin >> menu;
 
     if(menu == 1){
@@ -26,37 +27,34 @@ for(int i = 1; i > 0;){
     cin >> option;
 
     if(option == 1)
-        deck.add(hand.play("bomb"));
+        deck->add(hand->play("bomb"));
     else if(option == 2)
-        deck.add(hand.play("blockade"));
+        deck->add(hand->play("blockade"));
     else if(option == 3)
-        deck.add(hand.play("airlift"));
+        deck->add(hand->play("airlift"));
     else if(option == 4)
-    deck.add(hand.play("reinforcements"));
+    deck->add(hand->play("reinforcements"));
     else if(option == 5)
-        deck.add(hand.play("diplomacy"));
+        deck->add(hand->play("diplomacy"));
     else
         cout << "Error: Please enter a valid menu option.\n\n";
     }
 
     else if(menu == 2){
         
-        hand.add(deck.draw());
+        hand->add(deck->draw());
     }
 
     else if(menu == 3){
-        hand.display();
-    }
-
-    else if(menu == 4){
-        cout << "Thanks for playing!";
-        return 0;
+        hand->display();
     }
 
     else{
         cout << "Error: Please select a valid menu option. \n";
     }
-    }
 
+
+}
+cout << "Thanks for playing!";
 return 0;
 }
