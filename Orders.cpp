@@ -440,9 +440,7 @@ using namespace std;
 /////////////////////////////////////////////////////////////////////////////
 
 	//Default Constructor
-	OrderList::OrderList() {
-	}
-
+	OrderList::OrderList() = default;
 	//destructor
 	OrderList::~OrderList() {
 		list <Order*> ::iterator it;

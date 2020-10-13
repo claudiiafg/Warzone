@@ -1,11 +1,10 @@
 #pragma once
 
+using namespace std;
 #include <vector>
-#include "Orders.cpp"
+#include "Orders.h"
 
 class Hand;
-
-
 class Territory;
 
 class Player {
