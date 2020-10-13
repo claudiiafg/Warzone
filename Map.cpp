@@ -3,10 +3,10 @@
 //
 
 #include "Map.h"
-#include "Player.h"
 
-//MAP>>>>>>>>>>>>>>>>>>>>>>>>>
-
+/////////////////////////////////////////////////////////////////////////////
+///   MAP   					   	                                      ///
+/////////////////////////////////////////////////////////////////////////////
 
 Map::Map() = default;
 
@@ -200,7 +200,10 @@ Map& Map::operator = (const Map& _file) {
     return *this;
 }
 
-//CONTINENT>>>>>>>>>>>>>>>>>>>>>>>>>
+/////////////////////////////////////////////////////////////////////////////
+///   CONTINENT					   	                                      ///
+/////////////////////////////////////////////////////////////////////////////
+
 Continent::Continent() = default;
 
 // constructor
@@ -338,7 +341,7 @@ void Territory::setOwner(Player* _owner) {
 
 // stream insertion operator
 ostream &operator<<(ostream &os, const Territory &n) {
-    os << n.name << " is node #" << n.id;
+    os << n.name << " is node #" << n.id << " from the continent #" << n.continentID;
     os << " and has " << n.adjacent.size() << " adjacent territories -> ";
 
     for(int i = 0; i < n.adjacent.size(); i++) {
