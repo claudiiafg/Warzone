@@ -343,7 +343,7 @@ void Territory::setOwner(Player* _owner) {
 
 // stream insertion operator
 ostream &operator<<(ostream &os, const Territory &n) {
-    os << n.name << " is node #" << n.id << " from the continent #" << n.continentID;
+    os << n.name << " is node #" << n.id << " from continent #" << n.continentID;
     os << " and has " << n.adjacent.size() << " adjacent territories -> ";
 
     for(int i = 0; i < n.adjacent.size(); i++) {
