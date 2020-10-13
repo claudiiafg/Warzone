@@ -57,8 +57,8 @@ void Card::setType(string x) {
  * Initializes 50 pseudo-random cards and sorts them into a vector
  * */
 Deck::Deck() {
-    Card *temp = new Card;
     for (int i = 0; i < 50; i++) {
+        Card *temp = new Card;
         deck.push_back(temp);
     }
 
@@ -122,8 +122,8 @@ Hand::Hand() {
     /**
      * Initializes a hand with 5 cards
      */
-    Card *temp = new Card;
     for (int i = 0; i < 5; i++) {
+        Card *temp = new Card;
         hand.push_back(temp);
     }
     bombCounter = 0;

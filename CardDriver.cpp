@@ -53,8 +53,8 @@ while(menu != 4) {
         cout << "Error: Please select a valid menu option. \n";
     }
 
-    cout << "Thanks for playing!";
-}
 
+}
+cout << "Thanks for playing!";
 return 0;
 }
