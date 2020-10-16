@@ -1,0 +1,95 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.17.3"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "Warzone",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "Warzone_Card::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Warzone_Card-Debug-7fa706c7b2e244a24a66.json",
+					"name" : "Warzone_Card",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "Warzone_Map::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Warzone_Map-Debug-40d0ac073c3488fe3a1b.json",
+					"name" : "Warzone_Map",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "Warzone_MapLoader::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Warzone_MapLoader-Debug-cbc1245baf6d14259165.json",
+					"name" : "Warzone_MapLoader",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "Warzone_Order::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Warzone_Order-Debug-1563743e0bc328b3a836.json",
+					"name" : "Warzone_Order",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "Warzone_Player::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Warzone_Player-Debug-874ff5be76872a8d660f.json",
+					"name" : "Warzone_Player",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "C:/Users/gini/source/repos/claudiiafg/Warzone/out/build/x64-Debug (default)",
+		"source" : "C:/Users/gini/source/repos/claudiiafg/Warzone"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 0
+	}
+}

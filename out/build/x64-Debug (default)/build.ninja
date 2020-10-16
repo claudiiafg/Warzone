@@ -34,6 +34,135 @@ CONFIGURATION = Debug
 
 include rules.ninja
 
+# =============================================================================
+# Object build statements for EXECUTABLE target Warzone_MapLoader
+
+
+#############################################
+# Order-only phony target for Warzone_MapLoader
+
+build cmake_object_order_depends_target_Warzone_MapLoader_Debug: phony || CMakeFiles\Warzone_MapLoader.dir
+
+build CMakeFiles\Warzone_MapLoader.dir\MapLoaderDriver.cpp.obj: CXX_COMPILER__Warzone_MapLoader_Debug ..\..\..\MapLoaderDriver.cpp || cmake_object_order_depends_target_Warzone_MapLoader_Debug
+  FLAGS = /DWIN32 /D_WINDOWS /GR /EHsc /Zi /Ob0 /Od /RTC1 -MDd   -std:c++17
+  OBJECT_DIR = CMakeFiles\Warzone_MapLoader.dir
+  OBJECT_FILE_DIR = CMakeFiles\Warzone_MapLoader.dir
+  TARGET_COMPILE_PDB = CMakeFiles\Warzone_MapLoader.dir\
+  TARGET_PDB = Warzone_MapLoader.pdb
+
+build CMakeFiles\Warzone_MapLoader.dir\MapLoader.cpp.obj: CXX_COMPILER__Warzone_MapLoader_Debug ..\..\..\MapLoader.cpp || cmake_object_order_depends_target_Warzone_MapLoader_Debug
+  FLAGS = /DWIN32 /D_WINDOWS /GR /EHsc /Zi /Ob0 /Od /RTC1 -MDd   -std:c++17
+  OBJECT_DIR = CMakeFiles\Warzone_MapLoader.dir
+  OBJECT_FILE_DIR = CMakeFiles\Warzone_MapLoader.dir
+  TARGET_COMPILE_PDB = CMakeFiles\Warzone_MapLoader.dir\
+  TARGET_PDB = Warzone_MapLoader.pdb
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target Warzone_MapLoader
+
+
+#############################################
+# Link the executable Warzone_MapLoader.exe
+
+build Warzone_MapLoader.exe: CXX_EXECUTABLE_LINKER__Warzone_MapLoader_Debug CMakeFiles\Warzone_MapLoader.dir\MapLoaderDriver.cpp.obj CMakeFiles\Warzone_MapLoader.dir\MapLoader.cpp.obj
+  FLAGS = /DWIN32 /D_WINDOWS /GR /EHsc /Zi /Ob0 /Od /RTC1 -MDd
+  LINK_FLAGS = /machine:x64 /debug /INCREMENTAL /subsystem:console
+  LINK_LIBRARIES = kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
+  OBJECT_DIR = CMakeFiles\Warzone_MapLoader.dir
+  POST_BUILD = cd .
+  PRE_LINK = cd .
+  TARGET_COMPILE_PDB = CMakeFiles\Warzone_MapLoader.dir\
+  TARGET_FILE = Warzone_MapLoader.exe
+  TARGET_IMPLIB = Warzone_MapLoader.lib
+  TARGET_PDB = Warzone_MapLoader.pdb
+
+# =============================================================================
+# Object build statements for EXECUTABLE target Warzone_Card
+
+
+#############################################
+# Order-only phony target for Warzone_Card
+
+build cmake_object_order_depends_target_Warzone_Card_Debug: phony || CMakeFiles\Warzone_Card.dir
+
+build CMakeFiles\Warzone_Card.dir\CardDriver.cpp.obj: CXX_COMPILER__Warzone_Card_Debug ..\..\..\CardDriver.cpp || cmake_object_order_depends_target_Warzone_Card_Debug
+  FLAGS = /DWIN32 /D_WINDOWS /GR /EHsc /Zi /Ob0 /Od /RTC1 -MDd   -std:c++17
+  OBJECT_DIR = CMakeFiles\Warzone_Card.dir
+  OBJECT_FILE_DIR = CMakeFiles\Warzone_Card.dir
+  TARGET_COMPILE_PDB = CMakeFiles\Warzone_Card.dir\
+  TARGET_PDB = Warzone_Card.pdb
+
+build CMakeFiles\Warzone_Card.dir\Cards.cpp.obj: CXX_COMPILER__Warzone_Card_Debug ..\..\..\Cards.cpp || cmake_object_order_depends_target_Warzone_Card_Debug
+  FLAGS = /DWIN32 /D_WINDOWS /GR /EHsc /Zi /Ob0 /Od /RTC1 -MDd   -std:c++17
+  OBJECT_DIR = CMakeFiles\Warzone_Card.dir
+  OBJECT_FILE_DIR = CMakeFiles\Warzone_Card.dir
+  TARGET_COMPILE_PDB = CMakeFiles\Warzone_Card.dir\
+  TARGET_PDB = Warzone_Card.pdb
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target Warzone_Card
+
+
+#############################################
+# Link the executable Warzone_Card.exe
+
+build Warzone_Card.exe: CXX_EXECUTABLE_LINKER__Warzone_Card_Debug CMakeFiles\Warzone_Card.dir\CardDriver.cpp.obj CMakeFiles\Warzone_Card.dir\Cards.cpp.obj
+  FLAGS = /DWIN32 /D_WINDOWS /GR /EHsc /Zi /Ob0 /Od /RTC1 -MDd
+  LINK_FLAGS = /machine:x64 /debug /INCREMENTAL /subsystem:console
+  LINK_LIBRARIES = kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
+  OBJECT_DIR = CMakeFiles\Warzone_Card.dir
+  POST_BUILD = cd .
+  PRE_LINK = cd .
+  TARGET_COMPILE_PDB = CMakeFiles\Warzone_Card.dir\
+  TARGET_FILE = Warzone_Card.exe
+  TARGET_IMPLIB = Warzone_Card.lib
+  TARGET_PDB = Warzone_Card.pdb
+
+# =============================================================================
+# Object build statements for EXECUTABLE target Warzone_Map
+
+
+#############################################
+# Order-only phony target for Warzone_Map
+
+build cmake_object_order_depends_target_Warzone_Map_Debug: phony || CMakeFiles\Warzone_Map.dir
+
+build CMakeFiles\Warzone_Map.dir\MapDriver.cpp.obj: CXX_COMPILER__Warzone_Map_Debug ..\..\..\MapDriver.cpp || cmake_object_order_depends_target_Warzone_Map_Debug
+  FLAGS = /DWIN32 /D_WINDOWS /GR /EHsc /Zi /Ob0 /Od /RTC1 -MDd   -std:c++17
+  OBJECT_DIR = CMakeFiles\Warzone_Map.dir
+  OBJECT_FILE_DIR = CMakeFiles\Warzone_Map.dir
+  TARGET_COMPILE_PDB = CMakeFiles\Warzone_Map.dir\
+  TARGET_PDB = Warzone_Map.pdb
+
+build CMakeFiles\Warzone_Map.dir\Map.cpp.obj: CXX_COMPILER__Warzone_Map_Debug ..\..\..\Map.cpp || cmake_object_order_depends_target_Warzone_Map_Debug
+  FLAGS = /DWIN32 /D_WINDOWS /GR /EHsc /Zi /Ob0 /Od /RTC1 -MDd   -std:c++17
+  OBJECT_DIR = CMakeFiles\Warzone_Map.dir
+  OBJECT_FILE_DIR = CMakeFiles\Warzone_Map.dir
+  TARGET_COMPILE_PDB = CMakeFiles\Warzone_Map.dir\
+  TARGET_PDB = Warzone_Map.pdb
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target Warzone_Map
+
+
+#############################################
+# Link the executable Warzone_Map.exe
+
+build Warzone_Map.exe: CXX_EXECUTABLE_LINKER__Warzone_Map_Debug CMakeFiles\Warzone_Map.dir\MapDriver.cpp.obj CMakeFiles\Warzone_Map.dir\Map.cpp.obj
+  FLAGS = /DWIN32 /D_WINDOWS /GR /EHsc /Zi /Ob0 /Od /RTC1 -MDd
+  LINK_FLAGS = /machine:x64 /debug /INCREMENTAL /subsystem:console
+  LINK_LIBRARIES = kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
+  OBJECT_DIR = CMakeFiles\Warzone_Map.dir
+  POST_BUILD = cd .
+  PRE_LINK = cd .
+  TARGET_COMPILE_PDB = CMakeFiles\Warzone_Map.dir\
+  TARGET_FILE = Warzone_Map.exe
+  TARGET_IMPLIB = Warzone_Map.lib
+  TARGET_PDB = Warzone_Map.pdb
+
 
 #############################################
 # Utility command for rebuild_cache
@@ -101,7 +230,58 @@ build CMakeFiles\edit_cache.util: CUSTOM_COMMAND
 build edit_cache: phony CMakeFiles\edit_cache.util
 
 # =============================================================================
+# Object build statements for EXECUTABLE target Warzone_Order
+
+
+#############################################
+# Order-only phony target for Warzone_Order
+
+build cmake_object_order_depends_target_Warzone_Order_Debug: phony || CMakeFiles\Warzone_Order.dir
+
+build CMakeFiles\Warzone_Order.dir\OrdersDriver.cpp.obj: CXX_COMPILER__Warzone_Order_Debug ..\..\..\OrdersDriver.cpp || cmake_object_order_depends_target_Warzone_Order_Debug
+  FLAGS = /DWIN32 /D_WINDOWS /GR /EHsc /Zi /Ob0 /Od /RTC1 -MDd   -std:c++17
+  OBJECT_DIR = CMakeFiles\Warzone_Order.dir
+  OBJECT_FILE_DIR = CMakeFiles\Warzone_Order.dir
+  TARGET_COMPILE_PDB = CMakeFiles\Warzone_Order.dir\
+  TARGET_PDB = Warzone_Order.pdb
+
+build CMakeFiles\Warzone_Order.dir\Orders.cpp.obj: CXX_COMPILER__Warzone_Order_Debug ..\..\..\Orders.cpp || cmake_object_order_depends_target_Warzone_Order_Debug
+  FLAGS = /DWIN32 /D_WINDOWS /GR /EHsc /Zi /Ob0 /Od /RTC1 -MDd   -std:c++17
+  OBJECT_DIR = CMakeFiles\Warzone_Order.dir
+  OBJECT_FILE_DIR = CMakeFiles\Warzone_Order.dir
+  TARGET_COMPILE_PDB = CMakeFiles\Warzone_Order.dir\
+  TARGET_PDB = Warzone_Order.pdb
+
+
+# =============================================================================
+# Link build statements for EXECUTABLE target Warzone_Order
+
+
+#############################################
+# Link the executable Warzone_Order.exe
+
+build Warzone_Order.exe: CXX_EXECUTABLE_LINKER__Warzone_Order_Debug CMakeFiles\Warzone_Order.dir\OrdersDriver.cpp.obj CMakeFiles\Warzone_Order.dir\Orders.cpp.obj
+  FLAGS = /DWIN32 /D_WINDOWS /GR /EHsc /Zi /Ob0 /Od /RTC1 -MDd
+  LINK_FLAGS = /machine:x64 /debug /INCREMENTAL /subsystem:console
+  LINK_LIBRARIES = kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib
+  OBJECT_DIR = CMakeFiles\Warzone_Order.dir
+  POST_BUILD = cd .
+  PRE_LINK = cd .
+  TARGET_COMPILE_PDB = CMakeFiles\Warzone_Order.dir\
+  TARGET_FILE = Warzone_Order.exe
+  TARGET_IMPLIB = Warzone_Order.lib
+  TARGET_PDB = Warzone_Order.pdb
+
+# =============================================================================
 # Target aliases.
+
+build Warzone_Card: phony Warzone_Card.exe
+
+build Warzone_Map: phony Warzone_Map.exe
+
+build Warzone_MapLoader: phony Warzone_MapLoader.exe
+
+build Warzone_Order: phony Warzone_Order.exe
 
 build Warzone_Player: phony Warzone_Player.exe
 
@@ -113,7 +293,7 @@ build Warzone_Player: phony Warzone_Player.exe
 #############################################
 # Folder: C:/Users/gini/source/repos/claudiiafg/Warzone/out/build/x64-Debug (default)
 
-build all: phony Warzone_Player.exe
+build all: phony Warzone_MapLoader.exe Warzone_Card.exe Warzone_Map.exe Warzone_Player.exe Warzone_Order.exe
 
 # =============================================================================
 # Built-in targets
