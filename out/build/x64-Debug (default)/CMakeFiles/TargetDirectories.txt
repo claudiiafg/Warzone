@@ -1,0 +1,3 @@
+C:/Users/gini/source/repos/claudiiafg/Warzone/out/build/x64-Debug (default)/CMakeFiles/rebuild_cache.dir
+C:/Users/gini/source/repos/claudiiafg/Warzone/out/build/x64-Debug (default)/CMakeFiles/Warzone_Player.dir
+C:/Users/gini/source/repos/claudiiafg/Warzone/out/build/x64-Debug (default)/CMakeFiles/edit_cache.dir

@@ -1,4 +1,5 @@
 #include "Player.h"
+#include "Map.h"
 
 using namespace std;
 
@@ -55,14 +56,10 @@ Player::~Player() {
 
 //Required methods
 vector<Territory*> Player::toDefend() {
-//    vector<Territory*> toDefend{new Territory("terr1", "cont1"), new Territory("terr2", "cont2"), new Territory("terr3", "cont3")}; //Create arbitrary list for now
-    //vector<Territory*> toDefend;
     return playerTerritories;
 }
 
 vector<Territory*> Player::toAttack() {
-//    vector<Territory*> toAttack{new Territory("terr4", "cont4"), new Territory("terr5", "cont5"), new Territory("terr6", "cont6")}; //Create arbitrary list for now
-    //vector<Territory*> toAttack;
     return playerTerritories;
 }
 
@@ -77,11 +74,12 @@ ostream& operator<<(ostream &out, const Player &p) {
     out << "\nTerritories: ";
 
     for (int i = 0; i < (int)p.playerTerritories.size(); i++) {
-        out << p.playerTerritories.at(i) << ' ';
+        Territory* curr = p.playerTerritories.at(i);
+        out << curr->name << ' ';
     }
-
-    out << "\nOrders: " << p.playerOrders
-    << "\nHand: " << p.playerHand << "\n";
+    out << "\nHand: No hand yet\nOrders: No orders yet\n";
+    //out << "\nOrders: " << p.playerOrders
+    //<< "\nHand: " << p.playerHand << "\n";
 
     return out;
 }

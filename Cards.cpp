@@ -42,7 +42,8 @@ Card::Card(const Card &oldCard) {
 
 
 ostream &cardStream(ostream &cs, const Card *c) {
-    cout << "Card type: " << c->type;
+    cs << "Card type: " << c->type;
+    return cs;
 }
 
 string Card::getType() {
@@ -80,13 +81,14 @@ Deck::~Deck() {
 
 ostream &deckStream(ostream &ds, const Deck *d) {
     Card *temp = new Card;
-    cout << "Cards left in the deck: \n";
+    ds << "Cards left in the deck: \n";
     for (int i = 0; i < d->deck.size(); i++) {
         temp = d->deck.at(i);
-        cout << temp->getType() << "\n";
+        ds << temp->getType() << "\n";
     }
     delete temp;
     temp = NULL;
+    return ds;
 }
 
 vector<Card*> Deck::getDeck() {
@@ -146,12 +148,13 @@ Hand::Hand(const Hand &oldHand) {
 
 ostream &handStream(ostream &hs, const Hand *h) {
     Card *temp = new Card;
-    cout << "Cards in hand: \n";
+    hs << "Cards in hand: \n";
     for (int i = 0; i < h->hand.size(); i++) {
         temp = h->hand.at(i);
-        cout << temp->getType() << "\n";
+        hs << temp->getType() << "\n";
 
     }
+    return hs;
 }
 
 Hand::~Hand() {
