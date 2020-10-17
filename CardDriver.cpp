@@ -49,6 +49,10 @@ while(menu != 4) {
         hand->display();
     }
 
+    else if(menu == 4){
+        break;
+    }
+
     else{
         cout << "Error: Please select a valid menu option. \n";
     }

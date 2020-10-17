@@ -8,6 +8,7 @@
 #include <string>
 #include <iostream>
 #include <regex>
+#include <sstream>
 
 class Player;
 
@@ -85,7 +86,7 @@ public:
     vector<Territory*> territories;
 
     // methods
-    static bool validate();    //  whether the map contains all necessary info
+    bool validate();    //  whether the map contains all necessary info
     vector<Territory*> getTerritories();
     vector<Continent*> getContinents();
     Territory* getTerritoryById(string territoryID);

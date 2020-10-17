@@ -49,7 +49,6 @@ Map::Map(string _name, vector<string> mapData) {
 
     setTerritories(tempTerritories, borders);
     setContinents(tempContinents);
-    validate();
 }
 
 // copy constructor
@@ -71,8 +70,48 @@ Map::~Map() {
 
 // validate map
 bool Map::validate() {
-    cout << ">>>>>>>>>>>>Map successfully created>>>>>>>>>>" << endl;
-    return true;
+    vector<string> sequence;
+    int id = 0;
+
+    sequence.push_back(territories[0]->id);
+    for (auto & initialAdjacent : territories[0]->getAdjacentNodes()) {
+        sequence.push_back(initialAdjacent);
+    }
+
+    // attention! t starts at 1 -> territory[0] is node with id 1
+    for (int i = 0; i < sequence.size(); i++) {
+        // turn string to int
+        stringstream geek(sequence[i]);
+        geek >> id;
+
+        // check if enough
+        if(sequence.size() == territories.size()){
+            break;
+        }
+
+        // check each adjacent of current node in the sequence
+        for (auto & node : territories[id-1]->getAdjacentNodes()) {
+
+            // check ft enough
+            if(sequence.size() == territories.size()){
+                break;
+            }
+
+            // if not in the sequence yet add it
+            if (!(std::find(sequence.begin(), sequence.end(), node) != sequence.end()))
+            {
+                sequence.push_back(node);
+            }
+        }
+    }
+
+    if(sequence.size() == territories.size()){
+        cout << ">>>>>>>>>>>>Map successfully created>>>>>>>>>>" << endl;
+        return true;
+    }
+
+    cout << "Invalid map: " << name << ", ";
+    return false;
 }
 
 // get territories
