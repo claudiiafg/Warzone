@@ -1,9 +1,7 @@
-#include "Player.h"
-#include "Map.cpp"
-#include "Cards.cpp"
-#include "Orders.cpp"
 #include <vector>
 #include <iostream>
+
+#include "Player.h"4
 
 using namespace std;
 
