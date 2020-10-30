@@ -21,4 +21,19 @@ int main() {
 	vector<Territory*> toAttack = testPlayer->toAttack();
 	testPlayer->issueOrder();
 
+	delete playerHand;
+    delete playerOrders;
+    delete testPlayer;
+    delete copyPlayer;
+    for (int i = 0; i < playerTerritories.size(); i++) {
+        delete playerTerritories[i];
+    }
+    for (int i = 0; i < toDefend.size(); i++) {
+        delete toDefend[i];
+    }
+    for (int i = 0; i < toAttack.size(); i++) {
+        delete toAttack[i];
+    }
+
+    return 0;
 }
