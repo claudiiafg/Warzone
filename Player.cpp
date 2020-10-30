@@ -1,5 +1,4 @@
 #include "Player.h"
-#include "Map.h"
 
 using namespace std;
 
@@ -73,9 +72,8 @@ void Player::issueOrder() {
 ostream& operator<<(ostream &out, const Player &p) {
     out << "\nTerritories: ";
 
-    for (int i = 0; i < (int)p.playerTerritories.size(); i++) {
-        Territory* curr = p.playerTerritories.at(i);
-        out << curr->name << ' ';
+    for (int i = 0; i < p.playerTerritories.size(); i++) {
+        out << p.playerTerritories.at(i)->name << ' ';
     }
     out << "\nHand: No hand yet\nOrders: No orders yet\n";
     //out << "\nOrders: " << p.playerOrders
