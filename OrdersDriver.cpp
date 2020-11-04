@@ -26,11 +26,17 @@ int main()
 	player1Orders.executeOrderList();
 
 	delete deploy1;
+    deploy1 = NULL;
     delete advance1;
+    advance1 = NULL;
     delete bomb1;
+    bomb1 = NULL;
     delete blockade1;
+    blockade1 = NULL;
     delete airlift1;
+    airlift1 = NULL;
     delete negotiate1;
+    negotiate1 = NULL;
 
     return 0;
 }

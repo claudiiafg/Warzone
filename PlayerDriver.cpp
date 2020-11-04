@@ -22,9 +22,13 @@ int main() {
 	testPlayer->issueOrder();
 
 	delete playerHand;
+    playerHand = NULL;
     delete playerOrders;
+    playerOrders = NULL;
     delete testPlayer;
+    testPlayer = NULL;
     delete copyPlayer;
+    copyPlayer = NULL;
     for (int i = 0; i < playerTerritories.size(); i++) {
         delete playerTerritories[i];
     }

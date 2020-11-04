@@ -21,6 +21,7 @@ int main(){
 
         } else {
             delete map;
+            map = NULL;
         }
         cout << *map << endl;
     }

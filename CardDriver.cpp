@@ -58,6 +58,11 @@ int main(){
         }
     }
 
+    delete hand;
+    hand = NULL;
+    delete deck;
+    deck = NULL;
+
     cout << "Thanks for playing!";
     return 0;
 }
