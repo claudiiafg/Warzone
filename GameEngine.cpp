@@ -102,6 +102,7 @@ void GameEngine::selectMap() {
             throw 99;
         }
     }
+    cout << endl;
 }
 
 /*
@@ -127,25 +128,70 @@ void GameEngine::selectPlayers() {
 
         } else if(amountOfPlayers >= LOWER_LIMIT && amountOfPlayers <= UPPER_LIMIT) {
             createPlayers(amountOfPlayers);
+            cout << "**** Players ready! ****" << endl;
             exit = true;
         } else {
             cout << "Invalid number of player. Try again!" << endl;
         }
     }
-
-    cout << 'out';
+    cout << endl;
 }
 
 void GameEngine::activateObservers() {
+    int option = 0;
+    const int EXIT = 5;
 
+    while(option != EXIT) {
+        cout << ">>>>>>>> Please select the amount of information you wish to receive throughout the game" << endl;
+        cout << "1. Phase - displays information happening in the phase you're currently playing" << endl;
+        cout << "2. Statistics - displays some useful statistics about the game" << endl;
+        cout << "3. Both - turn on both notifications" << endl;
+        cout << "4. None - turn off both notifications" << endl;
+        cout << "5. EXIT" << endl;
+
+        cin >> option;
+
+        if(option == 1) {
+            // activate phase observers
+            // TODO
+            cout << "**** Phase Observer ON! ****" << endl;
+            option = EXIT;
+
+        } else if(option == 2) {
+            // activate statistics observer
+            // TODO
+            cout << "**** Statistics Observer ON! ****" << endl;
+            option = EXIT;
+
+        } else if (option == 3) {
+            // activate both observers
+            // TODO
+            cout << "**** All Observer ON! ****" << endl;
+            option = EXIT;
+
+        } else if (option == 4) {
+            // deactivate both observers
+            // TODO
+            cout << "**** All Observer OFF! ****" << endl;
+            option = EXIT;
+
+        } else if (option == 5) {
+            throw 99;
+
+        } else {
+            cout << "Invalid selection. Try again!" << endl;
+            continue;
+        }
+    }
+    cout << endl;
 }
 
 int main() {
 
     GameEngine* game = new GameEngine();
-    cout << *game << endl;
 
-    cout << "continue" << endl;
+    cout << "Current game in engine: " << endl;
+    cout << *game << endl;
 
     return 0;
 }
