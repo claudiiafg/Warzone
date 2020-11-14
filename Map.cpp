@@ -121,12 +121,12 @@ bool Map::validate() {
 
 
         if(sequence.size() == territories.size()){
-            cout << ">>>>>>>>>>>>Map successfully created>>>>>>>>>>" << endl;
+            cout << "Map is valid!" << endl;
             return true;
         }
 
     } catch(int e) {
-        cout << "Invalid map: " << name << ", ";
+        cout << "Invalid map!" << endl;
         return false;
     }
 
