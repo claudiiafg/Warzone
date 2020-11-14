@@ -7,7 +7,8 @@ Player::Player() : playerTerritories(), playerHand(nullptr), playerOrders(nullpt
 }
 
 //Parametrized constructor
-Player::Player(vector<Territory*> playerTerritories, Hand* playerHand, OrderList* playerOrders) : playerTerritories(playerTerritories), playerHand(playerHand), playerOrders(playerOrders) {
+Player::Player(vector<Territory*> playerTerritories, Hand* playerHand, OrderList* playerOrders) :
+    playerTerritories(playerTerritories), playerHand(playerHand), playerOrders(playerOrders) {
 }
 
 //Copy constructor
@@ -70,14 +71,13 @@ void Player::issueOrder() {
 
 //Stream operator overload
 ostream& operator<<(ostream &out, const Player &p) {
-    out << "\nTerritories: ";
+    out << "Territories: ";
 
     for (int i = 0; i < p.playerTerritories.size(); i++) {
         out << p.playerTerritories.at(i)->name << ' ';
     }
-    out << "\nHand: No hand yet\nOrders: No orders yet\n";
-    //out << "\nOrders: " << p.playerOrders
-    //<< "\nHand: " << p.playerHand << "\n";
-
+    out << endl;
+    out << "Orders: " << *p.playerOrders << endl;
+    out << "Hand: " << p.playerHand << endl;
     return out;
 }

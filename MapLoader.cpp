@@ -33,11 +33,6 @@ void MapLoader::loadMaps() {
                 }
             }
         }
-
-        // check for all files directly inside testing directory
-        else if (entry.is_regular_file()) {
-//            cout << "file: " << filenameStr << '\n';
-        }
         cout << endl;
     }
 }
@@ -84,11 +79,7 @@ vector<string> MapLoader::getContent(const string& path) {
 
 // prints and returns maps available
 vector<MapFile*> MapLoader::getMaps() {
-    for(int i = 0; i != maps.size(); i++) {
-        cout << *maps[i] << endl;
-    }
     return maps;
-
 }
 
 // streams insertion operator
@@ -116,7 +107,7 @@ MapFile::MapFile(const MapFile& _file) {
 
 // streams insertion operator
 ostream& operator<<(ostream &os, const MapFile& n) {
-    return os << "Maps available for creation: " << n.name << endl;
+    return os << n.name << endl;
 }
 
 // assignment operator

@@ -213,4 +213,7 @@ public:
 
 	//Execute orders then deletes pointers to objects and clears list
 	void executeOrderList();
+
+    friend ostream& operator<<(ostream &os, const OrderList& ol);
+
 };

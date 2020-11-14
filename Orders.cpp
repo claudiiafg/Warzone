@@ -545,3 +545,11 @@ using namespace std;
 		}
 		orders.clear();
 	}
+
+ostream &operator<<(ostream &os, const OrderList &ol) {
+	    for (Order* const o: ol.orders) {
+	        os << *o << endl;
+	    }
+	    return os;
+}
+
