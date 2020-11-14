@@ -10,7 +10,7 @@ GameEngine::GameEngine() {
     try{
         selectMap();
         selectPlayers();
-        activateObservers();
+//        activateObservers();
 
     } catch(int e) {
         cout << "You exited the game. Goodbye!" << endl;
@@ -38,6 +38,9 @@ GameEngine::~GameEngine() {
 ostream &operator<<(ostream &os, const GameEngine &n) {
     os << n.map->name << endl;
     os << n.players.size() << " Players in game:" << endl;
+    for(int i = 0; i < n.players.size(); i++) {
+        os << *n.players[i] << endl;
+    }
     return os;
 }
 
@@ -55,8 +58,22 @@ void GameEngine::setMap(Map* mapToSet) {
 
 // create correct amount of players with default parameters
 void GameEngine::createPlayers(int amount) {
+    vector<Territory*> tempTerr = map->territories;
+    const int TERRITORIES_PER_PLAYER = tempTerr.size() / amount;
+
     for(int i = 0; i < amount; i++) {
-        players.push_back(new Player());
+        vector<Territory*> playerTerr = {};
+        // pick random territory to give to player, and remove from territories list
+        for(int j = 0; j < TERRITORIES_PER_PLAYER; j++) {
+            int RandIndex = rand() % tempTerr.size();
+            playerTerr.push_back(tempTerr[RandIndex]);
+            tempTerr.erase(tempTerr.begin() + RandIndex);
+        }
+
+        vector<Territory*> playerTerritories = {playerTerr};
+        Hand* playerHand = new Hand();
+        OrderList* playerOrders = new OrderList();
+        players.push_back(new Player(playerTerritories, playerHand, playerOrders));
     }
 }
 
