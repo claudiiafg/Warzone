@@ -548,7 +548,7 @@ using namespace std;
 
 ostream &operator<<(ostream &os, const OrderList &ol) {
 	    for (Order* const o: ol.orders) {
-	        os << *o << endl;
+            os << o << " || ";
 	    }
 	    return os;
 }

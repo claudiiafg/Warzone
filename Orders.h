@@ -187,10 +187,11 @@ public:
 };
 
 class OrderList {
-	list <Order*> orders;
 
 public:
-	//Default Constructor
+    list <Order*> orders;
+
+    //Default Constructor
 	OrderList();
 	
 	//Destructor

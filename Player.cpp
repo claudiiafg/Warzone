@@ -3,12 +3,12 @@
 using namespace std;
 
 //Default constructor
-Player::Player() : playerTerritories(), playerHand(nullptr), playerOrders(nullptr) {
+Player::Player() : name(rand()%10), playerTerritories(), playerHand(nullptr), playerOrders(nullptr) {
 }
 
 //Parametrized constructor
-Player::Player(vector<Territory*> playerTerritories, Hand* playerHand, OrderList* playerOrders) :
-    playerTerritories(playerTerritories), playerHand(playerHand), playerOrders(playerOrders) {
+Player::Player(int name, vector<Territory*> playerTerritories, Hand* playerHand, OrderList* playerOrders) :
+        name(name), playerTerritories(playerTerritories), playerHand(playerHand), playerOrders(playerOrders) {
 }
 
 //Copy constructor
@@ -78,6 +78,6 @@ ostream& operator<<(ostream &out, const Player &p) {
     }
     out << endl;
     out << "Orders: " << *p.playerOrders << endl;
-    out << "Hand: " << p.playerHand << endl;
+    out << "Hand: " << *p.playerHand << endl;
     return out;
 }

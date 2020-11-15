@@ -146,15 +146,13 @@ Hand::Hand(const Hand &oldHand) {
     diplomacyCounter = oldHand.diplomacyCounter;
 }
 
-ostream &handStream(ostream &hs, const Hand *h) {
-    Card *temp = new Card;
-    hs << "Cards in hand: \n";
-    for (int i = 0; i < h->hand.size(); i++) {
-        temp = h->hand.at(i);
-        hs << temp->getType() << "\n";
-
-    }
-    return hs;
+ostream& operator<<(ostream &out, const Hand &h) {
+    out << "\n Bombs: " << h.bombCounter;
+    out << "\n Reinforcements: " << h.reinforcementCounter;
+    out << "\n Blockades: " << h.blockadeCounter;
+    out << "\n Airlifts: " << h.airliftCounter;
+    out << "\n Diplomacy: " << h.diplomacyCounter;
+    return out;
 }
 
 Hand::~Hand() {

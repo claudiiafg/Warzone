@@ -71,7 +71,7 @@ public:
 
     void setHand(vector<Card*> cv);
 
-    friend ostream &handStream(ostream &hs, const Hand *h);
+    friend ostream& operator << (ostream& out, const Hand& h);
 
 private:
     int bombCounter;

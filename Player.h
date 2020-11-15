@@ -9,9 +9,11 @@ using namespace std;
 class Player {
 
 public:
+    int name;
+
 	//Constructors
 	Player();
-	Player(vector<Territory*> playerTerritories, Hand* playerHand, OrderList* playerOrders);
+	Player(int name, vector<Territory*> playerTerritories, Hand* playerHand, OrderList* playerOrders);
 	Player(const Player& otherPlayer);
 
 	//Destructor
