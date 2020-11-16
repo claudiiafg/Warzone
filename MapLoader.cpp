@@ -48,7 +48,7 @@ bool MapLoader::isMapType(const string& path) {
     }
 
 
-    ifstream PathFile(path);
+    boost::filesystem::ifstream PathFile(path);
     // check for errors opening the file
     if (PathFile.fail()) {
         cout<<"It failed\n"<<strerror(errno)<<endl;
@@ -62,7 +62,7 @@ bool MapLoader::isMapType(const string& path) {
 
 // extract map data
 vector<string> MapLoader::getContent(const string& path) {
-    ifstream PathFile(path);
+    boost::filesystem::ifstream PathFile(path);
     string lineContent;
     vector<string> vecOfStr;
 
