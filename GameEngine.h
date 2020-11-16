@@ -32,6 +32,7 @@ public:
     vector<Player*> players;
 
     // functions
+    void startupPhase();
     void selectMap();
     void selectPlayers();
     void activateObservers();
@@ -43,6 +44,10 @@ public:
     // operators
     friend ostream& operator<<(ostream &os, const GameEngine& n);
     GameEngine& operator = (const GameEngine& _game);
+
+private:
+    int getInitialArmies(int amount);
+    vector<vector<Territory*>> getTerritoriesPerPlayer(int amount, vector<Territory*> tempTerr);
 };
 
 #endif //WARZONE_GAMEENGINE_H

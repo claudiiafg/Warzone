@@ -3,12 +3,12 @@
 using namespace std;
 
 //Default constructor
-Player::Player() : name(rand()%10), playerTerritories(), playerHand(nullptr), playerOrders(nullptr) {
+Player::Player() : name(rand()%10), armies(0), playerTerritories(), playerHand(nullptr), playerOrders(nullptr) {
 }
 
 //Parametrized constructor
-Player::Player(int name, vector<Territory*> playerTerritories, Hand* playerHand, OrderList* playerOrders) :
-        name(name), playerTerritories(playerTerritories), playerHand(playerHand), playerOrders(playerOrders) {
+Player::Player(int name, int armies, vector<Territory*> playerTerritories, Hand* playerHand, OrderList* playerOrders) :
+        name(name), armies(armies), playerTerritories(playerTerritories), playerHand(playerHand), playerOrders(playerOrders) {
 }
 
 //Copy constructor
@@ -84,8 +84,9 @@ void Player::issueOrder() {
 
 //Stream operator overload
 ostream& operator<<(ostream &out, const Player &p) {
+    out << "Player id: " << p.name << endl;
+    out << "Armies in reinforcement pool: " << p.armies << endl;
     out << "Territories: ";
-
     for (int i = 0; i < p.playerTerritories.size(); i++) {
         out << p.playerTerritories.at(i)->name << ' ';
     }
@@ -95,6 +96,7 @@ ostream& operator<<(ostream &out, const Player &p) {
     for (it = p.playerOrders->orders.begin(); it != p.playerOrders->orders.end(); ++it) {
         out << (*it) << " || ";
     }
+    out << endl;
     out << "Hand: " << *p.playerHand << endl;
     return out;
 }
