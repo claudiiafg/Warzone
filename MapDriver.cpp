@@ -5,7 +5,7 @@
 //using namespace std;
 #include <iostream>
 #include "Map.h"
-#include "MapLoader.cpp"
+#include "MapLoader.h"
 
 int main(){
 
@@ -21,6 +21,7 @@ int main(){
 
         } else {
             delete map;
+            map = NULL;
         }
         cout << *map << endl;
     }

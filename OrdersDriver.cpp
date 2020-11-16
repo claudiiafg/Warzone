@@ -21,11 +21,22 @@ int main()
 	player1Orders.addOrder(airlift1);
 	player1Orders.addOrder(negotiate1);
 
-
 	player1Orders.removeOrder(bomb1);
-
 	player1Orders.moveOrder(airlift1, "up");
-
 	player1Orders.executeOrderList();
 
+	delete deploy1;
+    deploy1 = NULL;
+    delete advance1;
+    advance1 = NULL;
+    delete bomb1;
+    bomb1 = NULL;
+    delete blockade1;
+    blockade1 = NULL;
+    delete airlift1;
+    airlift1 = NULL;
+    delete negotiate1;
+    negotiate1 = NULL;
+
+    return 0;
 }

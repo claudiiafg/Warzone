@@ -2,10 +2,9 @@
 
 using namespace std;
 #include <vector>
+#include "Map.h"
+#include "Cards.h"
 #include "Orders.h"
-
-class Hand;
-class Territory;
 
 class Player {
 

@@ -3,7 +3,7 @@
  COMP 345 - D
  9 October 2020
  */
-#include <stdio.h>
+
 #include <stdlib.h>
 #include "Cards.h"
 #include <iostream>

@@ -20,6 +20,7 @@ int main(){
             maps.push_back(map);
         } else {
             delete map;
+            map = NULL;
         }
     }
 

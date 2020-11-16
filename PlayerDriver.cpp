@@ -1,9 +1,7 @@
-#include "Player.h"
-#include "Map.cpp"
-#include "Cards.cpp"
-#include "Orders.cpp"
 #include <vector>
 #include <iostream>
+
+#include "Player.h"4
 
 using namespace std;
 
@@ -23,4 +21,23 @@ int main() {
 	vector<Territory*> toAttack = testPlayer->toAttack();
 	testPlayer->issueOrder();
 
+	delete playerHand;
+    playerHand = NULL;
+    delete playerOrders;
+    playerOrders = NULL;
+    delete testPlayer;
+    testPlayer = NULL;
+    delete copyPlayer;
+    copyPlayer = NULL;
+    for (int i = 0; i < playerTerritories.size(); i++) {
+        delete playerTerritories[i];
+    }
+    for (int i = 0; i < toDefend.size(); i++) {
+        delete toDefend[i];
+    }
+    for (int i = 0; i < toAttack.size(); i++) {
+        delete toAttack[i];
+    }
+
+    return 0;
 }

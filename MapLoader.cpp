@@ -5,14 +5,13 @@
 #include "MapLoader.h"
 
 using namespace std;
-namespace fs = std::filesystem;
 
 MapLoader::MapLoader()= default;
 
 //load all files in testing directory
 void MapLoader::loadMaps() {
     std::string path = "../testing";
-    for (const auto& entry : fs::directory_iterator(path)) {
+    for (const auto& entry : std::filesystem::directory_iterator(path)) {
         const auto filenameStr = entry.path().filename().string();
 
         cout << "Files Found:" << endl;
@@ -20,7 +19,7 @@ void MapLoader::loadMaps() {
         // check for all files inside each folder of testing directory
         if (entry.is_directory()) {
 //            std::cout << "dir:  " << filenameStr << '\n';
-            for (const auto & entry : fs::directory_iterator(entry.path())) {
+            for (const auto & entry : std::filesystem::directory_iterator(entry.path())) {
 //                cout << entry.path() << endl;
 
                 // check for file with map data and create MapFiles
