@@ -259,11 +259,11 @@ Map& Map::operator = (const Map& _file) {
 
 bool Map::continentHasUniqueOwner(string continentID) {
     vector<Territory*> territories = getTerritoriesByContinentId(continentID);
-    int owner = territories[0]->getOwner();
+    int owner = territories[0]->getOwnerID();
 
     for(auto terr : territories) {
         // if one has different owner -> not true
-        if(terr->getOwner() != owner) {
+        if(terr->getOwnerID() != owner) {
             return false;
         }
     }
@@ -433,7 +433,7 @@ Territory& Territory::operator = (const Territory& _file) {
     continentID = _file.continentID;
     adjacent = _file.adjacent;
     armiesNumber = _file.armiesNumber;
-    owner = _file.owner;
+    ownerID = _file.ownerID;
     return *this;
 }
 

@@ -27,7 +27,13 @@ GameEngine::~GameEngine() {
 
 // stream operator
 ostream &operator<<(ostream &os, const GameEngine &n) {
-    os << n.map->name << endl;
+    os << "Map name: " << n.map->name << endl;
+    os << "Territories and Owners: ";
+    for(auto & terr : n.map->getTerritories()) {
+        os << terr->name << " Owner ID: " << terr->getOwnerID() << " || ";
+    }
+    os << endl;
+    os << endl;
     os << n.players.size() << " Players in game:" << endl;
     for(int i = 0; i < n.players.size(); i++) {
         os << *n.players[i] << endl;
@@ -47,7 +53,7 @@ void GameEngine::startupPhase() {
     try{
         selectMap();
         selectPlayers();
-//        activateObservers();
+        activateObservers();
 
     } catch(int e) {
         cout << "You exited the game. Goodbye!" << endl;
@@ -83,6 +89,43 @@ void GameEngine::createPlayers(int amount) {
         //create player
         players.push_back(new Player(PLAYER_ID, initialArmies, playerTerr, playerHand, playerOrders));
     }
+}
+
+// get initial amount of armies per player
+int GameEngine::getInitialArmies(int amount) {
+    switch(amount) {
+        case 2:
+            return 40;
+        case 3:
+            return 35;
+        case 4:
+            return 30;
+        case 5:
+            return 25;
+        default:
+            return 0;
+    }
+}
+
+// get territories for each player (choose in a round-robin fashion)
+vector<vector<Territory *>> GameEngine::getTerritoriesPerPlayer(int amount, vector<Territory *> tempTerr) {
+    vector<vector<Territory*>> playersTerritories = {};
+
+    for(int i = 0; i < amount; i++) {
+        playersTerritories.push_back({});
+    }
+    int playerIndex = 0;
+
+    // assign territories to players in a round-robin method
+    while (tempTerr.size() > 0) {
+        if(playerIndex == amount) playerIndex = 0;
+        int RandIndex = rand() % tempTerr.size();
+        playersTerritories[playerIndex].push_back(tempTerr[RandIndex]);
+        tempTerr.erase(tempTerr.begin() + RandIndex);
+        playerIndex++;
+    }
+
+    return playersTerritories;
 }
 
 /*
@@ -209,41 +252,6 @@ void GameEngine::activateObservers() {
         }
     }
     cout << endl;
-}
-
-int GameEngine::getInitialArmies(int amount) {
-    switch(amount) {
-        case 2:
-            return 40;
-        case 3:
-            return 35;
-        case 4:
-            return 30;
-        case 5:
-            return 25;
-        default:
-            return 0;
-    }
-}
-
-vector<vector<Territory *>> GameEngine::getTerritoriesPerPlayer(int amount, vector<Territory *> tempTerr) {
-    vector<vector<Territory*>> playersTerritories = {};
-
-    for(int i = 0; i < amount; i++) {
-        playersTerritories.push_back({});
-    }
-    int playerIndex = 0;
-
-    // assign territories to players in a round-robin method
-    while (tempTerr.size() > 0) {
-        if(playerIndex == amount) playerIndex = 0;
-        int RandIndex = rand() % tempTerr.size();
-        playersTerritories[playerIndex].push_back(tempTerr[RandIndex]);
-        tempTerr.erase(tempTerr.begin() + RandIndex);
-        playerIndex++;
-    }
-
-    return playersTerritories;
 }
 
 int main() {

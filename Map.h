@@ -56,7 +56,7 @@ public:
     bool isAdjacentNode(const string& _node);
     int getArmies();
     void setArmiesNumber(int amount);
-    int getOwner();
+    int getOwnerID();
     void setOwner(int _ownerID);
 
     // operators

@@ -84,8 +84,9 @@ void Player::issueOrder() {
 
 //Stream operator overload
 ostream& operator<<(ostream &out, const Player &p) {
+    out << "Player id: " << p.name << endl;
+    out << "Armies in reinforcement pool: " << p.armies << endl;
     out << "Territories: ";
-
     for (int i = 0; i < p.playerTerritories.size(); i++) {
         out << p.playerTerritories.at(i)->name << ' ';
     }
@@ -95,6 +96,7 @@ ostream& operator<<(ostream &out, const Player &p) {
     for (it = p.playerOrders->orders.begin(); it != p.playerOrders->orders.end(); ++it) {
         out << (*it) << " || ";
     }
+    out << endl;
     out << "Hand: " << *p.playerHand << endl;
     return out;
 }
