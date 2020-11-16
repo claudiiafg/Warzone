@@ -10,10 +10,11 @@ class Player {
 
 public:
     int name;
+    int armies;
 
 	//Constructors
 	Player();
-	Player(int name, vector<Territory*> playerTerritories, Hand* playerHand, OrderList* playerOrders);
+	Player(int name, int armies, vector<Territory*> playerTerritories, Hand* playerHand, OrderList* playerOrders);
 	Player(const Player& otherPlayer);
 
 	//Destructor

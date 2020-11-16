@@ -6,16 +6,7 @@
 #include <typeinfo>
 
 // default constructor
-GameEngine::GameEngine() {
-    try{
-        selectMap();
-        selectPlayers();
-//        activateObservers();
-
-    } catch(int e) {
-        cout << "You exited the game. Goodbye!" << endl;
-    }
-}
+GameEngine::GameEngine() = default;
 
 // copy constructor
 GameEngine::GameEngine(const GameEngine &_c) {
@@ -52,6 +43,19 @@ GameEngine &GameEngine::operator=(const GameEngine &_game) {
 }
 
 // set map to play
+void GameEngine::startupPhase() {
+    try{
+        selectMap();
+        selectPlayers();
+//        activateObservers();
+
+    } catch(int e) {
+        cout << "You exited the game. Goodbye!" << endl;
+    }
+}
+
+
+// set map to play
 void GameEngine::setMap(Map* mapToSet) {
     map = mapToSet;
 }
@@ -59,79 +63,25 @@ void GameEngine::setMap(Map* mapToSet) {
 // create correct amount of players with default parameters
 void GameEngine::createPlayers(int amount) {
     vector<Territory*> tempTerr = map->territories;
-    vector<vector<Territory*>> playersTerritories = {};
-
-    for(int i = 0; i < amount; i++) {
-        playersTerritories.push_back({});
-    }
-    int playerIndex = 0;
-
-    // assign territories to players in a round-robin method
-    while (tempTerr.size() > 0) {
-        if(playerIndex == amount) playerIndex = 0;
-        int RandIndex = rand() % tempTerr.size();
-        playersTerritories[playerIndex].push_back(tempTerr[RandIndex]);
-        tempTerr.erase(tempTerr.begin() + RandIndex);
-        playerIndex++;
-    }
+    int initialArmies = getInitialArmies(amount);
+    vector<vector<Territory*>> playersTerritories = getTerritoriesPerPlayer(amount, tempTerr);
 
     // for each player, create hands and orders, and create player
     for(int i = 0; i < amount; i++) {
-        vector<Territory*> playerTerr = playersTerritories[i];
-        int playerName = i;
+        const int PLAYER_ID = i;
 
+        // get player's territories and set territory owner for each
+        vector<Territory*> playerTerr = playersTerritories[PLAYER_ID];
+        for(auto & terr:  playerTerr) {
+            terr->setOwner(PLAYER_ID);
+        }
+
+        //create empty hand and empty orders list
         Hand* playerHand = new Hand();
         OrderList* playerOrders = new OrderList();
-        int randomPlayer = amount - 1 - i;
-        if(randomPlayer == i) randomPlayer++;
 
-        Deploy* deploy1 = new Deploy(
-                playerName,
-                playerTerr[rand() % playerTerr.size()]->name,
-                playerName, 5);
-
-        Advance* advance1 = new Advance(
-                playerName,
-                playerTerr[rand() % playerTerr.size()]->name,
-                playerName, 10,
-                randomPlayer,
-                playersTerritories[randomPlayer][rand() % playersTerritories[randomPlayer].size()]->name,
-                3);
-
-        Bomb* bomb1 = new Bomb(
-                playerName,
-                playerTerr[rand() % playerTerr.size()]->name,
-                playerName,
-                2,
-                playersTerritories[randomPlayer][rand() % playersTerritories[randomPlayer].size()]->name);
-
-        Blockade* blockade1 = new Blockade(
-                playerName,
-                playerTerr[rand() % playerTerr.size()]->name,
-                playerName,
-                15);
-
-        Airlift* airlift1 = new Airlift(
-                playerName,
-                playerTerr[rand() % playerTerr.size()]->name,
-                playerName,
-                10,
-                randomPlayer,
-                playersTerritories[randomPlayer][rand() % playersTerritories[randomPlayer].size()]->name,
-                9);
-
-        Negotiate* negotiate1 = new Negotiate(
-                playerName,
-                rand() % amount);
-
-        playerOrders->addOrder(deploy1);
-        playerOrders->addOrder(advance1);
-        playerOrders->addOrder(bomb1);
-        playerOrders->addOrder(blockade1);
-        playerOrders->addOrder(airlift1);
-        playerOrders->addOrder(negotiate1);
-
-        players.push_back(new Player(playerName, playerTerr, playerHand, playerOrders));
+        //create player
+        players.push_back(new Player(PLAYER_ID, initialArmies, playerTerr, playerHand, playerOrders));
     }
 }
 
@@ -261,9 +211,45 @@ void GameEngine::activateObservers() {
     cout << endl;
 }
 
+int GameEngine::getInitialArmies(int amount) {
+    switch(amount) {
+        case 2:
+            return 40;
+        case 3:
+            return 35;
+        case 4:
+            return 30;
+        case 5:
+            return 25;
+        default:
+            return 0;
+    }
+}
+
+vector<vector<Territory *>> GameEngine::getTerritoriesPerPlayer(int amount, vector<Territory *> tempTerr) {
+    vector<vector<Territory*>> playersTerritories = {};
+
+    for(int i = 0; i < amount; i++) {
+        playersTerritories.push_back({});
+    }
+    int playerIndex = 0;
+
+    // assign territories to players in a round-robin method
+    while (tempTerr.size() > 0) {
+        if(playerIndex == amount) playerIndex = 0;
+        int RandIndex = rand() % tempTerr.size();
+        playersTerritories[playerIndex].push_back(tempTerr[RandIndex]);
+        tempTerr.erase(tempTerr.begin() + RandIndex);
+        playerIndex++;
+    }
+
+    return playersTerritories;
+}
+
 int main() {
 
     GameEngine* game = new GameEngine();
+    game->startupPhase();
 
     cout << "Current game in engine: " << endl;
     cout << *game << endl;

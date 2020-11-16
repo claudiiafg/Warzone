@@ -257,6 +257,20 @@ Map& Map::operator = (const Map& _file) {
     return *this;
 }
 
+bool Map::continentHasUniqueOwner(string continentID) {
+    vector<Territory*> territories = getTerritoriesByContinentId(continentID);
+    int owner = territories[0]->getOwner();
+
+    for(auto terr : territories) {
+        // if one has different owner -> not true
+        if(terr->getOwner() != owner) {
+            return false;
+        }
+    }
+    // if finish loop -> all the same
+    return true;
+}
+
 /////////////////////////////////////////////////////////////////////////////
 ///   CONTINENT					   	                                      ///
 /////////////////////////////////////////////////////////////////////////////
@@ -320,7 +334,7 @@ Territory::Territory() = default;
 // contructor
 Territory::Territory(string territoryString, string borderString) {
     armiesNumber = 0;
-    owner = *new Player*();
+    ownerID = NULL;
 
     // seperate strings by spaces
     regex ws_re("\\s+");
@@ -345,7 +359,7 @@ Territory::Territory(string territoryString, string borderString) {
 // copy contructor
 Territory::Territory(const Territory& otherTerritory) {
     armiesNumber = otherTerritory.armiesNumber;
-    owner = otherTerritory.owner;
+    ownerID = otherTerritory.ownerID;
     id = otherTerritory.id;
     name = otherTerritory.name;
     continentID = otherTerritory.continentID;
@@ -354,9 +368,7 @@ Territory::Territory(const Territory& otherTerritory) {
 }
 
 // destructor
-Territory::~Territory() {
-    delete owner;
-}
+Territory::~Territory() = default;
 
 // get continent id
 string Territory::getContinentID() {
@@ -389,13 +401,13 @@ void Territory::setArmiesNumber(int amount) {
 }
 
 // get owner
-Player* Territory::getOwner() {
-    return owner;
+int Territory::getOwnerID() {
+    return ownerID;
 }
 
 // set owner
-void Territory::setOwner(Player* _owner) {
-    owner = _owner;
+void Territory::setOwner(int _ownerID) {
+    ownerID = _ownerID;
 }
 
 // stream insertion operator

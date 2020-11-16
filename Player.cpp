@@ -3,12 +3,12 @@
 using namespace std;
 
 //Default constructor
-Player::Player() : name(rand()%10), playerTerritories(), playerHand(nullptr), playerOrders(nullptr) {
+Player::Player() : name(rand()%10), armies(0), playerTerritories(), playerHand(nullptr), playerOrders(nullptr) {
 }
 
 //Parametrized constructor
-Player::Player(int name, vector<Territory*> playerTerritories, Hand* playerHand, OrderList* playerOrders) :
-        name(name), playerTerritories(playerTerritories), playerHand(playerHand), playerOrders(playerOrders) {
+Player::Player(int name, int armies, vector<Territory*> playerTerritories, Hand* playerHand, OrderList* playerOrders) :
+        name(name), armies(armies), playerTerritories(playerTerritories), playerHand(playerHand), playerOrders(playerOrders) {
 }
 
 //Copy constructor
