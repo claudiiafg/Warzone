@@ -10,7 +10,7 @@ MapLoader::MapLoader()= default;
 
 //load all files in testing directory
 void MapLoader::loadMaps() {
-    std::string path = "../testing";
+    string path = "../testing";
     for (const auto& entry : std::filesystem::directory_iterator(path)) {
         const auto filenameStr = entry.path().filename().string();
 
@@ -20,12 +20,12 @@ void MapLoader::loadMaps() {
         if (entry.is_directory()) {
 //            std::cout << "dir:  " << filenameStr << '\n';
             for (const auto & entry : std::filesystem::directory_iterator(entry.path())) {
-//                cout << entry.path() << endl;
+                std::string path_string{entry.path().u8string()};
 
                 // check for file with map data and create MapFiles
-                if(isMapType(entry.path())) {
+                if(isMapType(path_string)) {
                     cout << "->VALID Map: " << entry.path().filename().string() << endl;
-                    vector<string> content = getContent(entry.path());
+                    vector<string> content = getContent(path_string);
                     string name = entry.path().filename().string();
                     maps.push_back(new MapFile(name, content));
                 } else {
