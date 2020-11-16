@@ -24,7 +24,7 @@ public:
 	//Executes an order
 	virtual void execute();
 
-	friend std::ostream& operator<<(std::ostream& out, const Order& b);
+    virtual ostream& operator<< (ostream& out) const;
 
 };
 
@@ -214,7 +214,4 @@ public:
 
 	//Execute orders then deletes pointers to objects and clears list
 	void executeOrderList();
-
-    friend ostream& operator<<(ostream &os, const OrderList& ol);
-
 };

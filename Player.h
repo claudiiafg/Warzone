@@ -27,6 +27,11 @@ public:
 	Hand* getMyHand() { return playerHand; }
 	OrderList* getMyOrders() { return playerOrders; }
 
+	//Mutators
+	void setTerritories(vector<Territory*> playerTerritories);
+	void setHand(Hand* playerHand);
+	void setOrders(OrderList* playerOrders);
+
 	//Required Methods
 	vector<Territory *> toDefend();
 	vector<Territory *> toAttack();
