@@ -9,7 +9,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 Map::Map() = default;
-int x = 0;
+int x = 1;
 
 // constructor
 Map::Map(string _name, vector<string> mapData) {
