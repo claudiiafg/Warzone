@@ -54,6 +54,19 @@ Player::~Player() {
     playerOrders = nullptr;
 }
 
+void Player::setTerritories(vector<Territory*> playerTerritories) {
+    this->playerTerritories = playerTerritories;
+}
+
+void Player::setHand(Hand* playerHand) {
+    this->playerHand = playerHand;
+}
+
+void Player::setOrders(OrderList* playerOrders) {
+    this->playerOrders = playerOrders;
+}
+
+
 //Required methods
 vector<Territory*> Player::toDefend() {
     return playerTerritories;
@@ -77,7 +90,11 @@ ostream& operator<<(ostream &out, const Player &p) {
         out << p.playerTerritories.at(i)->name << ' ';
     }
     out << endl;
-    out << "Orders: " << *p.playerOrders << endl;
+    out << "Orders: ";
+    list <Order*> ::iterator it;
+    for (it = p.playerOrders->orders.begin(); it != p.playerOrders->orders.end(); ++it) {
+        out << (*it) << " || ";
+    }
     out << "Hand: " << *p.playerHand << endl;
     return out;
 }

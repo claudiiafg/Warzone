@@ -32,10 +32,10 @@ using namespace std;
 	void Order::execute() {
 	}
 
-	ostream& operator<<(std::ostream& out, const Order& b)
-	{
-		return out;
-	}
+
+    ostream &Order::operator<<(ostream &out) const {
+        return out;
+    }
 
 /////////////////////////////////////////////////////////////////////////////
 ///   DEPLOY					   	                                      ///
@@ -47,7 +47,7 @@ using namespace std;
 		countryName = theCountryName;
 		units = theUnits;
 		playerID = thePlayerID;
-		cout << *this << endl;
+//		cout << *this << endl;
 	}
 
 	//Copy constructor
@@ -110,7 +110,7 @@ using namespace std;
 		attCountryOwner = theAttCountryOwner;
 		attCountryName = theAttCountryName;
 		attUnits = theAttUnits;
-		cout << *this << endl;
+//		cout << *this << endl;
 	}
 
 	//Copy constructor
@@ -190,7 +190,7 @@ using namespace std;
 		countryName = theCountryName;
 		attCountryOwner = theAttCountryOwner;
 		attCountryName = theAttCountryName;
-		cout << *this << endl;
+//		cout << *this << endl;
 	}
 
 	//Copy constructor
@@ -255,7 +255,7 @@ using namespace std;
 		countryOwner = theCountryOwner;
 		countryName = theCountryName;
 		units = theUnits;
-		cout << *this << endl;
+//		cout << *this << endl;
 	}
 
 	//Copy constructor
@@ -319,7 +319,7 @@ using namespace std;
 		attCountryOwner = theAttCountryOwner;
 		attCountryName = theAttCountryName;
 		attUnits = theAttUnits;
-		cout << *this << endl;
+//		cout << *this << endl;
 	}
 
 	//Copy constructor
@@ -394,7 +394,7 @@ using namespace std;
 	Negotiate::Negotiate(int thePlayerID, int theOtherPlayer) {
 		playerID = thePlayerID;
 		otherPlayer = theOtherPlayer;
-		cout << *this << endl;
+//		cout << *this << endl;
 	}
 
 	//Copy constructor
@@ -532,7 +532,7 @@ using namespace std;
 	void OrderList::viewOrderList() {
 		list <Order*> ::iterator it;
 		for (it = orders.begin(); it != orders.end(); ++it) {
-			cout << *(*it) << endl;
+			cout << (*it) << endl;
 		}
 	}
 
@@ -545,11 +545,3 @@ using namespace std;
 		}
 		orders.clear();
 	}
-
-ostream &operator<<(ostream &os, const OrderList &ol) {
-	    for (Order* const o: ol.orders) {
-            os << o << " || ";
-	    }
-	    return os;
-}
-

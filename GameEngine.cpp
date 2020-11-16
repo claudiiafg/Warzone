@@ -59,38 +59,40 @@ void GameEngine::setMap(Map* mapToSet) {
 // create correct amount of players with default parameters
 void GameEngine::createPlayers(int amount) {
     vector<Territory*> tempTerr = map->territories;
-    const int TERRITORIES_PER_PLAYER = tempTerr.size() / amount;
-    Deck* deck = new Deck();
     vector<vector<Territory*>> playersTerritories = {};
 
     for(int i = 0; i < amount; i++) {
-        vector<Territory*> playerTerr = {};
-        // pick random territory to give to player, and remove from territories list
-        for(int j = 0; j < TERRITORIES_PER_PLAYER; j++) {
-            int RandIndex = rand() % tempTerr.size();
-            playerTerr.push_back(tempTerr[RandIndex]);
-            tempTerr.erase(tempTerr.begin() + RandIndex);
-        }
+        playersTerritories.push_back({});
+    }
+    int playerIndex = 0;
 
-        playersTerritories.push_back(playerTerr);
+    // assign territories to players in a round-robin method
+    while (tempTerr.size() > 0) {
+        if(playerIndex == amount) playerIndex = 0;
+        int RandIndex = rand() % tempTerr.size();
+        playersTerritories[playerIndex].push_back(tempTerr[RandIndex]);
+        tempTerr.erase(tempTerr.begin() + RandIndex);
+        playerIndex++;
     }
 
+    // for each player, create hands and orders, and create player
     for(int i = 0; i < amount; i++) {
-        vector<Territory*> playerTerritories = playersTerritories[i];
+        vector<Territory*> playerTerr = playersTerritories[i];
         int playerName = i;
 
         Hand* playerHand = new Hand();
         OrderList* playerOrders = new OrderList();
-        int randomPlayer = rand() % amount;
+        int randomPlayer = amount - 1 - i;
+        if(randomPlayer == i) randomPlayer++;
 
         Deploy* deploy1 = new Deploy(
                 playerName,
-                playerTerritories[rand() % playerTerritories.size()]->name,
+                playerTerr[rand() % playerTerr.size()]->name,
                 playerName, 5);
 
         Advance* advance1 = new Advance(
                 playerName,
-                playerTerritories[rand() % playerTerritories.size()]->name,
+                playerTerr[rand() % playerTerr.size()]->name,
                 playerName, 10,
                 randomPlayer,
                 playersTerritories[randomPlayer][rand() % playersTerritories[randomPlayer].size()]->name,
@@ -98,20 +100,20 @@ void GameEngine::createPlayers(int amount) {
 
         Bomb* bomb1 = new Bomb(
                 playerName,
-                playerTerritories[rand() % playerTerritories.size()]->name,
+                playerTerr[rand() % playerTerr.size()]->name,
                 playerName,
                 2,
                 playersTerritories[randomPlayer][rand() % playersTerritories[randomPlayer].size()]->name);
 
         Blockade* blockade1 = new Blockade(
                 playerName,
-                playerTerritories[rand() % playerTerritories.size()]->name,
+                playerTerr[rand() % playerTerr.size()]->name,
                 playerName,
                 15);
 
         Airlift* airlift1 = new Airlift(
                 playerName,
-                playerTerritories[rand() % playerTerritories.size()]->name,
+                playerTerr[rand() % playerTerr.size()]->name,
                 playerName,
                 10,
                 randomPlayer,
@@ -129,7 +131,7 @@ void GameEngine::createPlayers(int amount) {
         playerOrders->addOrder(airlift1);
         playerOrders->addOrder(negotiate1);
 
-        players.push_back(new Player(playerName, playerTerritories, playerHand, playerOrders));
+        players.push_back(new Player(playerName, playerTerr, playerHand, playerOrders));
     }
 }
 
