@@ -9,6 +9,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 Map::Map() = default;
+int x = 0;
 
 // constructor
 Map::Map(string _name, vector<string> mapData) {
@@ -257,20 +258,6 @@ Map& Map::operator = (const Map& _file) {
     return *this;
 }
 
-bool Map::continentHasUniqueOwner(string continentID) {
-    vector<Territory*> territories = getTerritoriesByContinentId(continentID);
-    int owner = territories[0]->getOwnerID();
-
-    for(auto terr : territories) {
-        // if one has different owner -> not true
-        if(terr->getOwnerID() != owner) {
-            return false;
-        }
-    }
-    // if finish loop -> all the same
-    return true;
-}
-
 /////////////////////////////////////////////////////////////////////////////
 ///   CONTINENT					   	                                      ///
 /////////////////////////////////////////////////////////////////////////////
@@ -334,7 +321,7 @@ Territory::Territory() = default;
 // contructor
 Territory::Territory(string territoryString, string borderString) {
     armiesNumber = 0;
-    ownerID = NULL;
+    owner = *new Player*();
 
     // seperate strings by spaces
     regex ws_re("\\s+");
@@ -359,7 +346,7 @@ Territory::Territory(string territoryString, string borderString) {
 // copy contructor
 Territory::Territory(const Territory& otherTerritory) {
     armiesNumber = otherTerritory.armiesNumber;
-    ownerID = otherTerritory.ownerID;
+    owner = otherTerritory.owner;
     id = otherTerritory.id;
     name = otherTerritory.name;
     continentID = otherTerritory.continentID;
@@ -368,7 +355,9 @@ Territory::Territory(const Territory& otherTerritory) {
 }
 
 // destructor
-Territory::~Territory() = default;
+Territory::~Territory() {
+    delete owner;
+}
 
 // get continent id
 string Territory::getContinentID() {
@@ -401,13 +390,13 @@ void Territory::setArmiesNumber(int amount) {
 }
 
 // get owner
-int Territory::getOwnerID() {
-    return ownerID;
+Player* Territory::getOwner() {
+    return owner;
 }
 
 // set owner
-void Territory::setOwner(int _ownerID) {
-    ownerID = _ownerID;
+void Territory::setOwner(Player* _owner) {
+    owner = _owner;
 }
 
 // stream insertion operator
@@ -433,7 +422,7 @@ Territory& Territory::operator = (const Territory& _file) {
     continentID = _file.continentID;
     adjacent = _file.adjacent;
     armiesNumber = _file.armiesNumber;
-    ownerID = _file.ownerID;
+    owner = _file.owner;
     return *this;
 }
 
