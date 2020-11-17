@@ -36,6 +36,8 @@ public:
     void selectMap();
     void selectPlayers();
     void activateObservers();
+    void mainGameLoop();
+    void reinforcementPhase();
 
     void setMap(Map* mapToSet);
     void createPlayers(int amount);

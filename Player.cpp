@@ -4,12 +4,12 @@
 using namespace std;
 
 //Default constructor
-Player::Player() : name(rand()%10), armies(0), playerTerritories(), playerHand(nullptr), playerOrders(nullptr) {
+Player::Player() : name(rand()%10), armies(0), reinforcements(0), phase(1), playerTerritories(), playerHand(nullptr), playerOrders(nullptr) {
 }
 
 //Parametrized constructor
 Player::Player(int name, int armies, vector<Territory*> playerTerritories, Hand* playerHand, OrderList* playerOrders) :
-        name(name), armies(armies), playerTerritories(playerTerritories), playerHand(playerHand), playerOrders(playerOrders) {
+        name(name), armies(armies), playerTerritories(playerTerritories), playerHand(playerHand), playerOrders(playerOrders), reinforcements(0), phase(1) {
 }
 
 //Copy constructor
@@ -20,6 +20,10 @@ Player::Player(const Player &otherPlayer): Observable() {
 
     playerHand = *new Hand * (otherPlayer.playerHand);
     playerOrders = *new OrderList * (otherPlayer.playerOrders);
+    armies = 0;
+    reinforcements = 0;
+    phase = 1;
+    name = 0;
   }
 
 //= operator overload
@@ -65,6 +69,14 @@ void Player::setHand(Hand* playerHand) {
 
 void Player::setOrders(OrderList* playerOrders) {
     this->playerOrders = playerOrders;
+}
+
+void Player::setReinforcements(int reinforcements) {
+    this->reinforcements = reinforcements;
+}
+
+void Player::setPhase(int phase) {
+    this->phase = phase;
 }
 
 

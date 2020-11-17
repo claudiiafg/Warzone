@@ -12,6 +12,8 @@ class Player: public Observable {
 public:
     int name;
     int armies;
+	int reinforcements;
+	int phase;
 
 	//Constructors
 	Player();
@@ -28,11 +30,16 @@ public:
 	vector<Territory *> getMyTerritories() { return playerTerritories; }
 	Hand* getMyHand() { return playerHand; }
 	OrderList* getMyOrders() { return playerOrders; }
+	int getReinforcements() { return reinforcements; }
+	int getPhase() { return phase; }
+	int getTerritoryNum() { return playerTerritories.size(); }
 
 	//Mutators
 	void setTerritories(vector<Territory*> playerTerritories);
 	void setHand(Hand* playerHand);
 	void setOrders(OrderList* playerOrders);
+	void setReinforcements(int reinforcements);
+	void setPhase(int phase);
 
 	//Required Methods
 	vector<Territory *> toDefend();

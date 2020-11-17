@@ -143,7 +143,6 @@ void GameEngine::selectMap() {
 
     while(option != EXIT_SELECTION) {
         cout << ">>>>>>>> Which Map do you wish to play?" << endl;
-
         for (int i = 0; i < rawMaps.size(); i++) {
             cout << i << ": "<< *rawMaps[i];
         }
@@ -252,6 +251,34 @@ void GameEngine::activateObservers() {
         }
     }
     cout << endl;
+}
+
+void GameEngine::mainGameLoop() {
+    //Loop until only one player remains
+    while (players.size() > 1) { 
+        //reinforcementPhase();
+        //issueOrdersPhase();
+        //executeOrdersPhase();
+    }
+}
+
+void GameEngine::reinforcementPhase() {
+    for (auto player : players) {
+        int reinforcements = 0;
+        int bonus = 0;
+
+        reinforcements = (player->getTerritoryNum()) / 3; //Reinforcements equal to territories owned divided by 3, round down
+        if (reinforcements < 3) reinforcements = 3; //Minimum reinforcements is 3
+        
+        for (auto continent : map->continents) {
+            if (map->continentHasUniqueOwner(continent->id, player->name)) {
+                bonus = continent->bonus;
+            }
+        }
+       
+        player->reinforcements=reinforcements+bonus;
+        player->phase = player->phase++;
+    }
 }
 
 int main() {
