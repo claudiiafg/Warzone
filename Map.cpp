@@ -15,9 +15,9 @@ Map::Map() = default;
 Map::Map(string _name, vector<string> mapData): Observable() {
     name = _name;
 
-    int contI;
-    int terrI;
-    int borderI;
+    int contI = 0;
+    int terrI = 0;
+    int borderI = 0;
 
     // get indexes that limit the data necessary
     for (size_t i = 0; i < mapData.size(); ++i){

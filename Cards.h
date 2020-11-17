@@ -13,7 +13,11 @@
 #define CARDS_H
 
 #include <vector>
+#include <fstream>
+#include <istream>
+#include <string>
 #include <iostream>
+
 
 using namespace std;
 

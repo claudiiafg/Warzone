@@ -1,9 +1,12 @@
 #pragma once
 
 using namespace std;
-#include <iostream>
 #include <list>
 #include <iterator>
+#include <fstream>
+#include <istream>
+#include <string>
+#include <iostream>
 
 class Order {
 
