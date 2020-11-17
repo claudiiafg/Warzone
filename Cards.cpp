@@ -41,10 +41,11 @@ Card::Card(const Card &oldCard) {
 }
 
 
-ostream &cardStream(ostream &cs, const Card *c) {
-    cs << "Card type: " << c->type;
-    return cs;
+ostream& operator<<(ostream &out, const Card &c) {
+    out << "Card type: " << c.type;
+    return out;
 }
+
 
 string Card::getType() {
     return type;
@@ -79,16 +80,16 @@ Deck::~Deck() {
 
 }
 
-ostream &deckStream(ostream &ds, const Deck *d) {
+ostream& operator<<(ostream &out, const Deck &d) {
     Card *temp = new Card;
-    ds << "Cards left in the deck: \n";
-    for (int i = 0; i < d->deck.size(); i++) {
-        temp = d->deck.at(i);
-        ds << temp->getType() << "\n";
+    out << "Cards left in the deck: \n";
+    for (int i = 0; i < d.deck.size(); i++) {
+        temp = d.deck.at(i);
+        out << temp->getType() << "\n";
     }
     delete temp;
     temp = NULL;
-    return ds;
+    return out;
 }
 
 vector<Card*> Deck::getDeck() {

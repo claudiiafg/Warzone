@@ -25,7 +25,7 @@ public:
 
     void setType(string x);
 
-    friend ostream &cardStream(ostream &cs, const Card *c);
+    friend ostream& operator << (ostream& out, const Card& c);
 
 private:
     string type;
@@ -84,6 +84,8 @@ private:
 
 class Deck {
 public:
+    vector<Card*> deck;
+
     Deck();
 
     Deck(const Deck &oldDeck);
@@ -98,11 +100,10 @@ public:
 
     void add(Card *card);
 
-    friend ostream &deckStream(ostream &ds, const Deck *d);
+    friend ostream& operator << (ostream& out, const Deck& d);
 
 private:
     int nextDraw;
-    vector<Card*> deck;
 };
 
 #endif /* CARDS_H_ */
