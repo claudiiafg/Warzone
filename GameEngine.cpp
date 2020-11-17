@@ -305,6 +305,11 @@ void GameEngine::executeOrdersPhase() {
                 break;
             }
 
+            if (deployFlag == 0 || (deployFlag != 0 && playerOrders->containsDeployOrders())) { //Only execute orders if still in deploy phase or if all players are done deploying
+                playerOrders->sortOrderList();
+                Order* toExecute=playerOrders->front();
+                toExecute->execute();
+            }
         }
     }
 }

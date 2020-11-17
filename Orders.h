@@ -257,6 +257,9 @@ public:
 	//Move order up or down in the list
 	void moveOrder(Order* x, string move);
 
+	//Returns first order in list
+	Order* front();
+
 	//View the list of orders
 	void viewOrderList();
 
@@ -264,5 +267,8 @@ public:
 	bool OrderList::containsDeployOrders();
 
 	//Execute orders then deletes pointers to objects and clears list
-	void executeOrderList();
+	//void executeOrderList();
+
+	//Sorts orderlist by order priority
+	void OrderList::sortOrderList();
 };

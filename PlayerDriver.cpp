@@ -11,7 +11,8 @@ int main() {
 	OrderList* playerOrders = new OrderList();
 	Player* testPlayer = new Player(0, 5, playerTerritories, playerHand, playerOrders);
 	testPlayer->issueOrder();
-    if (playerOrders->containsDeployOrders()) cout << "Order is a deploy order";
+	if (playerOrders->containsDeployOrders()) cout << "Success";
 
-    return 0;
+	return 0;
+
 }

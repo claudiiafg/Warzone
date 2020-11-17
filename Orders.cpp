@@ -305,7 +305,7 @@ using namespace std;
 		playerID = b.playerID;
 		countryOwner = b.countryOwner;
 		countryName = b.countryName;
-		units = b.units;8
+		units = b.units;
 	}
 
 	//Assignment operator
@@ -603,6 +603,11 @@ using namespace std;
 		}
 	}
 
+	//Return first order in list
+	Order* OrderList::front() {
+		return orders.front();
+	}
+
 	//Compare priority of orders in list
 	bool compare(Order* x,Order* y) {
 		if (x->getPriority() < y->getPriority())
@@ -618,19 +623,19 @@ using namespace std;
 			cout << (*it) << endl;
 		}
 	}
-
+	
+	//Check if OrderList contains any Deploy orders
 	bool OrderList::containsDeployOrders() {
 		list <Order*> ::iterator it;
-		Deploy* t;
 		for (it = orders.begin(); it != orders.end(); ++it) {
-			if (typeid (t) == typeid(*it));
-			return true;
+			if ((*it)->getPriority()==1) return true;
 		}
 		return false;
 	}
+	
 
 	//Execute orders then deletes pointers to objects and clears list
-	void OrderList::executeOrderList() {
+	/*void OrderList::executeOrderList() {
 		orders.sort(compare);
 		list <Order*> ::iterator it;
 		for (it = orders.begin(); it != orders.end(); ++it) {
@@ -638,4 +643,8 @@ using namespace std;
 			delete *it;
 		}
 		orders.clear();
+	}*/
+
+	void OrderList::sortOrderList() {
+		orders.sort(compare);
 	}
