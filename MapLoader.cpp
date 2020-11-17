@@ -37,9 +37,6 @@ void MapLoader::loadMaps() {
         if(isMapType(path_name)) {
             cout << "->VALID Map: " << fileName << endl;
             vector<string> content = getContent(path_name);
-			for (auto &c : content) {
-				cout << c << endl;
-			}
             string name = fileName;
             maps.push_back(new MapFile(name, content));
         } else {
