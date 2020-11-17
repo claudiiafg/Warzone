@@ -3,6 +3,7 @@
 //
 
 #include "Map.h"
+#include "GameObservers.h"
 
 /////////////////////////////////////////////////////////////////////////////
 ///   MAP   					   	                                      ///
@@ -11,7 +12,7 @@
 Map::Map() = default;
 
 // constructor
-Map::Map(string _name, vector<string> mapData) {
+Map::Map(string _name, vector<string> mapData): Observable() {
     name = _name;
 
     int contI;
@@ -52,7 +53,7 @@ Map::Map(string _name, vector<string> mapData) {
 }
 
 // copy constructor
-Map::Map(const Map& _m){
+Map::Map(const Map& _m): Observable(){
     name = _m.name;
     territories = _m.territories;
     continents = _m.continents;
