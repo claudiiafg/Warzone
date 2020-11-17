@@ -90,9 +90,9 @@ vector<Territory*> Player::toAttack() {
 }
 
 void Player::issueOrder() {
-    Deploy* deploy1 = new Deploy(1, "Alberta", 1, 5);
-    playerOrders->addOrder(deploy1);
-    delete deploy1;
+    //Deploy* deploy1 = new Deploy(1, "Alberta", 1, 5);
+    Blockade* blockade1 = new Blockade(this->name, "Alberta", 1, 5);
+    playerOrders->addOrder(blockade1);
 }
 
 //Stream operator overload

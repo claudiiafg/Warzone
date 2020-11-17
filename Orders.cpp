@@ -305,7 +305,7 @@ using namespace std;
 		playerID = b.playerID;
 		countryOwner = b.countryOwner;
 		countryName = b.countryName;
-		units = b.units;
+		units = b.units;8
 	}
 
 	//Assignment operator
@@ -617,6 +617,16 @@ using namespace std;
 		for (it = orders.begin(); it != orders.end(); ++it) {
 			cout << (*it) << endl;
 		}
+	}
+
+	bool OrderList::containsDeployOrders() {
+		list <Order*> ::iterator it;
+		Deploy* t;
+		for (it = orders.begin(); it != orders.end(); ++it) {
+			if (typeid (t) == typeid(*it));
+			return true;
+		}
+		return false;
 	}
 
 	//Execute orders then deletes pointers to objects and clears list

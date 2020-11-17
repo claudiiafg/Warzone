@@ -2,10 +2,10 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "Warzone_Order.exe"
+			"path" : "Warzone_Player.exe"
 		},
 		{
-			"path" : "Warzone_Order.pdb"
+			"path" : "Warzone_Player.pdb"
 		}
 	],
 	"backtrace" : 1,
@@ -27,7 +27,7 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 8,
+				"line" : 7,
 				"parent" : 0
 			}
 		]
@@ -48,11 +48,15 @@
 			"sourceIndexes" : 
 			[
 				0,
-				1
+				1,
+				2,
+				3,
+				4,
+				5
 			]
 		}
 	],
-	"id" : "Warzone_Order::@6890427a1f51a3e7e1df",
+	"id" : "Warzone_Player::@6890427a1f51a3e7e1df",
 	"link" : 
 	{
 		"commandFragments" : 
@@ -72,8 +76,8 @@
 		],
 		"language" : "CXX"
 	},
-	"name" : "Warzone_Order",
-	"nameOnDisk" : "Warzone_Order.exe",
+	"name" : "Warzone_Player",
+	"nameOnDisk" : "Warzone_Player.exe",
 	"paths" : 
 	{
 		"build" : ".",
@@ -86,7 +90,11 @@
 			"sourceIndexes" : 
 			[
 				0,
-				1
+				1,
+				2,
+				3,
+				4,
+				5
 			]
 		}
 	],
@@ -95,13 +103,37 @@
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "OrdersDriver.cpp",
+			"path" : "PlayerDriver.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "Player.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "Map.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "Cards.cpp",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
 			"path" : "Orders.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "GameObservers.cpp",
 			"sourceGroupIndex" : 0
 		}
 	],

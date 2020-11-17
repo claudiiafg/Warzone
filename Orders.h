@@ -260,6 +260,9 @@ public:
 	//View the list of orders
 	void viewOrderList();
 
+	//Check if any deploy orders have been issued
+	bool OrderList::containsDeployOrders();
+
 	//Execute orders then deletes pointers to objects and clears list
 	void executeOrderList();
 };

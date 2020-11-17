@@ -2,10 +2,10 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "Warzone_MapLoader.exe"
+			"path" : "Warzone_Order.exe"
 		},
 		{
-			"path" : "Warzone_MapLoader.pdb"
+			"path" : "Warzone_Order.pdb"
 		}
 	],
 	"backtrace" : 1,
@@ -27,7 +27,7 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 5,
+				"line" : 8,
 				"parent" : 0
 			}
 		]
@@ -53,7 +53,7 @@
 			]
 		}
 	],
-	"id" : "Warzone_MapLoader::@6890427a1f51a3e7e1df",
+	"id" : "Warzone_Order::@6890427a1f51a3e7e1df",
 	"link" : 
 	{
 		"commandFragments" : 
@@ -73,8 +73,8 @@
 		],
 		"language" : "CXX"
 	},
-	"name" : "Warzone_MapLoader",
-	"nameOnDisk" : "Warzone_MapLoader.exe",
+	"name" : "Warzone_Order",
+	"nameOnDisk" : "Warzone_Order.exe",
 	"paths" : 
 	{
 		"build" : ".",
@@ -97,19 +97,19 @@
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "MapLoaderDriver.cpp",
+			"path" : "OrdersDriver.cpp",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "MapLoader.cpp",
+			"path" : "Orders.cpp",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 1,
 			"compileGroupIndex" : 0,
-			"path" : "Map.cpp",
+			"path" : "GameObservers.cpp",
 			"sourceGroupIndex" : 0
 		}
 	],

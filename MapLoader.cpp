@@ -34,9 +34,9 @@ void MapLoader::loadMaps() {
         string parendFolder = fileName.substr(0,fileName.find_last_of('.'));
         string path_name = mainPath + parendFolder + "/" + fileName;
         // check for file with map data and create MapFiles
-        if(isMapType(path_name)) {
+        if(isMapType(fileName)) {
             cout << "->VALID Map: " << fileName << endl;
-            vector<string> content = getContent(path_name);
+            vector<string> content = getContent(fileName);
             string name = fileName;
             maps.push_back(new MapFile(name, content));
         } else {
