@@ -1,11 +1,5 @@
 
 #include "GameObservers.h"
-#include "Player.h"
-#include "Orders.h"
-#include "Map.h"
-#include <list>
-#include <iostream>
-using namespace std;
 
 //////////OBSERVABLE//////////
 
