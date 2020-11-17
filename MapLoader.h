@@ -8,10 +8,6 @@
 #include <vector>
 #include <string>
 #include <iostream>
-#include <stdio.h>
-#include <sys/types.h>
-#include <dirent.h>
-
 
 using namespace std;
 
@@ -42,8 +38,6 @@ public:
 
     void loadMaps();    // starts loading process
     vector<MapFile*> getMaps();  // gets files from directory, checks validity and sets each map as MapFile
-    vector<string> listFilesRecursively(const char *path);
-
 
 private:
     vector<MapFile*> maps;   // all maps to create / load

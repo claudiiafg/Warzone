@@ -10,60 +10,40 @@ MapLoader::MapLoader()= default;
 
 //load all files in testing directory
 void MapLoader::loadMaps() {
-    char *path = "../testing";
-    vector<string> fileNames = listFilesRecursively(path);
-    string folderName = "";
+    string mainPath = "../testing/";
+    vector<string> fileNames = {
+            "brasil.cards",
+            "brasil.map",
+            "brasil_map.gif",
+            "brasil_pic.gif",
+            "canada.cards",
+            "canada.map",
+            "canada.gif",
+            "canada.gif",
+            "europe.cards",
+            "europe.map",
+            "europe.gif",
+            "europe.gif",
+            "haiti.cards",
+            "haiti.map",
+            "haiti.gif",
+            "haiti.gif",
+    };
 
-    for(auto &file : fileNames) {
-        bool isFolderName = (file.find_last_of('.') > 100);
-        if(isFolderName) {
-            folderName = file + "/";
-        }
-
-        string path_name = "../testing/" + folderName + file;
+    for(auto &fileName : fileNames) {
+        string parendFolder = fileName.substr(0,fileName.find_last_of('.'));
+        string path_name = mainPath + parendFolder + "/" + fileName;
         // check for file with map data and create MapFiles
         if(isMapType(path_name)) {
-            cout << "->VALID Map: " << file << endl;
+            cout << "->VALID Map: " << fileName << endl;
             vector<string> content = getContent(path_name);
-            string name = file;
+            string name = fileName;
             maps.push_back(new MapFile(name, content));
         } else {
-            cout << "->Invalid: " << file << endl;
+            cout << "->Invalid: " << fileName << endl;
         }
     }
     cout << endl << endl;
-}
-
-vector<string> MapLoader::listFilesRecursively(const char *basePath) {
-    char path[1000];
-    struct dirent *dp;
-    DIR *dir = opendir(basePath);
-    vector<string> fileNames = {};
-
-    // Unable to open directory stream
-    if (!dir)
-        return fileNames;
-
-    while ((dp = readdir(dir)) != NULL) {
-        if (strcmp(dp->d_name, ".") != 0 && strcmp(dp->d_name, "..") != 0) {
-            vector<string> tempFileNames = {};
-
-            // Construct new path from our base path
-            strcpy(path, basePath);
-            strcat(path, "/");
-            strcat(path, dp->d_name);
-            fileNames.push_back(dp->d_name);
-
-            tempFileNames = listFilesRecursively(path);
-
-            for(auto &f: tempFileNames) {
-                fileNames.push_back(f);
-            }
-        }
-    }
-
-    closedir(dir);
-    return fileNames;
 }
 
 
