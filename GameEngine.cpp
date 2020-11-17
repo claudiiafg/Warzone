@@ -143,7 +143,6 @@ void GameEngine::selectMap() {
 
     while(option != EXIT_SELECTION) {
         cout << ">>>>>>>> Which Map do you wish to play?" << endl;
-
         for (int i = 0; i < rawMaps.size(); i++) {
             cout << i << ": "<< *rawMaps[i];
         }
@@ -252,6 +251,19 @@ void GameEngine::activateObservers() {
         }
     }
     cout << endl;
+}
+
+void GameEngine::mainGameLoop() {
+    //Loop until only one player remains
+    while (players.size() > 1) { 
+        //reinforcementPhase();
+        //issueOrdersPhase();
+        //executeOrdersPhase();
+    }
+}
+
+void GameEngine::reinforcementPhase() {
+
 }
 
 int main() {
