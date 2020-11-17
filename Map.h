@@ -10,6 +10,7 @@
 #include <regex>
 #include <sstream>
 #include <algorithm>
+#include "GameObservers.h"
 
 class Player;
 
@@ -71,7 +72,7 @@ private:
 };
 
 
-class Map{
+class Map: public Observable{
 public:
     // constructors
     Map();
@@ -94,7 +95,6 @@ public:
     Continent* getContinentById(string id);
     vector<Territory*> getAdjacentTerritories(string territoryID);
     vector<Territory*> getTerritoriesByContinentId(string id);
-
     // operators
     friend ostream& operator<<(ostream &os, const  Map& n);
     Map& operator = (const Map& _file);
@@ -103,6 +103,4 @@ private:
     // methods
     void setTerritories(vector<string> _territoriesData, vector<string> _bordersData);
     void setContinents(vector<string> _continentsData);
-
-
 };

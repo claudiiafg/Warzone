@@ -1,17 +1,18 @@
 #include "Player.h"
+#include "GameObservers.h"
 
 using namespace std;
 
 //Default constructor
-Player::Player() : playerTerritories(), playerHand(nullptr), playerOrders(nullptr) {
+Player::Player() : playerTerritories(), playerHand(nullptr), playerOrders(nullptr), Observable() {
 }
 
 //Parametrized constructor
-Player::Player(vector<Territory*> playerTerritories, Hand* playerHand, OrderList* playerOrders) : playerTerritories(playerTerritories), playerHand(playerHand), playerOrders(playerOrders) {
+Player::Player(vector<Territory*> playerTerritories, Hand* playerHand, OrderList* playerOrders) : playerTerritories(playerTerritories), playerHand(playerHand), playerOrders(playerOrders), Observable() {
 }
 
 //Copy constructor
-Player::Player(const Player &otherPlayer) {
+Player::Player(const Player &otherPlayer): Observable() {
     for (int i = 0; i < (int)otherPlayer.playerTerritories.size(); i++) {
         playerTerritories.at(i) = *new Territory * (otherPlayer.playerTerritories.at(i));
     }

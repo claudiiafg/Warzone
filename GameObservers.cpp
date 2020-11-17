@@ -13,8 +13,17 @@ Observable::Observable(){
     _observers = new list<Observer*>;
 }
 
-Observable::Observable(){
+Observable::~Observable(){
     delete _observers;
+}
+
+Observable::Observable(const Observable& o){
+    list<Observer*>::iterator _it = _observers->begin();
+    list<Observer*>::iterator oit = o._observers->begin();
+    for(int i = 0; i < o._observers->size(); i++)
+    *_it = *oit;
+    _it++;
+    oit++;
 }
 
 void Observable::Attach(Observer* o){
@@ -32,95 +41,48 @@ void Observable::Notify(){
     (*i)->Update();
 }
 
+list<Observer*> Observable::getObservers(){
+    return *_observers;
+}
 
-//////////MAPSUBJECT//////////
+//////////OBSERVER//////////
 
-MapSubject::MapSubject(){
+
+Observer::Observer(){
+}
+
+Observer::~Observer(){
 
 }
 
-Map* ms = new Map;
-MapSubject::MapSubject(Map* m){
+Observer::Observer(const Observer& o){
 
- ms = m;
 }
 
-MapSubject::~MapSubject(){
+void Observer::Update(){
 
-    delete ms;
-    ms = NULL;
 }
 
-void MapSubject::Attach(Observer* o){
+
+//////////PHASEOBSERVER//////////
+
+PhaseObserver::PhaseObserver(){
+
+}
+
+PhaseObserver::~PhaseObserver(){
+
+}
+
+PhaseObserver::PhaseObserver(const PhaseObserver& po){
+
+}
+
+void PhaseObserver::Update(){
+    display();
+}
+
+void PhaseObserver::display(){
+    int phase = 5; //To complete when phase tracker is added
     
-}
-
-void MapSubject::Detach(Observer* o){
-
-}
-
-void MapSubject::Notify(){
-
-}
-
-
-//////////PLAYERSUBJECT//////////
-
-PlayerSubject::PlayerSubject(){
-
-}
-
-Player* ps = new Player;
-PlayerSubject::PlayerSubject(Player* p){
-
- ps = p;
-}
-
-PlayerSubject::~PlayerSubject(){
-
-    delete ps;
-    ps = NULL;
-}
-
-void PlayerSubject::Attach(Observer* o){
-    
-}
-
-void PlayerSubject::Detach(Observer* o){
-
-}
-
-void PlayerSubject::Notify(){
-
-}
-
-
-//////////OrderListSubject//////////
-
-OrderListSubject::OrderListSubject(){
-
-}
-
-OrderList* ols = new OrderList;
-OrderListSubject::OrderListSubject(OrderList* ol){
-
- ols = ol;
-}
-
-OrderListSubject::~OrderListSubject(){
-
-    delete ps;
-    ps = NULL;
-}
-
-void OrderListSubject::Attach(Observer* o){
-    
-}
-
-void OrderListSubject::Detach(Observer* o){
-
-}
-
-void OrderListSubject::Notify(){
-
 }

@@ -5,8 +5,9 @@ using namespace std;
 #include "Map.h"
 #include "Cards.h"
 #include "Orders.h"
+#include "GameObservers.h"
 
-class Player {
+class Player: public Observable {
 
 public:
 	//Constructors
