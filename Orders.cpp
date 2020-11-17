@@ -12,15 +12,27 @@ using namespace std;
 
 	//Default constructor
 	Order::Order() {
+		priority = NULL;
 	}
 
 	//Copy constructor
 	Order::Order(const Order& b) {
+		priority = b.priority;
 	}
 
 	//Assignment operator
 	Order& Order::operator = (const Order& d2) {
 		return *this;
+	}
+
+	//Get priority
+	int Order::getPriority() {
+		return priority;
+	}
+
+	//Less than operator for priority comparison
+	bool Order::operator <(const Order& playerObj) const {
+		return priority < playerObj.priority;
 	}
 
 	//Validates an order
@@ -65,6 +77,16 @@ using namespace std;
 		units = d2.units;
 		playerID = d2.playerID;
 		return *this;
+	}
+
+	//Get priority
+	int Deploy::getPriority() {
+		return priority;
+	}
+
+	//Less than operator for priority comparison
+	bool Deploy::operator <(const Deploy& playerObj) const {
+		return priority < playerObj.priority;
 	}
 
 	//Validates a deploy order
@@ -134,6 +156,16 @@ using namespace std;
 		units = b.units;
 		attUnits = b.attUnits;
 		return *this;
+	}
+
+	//Get priority
+	int Advance::getPriority() {
+		return priority;
+	}
+
+	//Less than operator for priority comparison
+	bool Advance::operator <(const Advance& playerObj) const {
+		return priority < playerObj.priority;
 	}
 
 	//Validates an advance order
@@ -212,6 +244,16 @@ using namespace std;
 		return *this;
 	}
 
+	//Get priority
+	int Bomb::getPriority() {
+		return priority;
+	}
+
+	//Less than operator for priority comparison
+	bool Bomb::operator <(const Bomb& playerObj) const {
+		return priority < playerObj.priority;
+	}
+
 	//Validates a bomb order
 	bool Bomb::validate() {
 		bool playerOwnsCountry = false;
@@ -273,6 +315,16 @@ using namespace std;
 		countryName = b.countryName;
 		units = b.units;
 		return *this;
+	}
+
+	//Get priority
+	int Blockade::getPriority() {
+		return priority;
+	}
+
+	//Less than operator for priority comparison
+	bool Blockade::operator <(const Blockade& playerObj) const {
+		return priority < playerObj.priority;
 	}
 
 	//Validates a blockade order
@@ -345,6 +397,16 @@ using namespace std;
 		return *this;
 	}
 
+	//Get priority
+	int Airlift::getPriority() {
+		return priority;
+	}
+
+	//Less than operator for priority comparison
+	bool Airlift::operator <(const Airlift& playerObj) const {
+		return priority < playerObj.priority;
+	}
+
 	//Validates an airlift order
 	bool Airlift::validate() {
 		bool playerOwnsCountry = false;
@@ -410,6 +472,17 @@ using namespace std;
 		return *this;
 	}
 
+	//Get priority
+	int Negotiate::getPriority() {
+		return priority;
+	}
+
+	//Less than operator for priority comparison
+	bool Negotiate::operator <(const Negotiate& playerObj) const {
+		return priority < playerObj.priority;
+	}
+
+
 	//Validates a negotiate order
 	bool Negotiate::validate() {
 		bool validOpponent = false;
@@ -441,6 +514,7 @@ using namespace std;
 
 	//Default Constructor
 	OrderList::OrderList() = default;
+
 	//destructor
 	OrderList::~OrderList() {
 		list <Order*> ::iterator it;
@@ -455,6 +529,7 @@ using namespace std;
 		orders.push_back(x);
 	}
 
+	//Remove order from list
 	void OrderList::removeOrder(Order* x) {
 		list <Order*> ::iterator it;
 		for (it = orders.begin(); it != orders.end(); ++it) {
@@ -528,6 +603,14 @@ using namespace std;
 		}
 	}
 
+	//Compare priority of orders in list
+	bool compare(Order* x,Order* y) {
+		if (x->getPriority() < y->getPriority())
+			return (true);
+		else
+			return(false);
+	}
+
 	//View the list of orders
 	void OrderList::viewOrderList() {
 		list <Order*> ::iterator it;
@@ -538,6 +621,7 @@ using namespace std;
 
 	//Execute orders then deletes pointers to objects and clears list
 	void OrderList::executeOrderList() {
+		orders.sort(compare);
 		list <Order*> ::iterator it;
 		for (it = orders.begin(); it != orders.end(); ++it) {
 			(*it)->execute();

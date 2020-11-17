@@ -5,10 +5,10 @@ using namespace std;
 #include <list>
 #include <iterator>
 
-class Order
-{
-public:
+class Order {
 
+public:
+	int priority;
 	//Default Constructor
 	Order();
 
@@ -18,17 +18,24 @@ public:
 	//Assignment operator
 	Order& operator = (const Order& d2);
 
+	//Get Priority
+	virtual int getPriority();
+
+	//Less than operator for priority comparison
+	virtual bool operator <(const Order& playerObj) const;
+
 	//Validates an order
 	virtual bool validate();
 
 	//Executes an order
-	virtual void execute();
+	virtual void execute() = 0;
 
     virtual ostream& operator<< (ostream& out) const;
 
 };
 
 class Deploy : public Order {
+	int priority = 1;
 	int playerID;
 	string countryName;
 	int countryOwner;
@@ -45,6 +52,12 @@ public:
 	//Assignment operator
 	Deploy& operator = (const Deploy& d2);
 
+	//Get Priority
+	int getPriority();
+
+	//Less than operator for priority comparison
+	bool operator <(const Deploy& playerObj) const;
+
 	//Validates a deploy order
 	bool validate();
 
@@ -55,6 +68,7 @@ public:
 };
 
 class Advance : public Order {
+	int priority = 4;
 	int playerID;
 	string countryName;
 	int countryOwner;
@@ -73,6 +87,12 @@ public:
 	//Assignment operator
 	Advance& operator = (const Advance& b);
 
+	//Get Priority
+	int getPriority();
+
+	//Less than operator for priority comparison
+	bool operator <(const Advance& playerObj) const;
+
 	//Validates an advance order
 	bool validate();
 
@@ -83,6 +103,7 @@ public:
 };
 
 class Bomb : public Order {
+	int priority = 4;
 	int playerID;
 	int countryOwner;
 	string countryName;
@@ -99,6 +120,12 @@ public:
 	//Assignment operator
 	Bomb& operator = (const Bomb& b);
 
+	//Get Priority
+	int getPriority();
+
+	//Less than operator for priority comparison
+	bool operator <(const Bomb& playerObj) const;
+
 	//Validates a bomb order
 	bool validate();
 
@@ -109,6 +136,7 @@ public:
 };
 
 class Blockade : public Order {
+	int priority = 3;
 	int playerID;
 	string countryName;
 	int countryOwner;
@@ -125,6 +153,12 @@ public:
 	//Assignment operator
 	Blockade& operator = (const Blockade& b);
 
+	//Get Priority
+	int getPriority();
+
+	//Less than operator for priority comparison
+	bool operator <(const Blockade& playerObj) const;
+
 	//Validates a blockade order
 	bool validate();
 
@@ -135,6 +169,7 @@ public:
 };
 
 class Airlift : public Order {
+	int priority = 2;
 	int playerID;
 	string countryName;
 	int countryOwner;
@@ -153,6 +188,12 @@ public:
 	//Assignment operator
 	Airlift& operator = (const Airlift& b);
 
+	//Get Priority
+	int getPriority();
+
+	//Less than operator for priority comparison
+	bool operator <(const Airlift& playerObj) const;
+
 	//Validates an airlift order
 	bool validate();
 
@@ -164,6 +205,7 @@ public:
 };
 
 class Negotiate : public Order {
+	int priority = 4;
 	int playerID;
 	int otherPlayer;
 
@@ -176,6 +218,12 @@ public:
 
 	//Assignment operator
 	Negotiate& operator = (const Negotiate& b);
+
+	//Get Priority
+	int getPriority();
+
+	//Less than operator for priority comparison
+	bool operator <(const Negotiate& playerObj) const;
 
 	//Validates a negotiate order
 	bool validate();
