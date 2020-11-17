@@ -8,11 +8,12 @@
 #include <vector>
 #include <string>
 #include <iostream>
-#include <boost/filesystem.hpp>
-#include <boost/range/iterator_range.hpp>
+#include <stdio.h>
+#include <sys/types.h>
+#include <dirent.h>
+
 
 using namespace std;
-using namespace boost::filesystem;
 
 
 class MapFile{
@@ -41,12 +42,14 @@ public:
 
     void loadMaps();    // starts loading process
     vector<MapFile*> getMaps();  // gets files from directory, checks validity and sets each map as MapFile
+    vector<string> listFilesRecursively(const char *path);
 
 
 private:
     vector<MapFile*> maps;   // all maps to create / load
     static bool isMapType(const string& path);  // check validity of map
     static vector<string> getContent(const string& path);   // get files content
+
 
     // operator
     friend ostream& operator<<(ostream &os, const  MapLoader& l);

@@ -10,32 +10,62 @@ MapLoader::MapLoader()= default;
 
 //load all files in testing directory
 void MapLoader::loadMaps() {
-    string path = "../testing";
-    for (const auto& entry : std::filesystem::directory_iterator(path)) {
-        const auto filenameStr = entry.path().filename().string();
+    char *path = "../testing";
+    vector<string> fileNames = listFilesRecursively(path);
+    string folderName = "";
 
-        cout << "Files Found:" << endl;
+    for(auto &file : fileNames) {
+        bool isFolderName = (file.find_last_of('.') > 100);
+        if(isFolderName) {
+            folderName = file + "/";
+        }
 
-        // check for all files inside each folder of testing directory
-        if (entry.is_directory()) {
-//            std::cout << "dir:  " << filenameStr << '\n';
-            for (const auto & entry : std::filesystem::directory_iterator(entry.path())) {
-                std::string path_string{entry.path().u8string()};
+        string path_name = "../testing/" + folderName + file;
+        // check for file with map data and create MapFiles
+        if(isMapType(path_name)) {
+            cout << "->VALID Map: " << file << endl;
+            vector<string> content = getContent(path_name);
+            string name = file;
+            maps.push_back(new MapFile(name, content));
+        } else {
+            cout << "->Invalid: " << file << endl;
+        }
+    }
+    cout << endl << endl;
+}
 
-                // check for file with map data and create MapFiles
-                if(isMapType(path_string)) {
-                    cout << "->VALID Map: " << entry.path().filename().string() << endl;
-                    vector<string> content = getContent(path_string);
-                    string name = entry.path().filename().string();
-                    maps.push_back(new MapFile(name, content));
-                } else {
-                    cout << "->Invalid: " << entry.path().filename().string() << endl;
-                }
+vector<string> MapLoader::listFilesRecursively(const char *basePath) {
+    char path[1000];
+    struct dirent *dp;
+    DIR *dir = opendir(basePath);
+    vector<string> fileNames = {};
+
+    // Unable to open directory stream
+    if (!dir)
+        return fileNames;
+
+    while ((dp = readdir(dir)) != NULL) {
+        if (strcmp(dp->d_name, ".") != 0 && strcmp(dp->d_name, "..") != 0) {
+            vector<string> tempFileNames = {};
+
+            // Construct new path from our base path
+            strcpy(path, basePath);
+            strcat(path, "/");
+            strcat(path, dp->d_name);
+            fileNames.push_back(dp->d_name);
+
+            tempFileNames = listFilesRecursively(path);
+
+            for(auto &f: tempFileNames) {
+                fileNames.push_back(f);
             }
         }
-        cout << endl;
     }
+
+    closedir(dir);
+    return fileNames;
 }
+
 
 // validate map type
 bool MapLoader::isMapType(const string& path) {
@@ -47,8 +77,7 @@ bool MapLoader::isMapType(const string& path) {
         return false;
     }
 
-
-    boost::filesystem::ifstream PathFile(path);
+    ifstream PathFile(path);
     // check for errors opening the file
     if (PathFile.fail()) {
         cout<<"It failed\n"<<strerror(errno)<<endl;
@@ -62,7 +91,7 @@ bool MapLoader::isMapType(const string& path) {
 
 // extract map data
 vector<string> MapLoader::getContent(const string& path) {
-    boost::filesystem::ifstream PathFile(path);
+    ifstream PathFile(path);
     string lineContent;
     vector<string> vecOfStr;
 
