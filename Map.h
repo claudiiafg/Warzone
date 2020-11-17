@@ -30,6 +30,7 @@ public:
     string name;
     string id;  // node number
     vector <string> adjacent;
+    int bonus;
 
     // operators
     friend ostream& operator<<(ostream &os, const Continent& n);
@@ -95,7 +96,7 @@ public:
     Continent* getContinentById(string id);
     vector<Territory*> getAdjacentTerritories(string territoryID);
     vector<Territory*> getTerritoriesByContinentId(string id);
-    bool continentHasUniqueOwner(string continentID);
+    bool continentHasUniqueOwner(string continentID, int playerName);
 
     // operators
     friend ostream& operator<<(ostream &os, const  Map& n);

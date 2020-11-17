@@ -31,6 +31,7 @@ public:
 	OrderList* getMyOrders() { return playerOrders; }
 	int getReinforcements() { return reinforcements; }
 	int getPhase() { return phase; }
+	int getTerritoryNum() { return playerTerritories.size(); }
 
 	//Mutators
 	void setTerritories(vector<Territory*> playerTerritories);

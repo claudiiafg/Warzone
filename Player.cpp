@@ -3,7 +3,7 @@
 using namespace std;
 
 //Default constructor
-Player::Player() : name(rand()%10), armies(0), reinforcements(0), phase(0), playerTerritories(), playerHand(nullptr), playerOrders(nullptr) {
+Player::Player() : name(rand()%10), armies(0), reinforcements(0), phase(1), playerTerritories(), playerHand(nullptr), playerOrders(nullptr) {
 }
 
 //Parametrized constructor
@@ -19,6 +19,10 @@ Player::Player(const Player &otherPlayer) {
 
     playerHand = *new Hand * (otherPlayer.playerHand);
     playerOrders = *new OrderList * (otherPlayer.playerOrders);
+    armies = 0;
+    reinforcements = 0;
+    phase = 1;
+    name = 0;
   }
 
 //= operator overload

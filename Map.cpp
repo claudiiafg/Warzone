@@ -257,13 +257,12 @@ Map& Map::operator = (const Map& _file) {
     return *this;
 }
 
-bool Map::continentHasUniqueOwner(string continentID) {
+bool Map::continentHasUniqueOwner(string continentID, int playerName) {
     vector<Territory*> territories = getTerritoriesByContinentId(continentID);
-    int owner = territories[0]->getOwnerID();
 
     for(auto terr : territories) {
         // if one has different owner -> not true
-        if(terr->getOwnerID() != owner) {
+        if(terr->getOwnerID() != playerName) {
             return false;
         }
     }
@@ -288,6 +287,7 @@ Continent::Continent(string pos, string continentsString) {
     };
 
     name = result[0];
+    bonus = stoi(result[1]);
 }
 
 // copy constructor
@@ -295,6 +295,7 @@ Continent::Continent(const Continent& _c){
     id = _c.id;
     name = _c.name;
     adjacent = _c.adjacent;
+    bonus = _c.bonus;
 }
 
 // destructor
