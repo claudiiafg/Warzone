@@ -54,7 +54,6 @@ void GameEngine::startupPhase() {
         selectMap();
         selectPlayers();
         activateObservers();
-
     } catch(int e) {
         throw e;
     }
@@ -278,6 +277,35 @@ void GameEngine::reinforcementPhase() {
        
         player->reinforcements=reinforcements+bonus;
         player->phase = player->phase++;
+    }
+}
+
+void GameEngine::issueOrdersPhase() {
+    while (issuingFlag > 0) {
+        for (auto player : players) {
+            player->issueOrder();
+        }
+    }
+}
+
+void GameEngine::executeOrdersPhase() {
+    while (executeFlag > 0) {
+        if (players.size() <= 1) break;
+
+        for(std::vector<Player*>::iterator player = players.begin(); player != players.end(); ++player) {
+            OrderList* playerOrders = (*player)->getMyOrders();
+            if ((*playerOrders).orders.empty()) break; //Check if player has orders remaining
+            
+            //If player has no remaining territories, remove from game
+            vector<Territory*> playerTerritories = (*player)->getMyTerritories();
+            if (playerTerritories.empty()) {
+                (*player)->phase++; //Send player to phase 5 (conquered)
+                players.erase(player); //Remove player from player list
+                --player; //Wind iterator back to account for left shift from deletion
+                break;
+            }
+
+        }
     }
 }
 
