@@ -77,9 +77,9 @@ vector<Territory*> Player::toAttack() {
 }
 
 void Player::issueOrder() {
-    Order *newOrder = new Order();
-    playerOrders->addOrder(newOrder);
-    delete newOrder;
+    //Order *newOrder = new Order();
+    //playerOrders->addOrder(newOrder);
+    //delete newOrder;
 }
 
 //Stream operator overload

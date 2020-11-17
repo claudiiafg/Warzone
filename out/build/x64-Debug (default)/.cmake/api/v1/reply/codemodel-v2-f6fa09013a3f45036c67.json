@@ -1,0 +1,100 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "Warzone",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "Warzone_Card::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Warzone_Card-Debug-336c051be8d18420d46b.json",
+					"name" : "Warzone_Card",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "Warzone_GameEngine::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Warzone_GameEngine-Debug-e920312f4440b6f1dbaa.json",
+					"name" : "Warzone_GameEngine",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "Warzone_Map::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Warzone_Map-Debug-82c152193d1680f35477.json",
+					"name" : "Warzone_Map",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "Warzone_MapLoader::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Warzone_MapLoader-Debug-8670bdff53691e53f603.json",
+					"name" : "Warzone_MapLoader",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "Warzone_Order::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Warzone_Order-Debug-893732e562bd32d3d3d0.json",
+					"name" : "Warzone_Order",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "Warzone_Player::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Warzone_Player-Debug-ada9ffd5ccb7613a2703.json",
+					"name" : "Warzone_Player",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "C:/Users/gini/source/repos/claudiiafg/Warzone/out/build/x64-Debug (default)",
+		"source" : "C:/Users/gini/source/repos/claudiiafg/Warzone"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 0
+	}
+}
