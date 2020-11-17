@@ -10,9 +10,12 @@ using namespace std;
 class Player: public Observable {
 
 public:
+    int name;
+    int armies;
+
 	//Constructors
 	Player();
-	Player(vector<Territory*> playerTerritories, Hand* playerHand, OrderList* playerOrders);
+	Player(int name, int armies, vector<Territory*> playerTerritories, Hand* playerHand, OrderList* playerOrders);
 	Player(const Player& otherPlayer);
 
 	//Destructor
@@ -25,6 +28,11 @@ public:
 	vector<Territory *> getMyTerritories() { return playerTerritories; }
 	Hand* getMyHand() { return playerHand; }
 	OrderList* getMyOrders() { return playerOrders; }
+
+	//Mutators
+	void setTerritories(vector<Territory*> playerTerritories);
+	void setHand(Hand* playerHand);
+	void setOrders(OrderList* playerOrders);
 
 	//Required Methods
 	vector<Territory *> toDefend();

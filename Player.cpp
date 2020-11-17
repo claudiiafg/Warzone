@@ -4,11 +4,12 @@
 using namespace std;
 
 //Default constructor
-Player::Player() : playerTerritories(), playerHand(nullptr), playerOrders(nullptr), Observable() {
+Player::Player() : name(rand()%10), armies(0), playerTerritories(), playerHand(nullptr), playerOrders(nullptr) {
 }
 
 //Parametrized constructor
-Player::Player(vector<Territory*> playerTerritories, Hand* playerHand, OrderList* playerOrders) : playerTerritories(playerTerritories), playerHand(playerHand), playerOrders(playerOrders), Observable() {
+Player::Player(int name, int armies, vector<Territory*> playerTerritories, Hand* playerHand, OrderList* playerOrders) :
+        name(name), armies(armies), playerTerritories(playerTerritories), playerHand(playerHand), playerOrders(playerOrders) {
 }
 
 //Copy constructor
@@ -54,6 +55,19 @@ Player::~Player() {
     playerOrders = nullptr;
 }
 
+void Player::setTerritories(vector<Territory*> playerTerritories) {
+    this->playerTerritories = playerTerritories;
+}
+
+void Player::setHand(Hand* playerHand) {
+    this->playerHand = playerHand;
+}
+
+void Player::setOrders(OrderList* playerOrders) {
+    this->playerOrders = playerOrders;
+}
+
+
 //Required methods
 vector<Territory*> Player::toDefend() {
     return playerTerritories;
@@ -64,21 +78,26 @@ vector<Territory*> Player::toAttack() {
 }
 
 void Player::issueOrder() {
-    Order *newOrder = new Order();
-    playerOrders->addOrder(newOrder);
-    delete newOrder;
+    Deploy* deploy1 = new Deploy(1, "Alberta", 1, 5);
+    playerOrders->addOrder(deploy1);
+    delete deploy1;
 }
 
 //Stream operator overload
 ostream& operator<<(ostream &out, const Player &p) {
-    out << "\nTerritories: ";
-
+    out << "Player id: " << p.name << endl;
+    out << "Armies in reinforcement pool: " << p.armies << endl;
+    out << "Territories: ";
     for (int i = 0; i < p.playerTerritories.size(); i++) {
         out << p.playerTerritories.at(i)->name << ' ';
     }
-    out << "\nHand: No hand yet\nOrders: No orders yet\n";
-    //out << "\nOrders: " << p.playerOrders
-    //<< "\nHand: " << p.playerHand << "\n";
-
+    out << endl;
+    out << "Orders: ";
+    list <Order*> ::iterator it;
+    for (it = p.playerOrders->orders.begin(); it != p.playerOrders->orders.end(); ++it) {
+        out << (*it) << " || ";
+    }
+    out << endl;
+    out << "Hand: " << *p.playerHand << endl;
     return out;
 }

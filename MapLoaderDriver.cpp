@@ -5,7 +5,7 @@
 //using namespace std;
 #include <iostream>
 #include "MapLoader.h"
-#include "Map.cpp"
+#include "Map.h"
 
 int main(){
 

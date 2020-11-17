@@ -41,10 +41,11 @@ Card::Card(const Card &oldCard) {
 }
 
 
-ostream &cardStream(ostream &cs, const Card *c) {
-    cs << "Card type: " << c->type;
-    return cs;
+ostream& operator<<(ostream &out, const Card &c) {
+    out << "Card type: " << c.type;
+    return out;
 }
+
 
 string Card::getType() {
     return type;
@@ -79,16 +80,16 @@ Deck::~Deck() {
 
 }
 
-ostream &deckStream(ostream &ds, const Deck *d) {
+ostream& operator<<(ostream &out, const Deck &d) {
     Card *temp = new Card;
-    ds << "Cards left in the deck: \n";
-    for (int i = 0; i < d->deck.size(); i++) {
-        temp = d->deck.at(i);
-        ds << temp->getType() << "\n";
+    out << "Cards left in the deck: \n";
+    for (int i = 0; i < d.deck.size(); i++) {
+        temp = d.deck.at(i);
+        out << temp->getType() << "\n";
     }
     delete temp;
     temp = NULL;
-    return ds;
+    return out;
 }
 
 vector<Card*> Deck::getDeck() {
@@ -146,15 +147,13 @@ Hand::Hand(const Hand &oldHand) {
     diplomacyCounter = oldHand.diplomacyCounter;
 }
 
-ostream &handStream(ostream &hs, const Hand *h) {
-    Card *temp = new Card;
-    hs << "Cards in hand: \n";
-    for (int i = 0; i < h->hand.size(); i++) {
-        temp = h->hand.at(i);
-        hs << temp->getType() << "\n";
-
-    }
-    return hs;
+ostream& operator<<(ostream &out, const Hand &h) {
+    out << "\n Bombs: " << h.bombCounter;
+    out << "\n Reinforcements: " << h.reinforcementCounter;
+    out << "\n Blockades: " << h.blockadeCounter;
+    out << "\n Airlifts: " << h.airliftCounter;
+    out << "\n Diplomacy: " << h.diplomacyCounter;
+    return out;
 }
 
 Hand::~Hand() {

@@ -12,6 +12,7 @@
 #include <algorithm>
 #include "GameObservers.h"
 
+
 class Player;
 
 using namespace std;
@@ -56,8 +57,8 @@ public:
     bool isAdjacentNode(const string& _node);
     int getArmies();
     void setArmiesNumber(int amount);
-    Player* getOwner();
-    void setOwner(Player* _owner);
+    int getOwnerID();
+    void setOwner(int _ownerID);
 
     // operators
     friend ostream& operator<<(ostream &os, const  Territory& n);
@@ -68,7 +69,7 @@ private:
     string continentID;
     vector<string> adjacent;   // adjacent nodes
     int armiesNumber{};
-    Player* owner{};
+    int ownerID;
 };
 
 
@@ -95,6 +96,9 @@ public:
     Continent* getContinentById(string id);
     vector<Territory*> getAdjacentTerritories(string territoryID);
     vector<Territory*> getTerritoriesByContinentId(string id);
+
+    bool continentHasUniqueOwner(string continentID);
+
     // operators
     friend ostream& operator<<(ostream &os, const  Map& n);
     Map& operator = (const Map& _file);

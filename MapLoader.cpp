@@ -10,37 +10,42 @@ MapLoader::MapLoader()= default;
 
 //load all files in testing directory
 void MapLoader::loadMaps() {
-    std::string path = "../testing";
-    for (const auto& entry : std::filesystem::directory_iterator(path)) {
-        const auto filenameStr = entry.path().filename().string();
+    string mainPath = "../testing/";
+    vector<string> fileNames = {
+            "brasil.cards",
+            "brasil.map",
+            "brasil_map.gif",
+            "brasil_pic.gif",
+            "canada.cards",
+            "canada.map",
+            "canada.gif",
+            "canada.gif",
+            "europe.cards",
+            "europe.map",
+            "europe.gif",
+            "europe.gif",
+            "haiti.cards",
+            "haiti.map",
+            "haiti.gif",
+            "haiti.gif",
+    };
 
-        cout << "Files Found:" << endl;
-
-        // check for all files inside each folder of testing directory
-        if (entry.is_directory()) {
-//            std::cout << "dir:  " << filenameStr << '\n';
-            for (const auto & entry : std::filesystem::directory_iterator(entry.path())) {
-//                cout << entry.path() << endl;
-
-                // check for file with map data and create MapFiles
-                if(isMapType(entry.path())) {
-                    cout << "->VALID Map: " << entry.path().filename().string() << endl;
-                    vector<string> content = getContent(entry.path());
-                    string name = entry.path().filename().string();
-                    maps.push_back(new MapFile(name, content));
-                } else {
-                    cout << "->Invalid: " << entry.path().filename().string() << endl;
-                }
-            }
+    for(auto &fileName : fileNames) {
+        string parendFolder = fileName.substr(0,fileName.find_last_of('.'));
+        string path_name = mainPath + parendFolder + "/" + fileName;
+        // check for file with map data and create MapFiles
+        if(isMapType(path_name)) {
+            cout << "->VALID Map: " << fileName << endl;
+            vector<string> content = getContent(path_name);
+            string name = fileName;
+            maps.push_back(new MapFile(name, content));
+        } else {
+            cout << "->Invalid: " << fileName << endl;
         }
-
-        // check for all files directly inside testing directory
-        else if (entry.is_regular_file()) {
-//            cout << "file: " << filenameStr << '\n';
-        }
-        cout << endl;
     }
+    cout << endl << endl;
 }
+
 
 // validate map type
 bool MapLoader::isMapType(const string& path) {
@@ -51,7 +56,6 @@ bool MapLoader::isMapType(const string& path) {
     if(ext != ".map") {
         return false;
     }
-
 
     ifstream PathFile(path);
     // check for errors opening the file
@@ -84,11 +88,7 @@ vector<string> MapLoader::getContent(const string& path) {
 
 // prints and returns maps available
 vector<MapFile*> MapLoader::getMaps() {
-    for(int i = 0; i != maps.size(); i++) {
-        cout << *maps[i] << endl;
-    }
     return maps;
-
 }
 
 // streams insertion operator
@@ -116,7 +116,7 @@ MapFile::MapFile(const MapFile& _file) {
 
 // streams insertion operator
 ostream& operator<<(ostream &os, const MapFile& n) {
-    return os << "Maps available for creation: " << n.name << endl;
+    return os << n.name << endl;
 }
 
 // assignment operator

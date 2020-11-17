@@ -122,12 +122,12 @@ bool Map::validate() {
 
 
         if(sequence.size() == territories.size()){
-            cout << ">>>>>>>>>>>>Map successfully created>>>>>>>>>>" << endl;
+            cout << "Map is valid!" << endl;
             return true;
         }
 
     } catch(int e) {
-        cout << "Invalid map: " << name << ", ";
+        cout << "Invalid map!" << endl;
         return false;
     }
 
@@ -171,7 +171,7 @@ void Map::setContinents(vector<string> _continentsData) {
             for (auto & k : adjacentTerr) {
                 // push continent of adjacent territories of the continent's territories
                 if(!(std::find(adjacentCont.begin(), adjacentCont.end(), k->getContinentID()) != adjacentCont.end()) &&
-                k->getContinentID() != continent->id) {
+                   k->getContinentID() != continent->id) {
                     adjacentCont.push_back(k->getContinentID());
                 }
             }
@@ -258,6 +258,20 @@ Map& Map::operator = (const Map& _file) {
     return *this;
 }
 
+bool Map::continentHasUniqueOwner(string continentID) {
+    vector<Territory*> territories = getTerritoriesByContinentId(continentID);
+    int owner = territories[0]->getOwnerID();
+
+    for(auto terr : territories) {
+        // if one has different owner -> not true
+        if(terr->getOwnerID() != owner) {
+            return false;
+        }
+    }
+    // if finish loop -> all the same
+    return true;
+}
+
 /////////////////////////////////////////////////////////////////////////////
 ///   CONTINENT					   	                                      ///
 /////////////////////////////////////////////////////////////////////////////
@@ -271,7 +285,7 @@ Continent::Continent(string pos, string continentsString) {
     //seperate string by spaces
     regex ws_re("\\s+");
     vector<string> result{
-    sregex_token_iterator(continentsString.begin(), continentsString.end(), ws_re, -1), {}
+            sregex_token_iterator(continentsString.begin(), continentsString.end(), ws_re, -1), {}
     };
 
     name = result[0];
@@ -321,15 +335,15 @@ Territory::Territory() = default;
 // contructor
 Territory::Territory(string territoryString, string borderString) {
     armiesNumber = 0;
-    owner = *new Player*();
+    ownerID = NULL;
 
     // seperate strings by spaces
     regex ws_re("\\s+");
     vector<string> result{
-    sregex_token_iterator(territoryString.begin(), territoryString.end(), ws_re, -1), {}
+            sregex_token_iterator(territoryString.begin(), territoryString.end(), ws_re, -1), {}
     };
     vector<string> bordersResult{
-    sregex_token_iterator(borderString.begin(), borderString.end(), ws_re, -1), {}
+            sregex_token_iterator(borderString.begin(), borderString.end(), ws_re, -1), {}
     };
 
     id = result[0];
@@ -346,7 +360,7 @@ Territory::Territory(string territoryString, string borderString) {
 // copy contructor
 Territory::Territory(const Territory& otherTerritory) {
     armiesNumber = otherTerritory.armiesNumber;
-    owner = otherTerritory.owner;
+    ownerID = otherTerritory.ownerID;
     id = otherTerritory.id;
     name = otherTerritory.name;
     continentID = otherTerritory.continentID;
@@ -355,9 +369,7 @@ Territory::Territory(const Territory& otherTerritory) {
 }
 
 // destructor
-Territory::~Territory() {
-    delete owner;
-}
+Territory::~Territory() = default;
 
 // get continent id
 string Territory::getContinentID() {
@@ -390,13 +402,13 @@ void Territory::setArmiesNumber(int amount) {
 }
 
 // get owner
-Player* Territory::getOwner() {
-    return owner;
+int Territory::getOwnerID() {
+    return ownerID;
 }
 
 // set owner
-void Territory::setOwner(Player* _owner) {
-    owner = _owner;
+void Territory::setOwner(int _ownerID) {
+    ownerID = _ownerID;
 }
 
 // stream insertion operator
@@ -422,7 +434,7 @@ Territory& Territory::operator = (const Territory& _file) {
     continentID = _file.continentID;
     adjacent = _file.adjacent;
     armiesNumber = _file.armiesNumber;
-    owner = _file.owner;
+    ownerID = _file.ownerID;
     return *this;
 }
 
