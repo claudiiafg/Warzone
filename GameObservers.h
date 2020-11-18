@@ -42,6 +42,7 @@ class PhaseObserver: public Observer {
         void display();
 
     private:
+        Player *playerSubject;
 
 };
 
@@ -55,5 +56,7 @@ class GameStatObserver: public Observer {
         void Update();
         void display();
     private:
-
+        Player *playerSubject;
+        Map *mapSubject;
+        OrderList *orderListSubject;
 };

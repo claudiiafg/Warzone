@@ -83,6 +83,6 @@ void PhaseObserver::Update(){
 }
 
 void PhaseObserver::display(){
-    int phase = 5; //To complete when phase tracker is added
+    int phase = playerSubject->phase;
     
 }
