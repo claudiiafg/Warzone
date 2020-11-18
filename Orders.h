@@ -263,6 +263,9 @@ public:
 	//Returns first order in list
 	Order* front();
 
+	//Returns true if OrderList is empty, false otherwise
+	bool isEmpty();
+
 	//View the list of orders
 	void viewOrderList();
 

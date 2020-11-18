@@ -608,6 +608,12 @@ using namespace std;
 		return orders.front();
 	}
 
+	//Returns true if list is empty, false otherwise
+	bool OrderList::isEmpty() {
+		if (orders.empty()) return true;
+		else return false;
+	}
+
 	//Compare priority of orders in list
 	bool compare(Order* x,Order* y) {
 		if (x->getPriority() < y->getPriority())

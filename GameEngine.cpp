@@ -294,7 +294,7 @@ void GameEngine::executeOrdersPhase() {
 
         for(std::vector<Player*>::iterator player = players.begin(); player != players.end(); ++player) {
             OrderList* playerOrders = (*player)->getMyOrders();
-            if ((*playerOrders).orders.empty()) break; //Check if player has orders remaining
+            if (playerOrders->isEmpty()) break; //Check if player has orders remaining
             
             //If player has no remaining territories, remove from game
             vector<Territory*> playerTerritories = (*player)->getMyTerritories();
@@ -306,9 +306,12 @@ void GameEngine::executeOrdersPhase() {
             }
 
             if (deployFlag == 0 || (deployFlag != 0 && playerOrders->containsDeployOrders())) { //Only execute orders if still in deploy phase or if all players are done deploying
-                playerOrders->sortOrderList();
-                Order* toExecute=playerOrders->front();
-                toExecute->execute();
+                playerOrders->sortOrderList(); //Move highest priority orders to front of list
+                Order* toExecute=playerOrders->front(); 
+                toExecute->execute(); //Execute highest priority order
+
+                if (!(playerOrders->containsDeployOrders())) deployFlag--;
+                if (playerOrders->isEmpty()) executeFlag--;
             }
         }
     }
