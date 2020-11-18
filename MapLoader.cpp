@@ -22,8 +22,8 @@ void MapLoader::loadMaps() {
     } else if (name == "james") {
         mainPath = "C://Users/James/repos/TempWarzone1/testing/";
 
-    } else if ( name == "virginia") {
-        mainPath = "C://Users/";
+    } else if ( name == "gini") {
+        mainPath = "C:/Users/gini/source/repos/claudiiafg/Warzone/testing/";
 
     } else if (name == "ian") {
         mainPath = "C://Users/";
