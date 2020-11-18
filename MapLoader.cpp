@@ -10,7 +10,8 @@ MapLoader::MapLoader()= default;
 
 //load all files in testing directory
 void MapLoader::loadMaps() {
-    string mainPath = "../testing/";
+
+    string mainPath = "C://Users/claud/Warzone/testing/";
     vector<string> fileNames = {
             "brasil.cards",
             "brasil.map",
@@ -57,10 +58,9 @@ bool MapLoader::isMapType(const string& path) {
         return false;
     }
 
-	ofstream myFile;
-	myFile.open(path);
+	ifstream myFile (path);
     // check for errors opening the file
-    if (myFile.is_open()) {
+    if (!myFile.is_open()) {
         cout<<"It failed\n"<<strerror(errno)<<endl;
         return false;
     }
@@ -72,8 +72,8 @@ bool MapLoader::isMapType(const string& path) {
 
 // extract map data
 vector<string> MapLoader::getContent(const string& path) {
-	ifstream myFile;
-	myFile.open(path);
+	ifstream myFile (path);
+	cout << path << endl;
 
     string lineContent;
     vector<string> vecOfStr;
