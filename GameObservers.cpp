@@ -116,19 +116,26 @@ void PhaseObserver::Update(){
 void PhaseObserver::display(){
     int name = playerSubject->name;
     int phase = playerSubject->phase;
-    cout << "********PLAYER " + name; + "********\n";
+    cout << "********PLAYER " << name << "********\n";
 
     switch(phase) {
         case 1:
                 cout << "********STARTUP PHASE********\n\n\n";
+                break;
         case 2:
                 cout << "********REINFORCEMENT PHASE********\n\n\n";
+                break;
         case 3:
                 cout << "********ORDER ISSUING PHASE********\n\n\n";
+                break;
         case 4:
                 cout << "********ORDER EXECUTION PHASE********\n\n\n";
+                break;
         case 5:
                 cout << "********CONQUERED********\n\n\n";
+                break;
+        default:
+                cout << "ERROR\n\n\n";
     }
 }
 
