@@ -271,6 +271,16 @@ bool Map::continentHasUniqueOwner(string continentID, int playerName) {
     return true;
 }
 
+vector<Territory *> Map::getTerritoriesByOwnerID(int ownerID) {
+    vector<Territory *> tempList = {};
+    for (auto &t : territories) {
+        if(t->getOwnerID() == ownerID) {
+            tempList.push_back(t);
+        }
+    }
+    return tempList;
+}
+
 /////////////////////////////////////////////////////////////////////////////
 ///   CONTINENT					   	                                      ///
 /////////////////////////////////////////////////////////////////////////////

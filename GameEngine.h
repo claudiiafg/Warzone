@@ -42,6 +42,8 @@ public:
     void setMap(Map* mapToSet);
     void createPlayers(int amount);
 
+    void updateTerritoryOwner(int ownerID, string territoryID);
+
     //main game functions
     void mainGameLoop();
     void reinforcementPhase();

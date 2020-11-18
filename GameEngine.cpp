@@ -334,6 +334,11 @@ void GameEngine::executeOrdersPhase() {
     }
 }
 
+void GameEngine::updateTerritoryOwner(int ownerID, string territoryID) {
+    map->getTerritoryById(territoryID)->setOwner(ownerID);
+    players[ownerID]->setTerritories(map->getTerritoriesByOwnerID(ownerID));
+}
+
 int main() {
     try{
         GameEngine* game = new GameEngine();
