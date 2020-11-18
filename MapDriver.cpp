@@ -20,14 +20,15 @@ int main(){
 
     for (int i = 0; i < rawMaps.size(); i++) {
         Map* map = new Map(rawMaps[i]->name, rawMaps[i]->content);
+
         if(map->validate()) {
             maps.push_back(map);
+            cout << *map << endl;
 
         } else {
             delete map;
             map = NULL;
         }
-        cout << *map << endl;
     }
 
     for (int i = 0; i < maps.size(); i++) {

@@ -10,8 +10,31 @@ MapLoader::MapLoader()= default;
 
 //load all files in testing directory
 void MapLoader::loadMaps() {
+    string name = "";
+    string mainPath = "";
 
-    string mainPath = "C://Users/claud/Warzone/testing/";
+    cout << "In order to search for the Maps in your computer, please enter your first name" << endl;
+    cin >> name;
+    if (name == "clau") {
+        // can use relative paths on mac
+        mainPath = "../testing/";
+
+    } else if (name == "james") {
+        mainPath = "C://Users/James/repos/TempWarzone1/testing/";
+
+    } else if ( name == "virginia") {
+        mainPath = "C://Users/";
+
+    } else if (name == "ian") {
+        mainPath = "C://Users/";
+
+    } else if (name == "ta") {
+        mainPath = "../testing/";
+
+    } else {
+        cout << "no option for you, please go look into MapLoader::loadMaps() and get yourself an personalized option";
+    }
+
     vector<string> fileNames = {
             "brasil.cards",
             "brasil.map",
@@ -25,19 +48,15 @@ void MapLoader::loadMaps() {
             "europe.map",
             "europe.gif",
             "europe.gif",
-            "haiti.cards",
-            "haiti.map",
-            "haiti.gif",
-            "haiti.gif",
     };
 
     for(auto &fileName : fileNames) {
         string parendFolder = fileName.substr(0,fileName.find_last_of('.'));
         string path_name = mainPath + parendFolder + "/" + fileName;
         // check for file with map data and create MapFiles
-        if(isMapType(fileName)) {
+        if(isMapType(path_name)) {
             cout << "->VALID Map: " << fileName << endl;
-            vector<string> content = getContent(fileName);
+            vector<string> content = getContent(path_name);
             string name = fileName;
             maps.push_back(new MapFile(name, content));
         } else {
@@ -73,7 +92,6 @@ bool MapLoader::isMapType(const string& path) {
 // extract map data
 vector<string> MapLoader::getContent(const string& path) {
 	ifstream myFile (path);
-	cout << path << endl;
 
     string lineContent;
     vector<string> vecOfStr;

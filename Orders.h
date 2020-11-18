@@ -271,11 +271,11 @@ public:
 	void viewOrderList();
 
 	//Check if any deploy orders have been issued
-	bool OrderList::containsDeployOrders();
+	bool containsDeployOrders();
 
 	//Execute orders then deletes pointers to objects and clears list
 	//void executeOrderList();
 
 	//Sorts orderlist by order priority
-	void OrderList::sortOrderList();
+	void sortOrderList();
 };
