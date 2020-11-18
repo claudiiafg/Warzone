@@ -1,9 +1,13 @@
 #pragma once
 
 using namespace std;
-#include <iostream>
 #include <list>
 #include <iterator>
+#include <fstream>
+#include <istream>
+#include <string>
+#include <iostream>
+#include "Cards.h"
 
 class Order {
 
@@ -257,9 +261,21 @@ public:
 	//Move order up or down in the list
 	void moveOrder(Order* x, string move);
 
+	//Returns first order in list
+	Order* front();
+
+	//Returns true if OrderList is empty, false otherwise
+	bool isEmpty();
+
 	//View the list of orders
 	void viewOrderList();
 
+	//Check if any deploy orders have been issued
+	bool containsDeployOrders();
+
 	//Execute orders then deletes pointers to objects and clears list
-	void executeOrderList();
+	//void executeOrderList();
+
+	//Sorts orderlist by order priority
+	void sortOrderList();
 };

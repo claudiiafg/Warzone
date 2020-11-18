@@ -30,17 +30,26 @@ public:
     //attributes
     Map* map;
     vector<Player*> players;
+    int deployFlag;
+    int issuingFlag;
+    int executeFlag;
 
-    // functions
+    // startup functions
     void startupPhase();
     void selectMap();
     void selectPlayers();
     void activateObservers();
-    void mainGameLoop();
-    void reinforcementPhase();
-
     void setMap(Map* mapToSet);
     void createPlayers(int amount);
+
+    void updateTerritoryOwner(int ownerID, string territoryID);
+
+    //main game functions
+    void mainGameLoop();
+    void reinforcementPhase();
+    void issueOrdersPhase();
+    void executeOrdersPhase();
+ 
 
 
     // operators
@@ -51,5 +60,6 @@ private:
     int getInitialArmies(int amount);
     vector<vector<Territory*>> getTerritoriesPerPlayer(int amount, vector<Territory*> tempTerr);
 };
+
 
 #endif //WARZONE_GAMEENGINE_H

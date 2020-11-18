@@ -1,4 +1,5 @@
 #include "Orders.h"
+#include "Player.h"
 
 #include <iostream>
 #include <list>
@@ -603,6 +604,17 @@ using namespace std;
 		}
 	}
 
+	//Return first order in list
+	Order* OrderList::front() {
+		return orders.front();
+	}
+
+	//Returns true if list is empty, false otherwise
+	bool OrderList::isEmpty() {
+		if (orders.empty()) return true;
+		else return false;
+	}
+
 	//Compare priority of orders in list
 	bool compare(Order* x,Order* y) {
 		if (x->getPriority() < y->getPriority())
@@ -618,9 +630,19 @@ using namespace std;
 			cout << (*it) << endl;
 		}
 	}
+	
+	//Check if OrderList contains any Deploy orders
+	bool OrderList::containsDeployOrders() {
+		list <Order*> ::iterator it;
+		for (it = orders.begin(); it != orders.end(); ++it) {
+			if ((*it)->getPriority()==1) return true;
+		}
+		return false;
+	}
+	
 
 	//Execute orders then deletes pointers to objects and clears list
-	void OrderList::executeOrderList() {
+	/*void OrderList::executeOrderList() {
 		orders.sort(compare);
 		list <Order*> ::iterator it;
 		for (it = orders.begin(); it != orders.end(); ++it) {
@@ -628,4 +650,8 @@ using namespace std;
 			delete *it;
 		}
 		orders.clear();
+	}*/
+
+	void OrderList::sortOrderList() {
+		orders.sort(compare);
 	}

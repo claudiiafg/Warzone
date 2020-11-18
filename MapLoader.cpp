@@ -10,7 +10,31 @@ MapLoader::MapLoader()= default;
 
 //load all files in testing directory
 void MapLoader::loadMaps() {
-    string mainPath = "../testing/";
+    string name = "";
+    string mainPath = "";
+
+    cout << "In order to search for the Maps in your computer, please enter your first name" << endl;
+    cin >> name;
+    if (name == "clau") {
+        // can use relative paths on mac
+        mainPath = "../testing/";
+
+    } else if (name == "james") {
+        mainPath = "C://Users/James/repos/TempWarzone1/testing/";
+
+    } else if ( name == "gini") {
+        mainPath = "C:/Users/gini/source/repos/claudiiafg/Warzone/testing/";
+
+    } else if (name == "ian") {
+        mainPath = "C://Users/";
+
+    } else if (name == "ta") {
+        mainPath = "../testing/";
+
+    } else {
+        cout << "no option for you, please go look into MapLoader::loadMaps() and get yourself an personalized option";
+    }
+
     vector<string> fileNames = {
             "brasil.cards",
             "brasil.map",
@@ -24,10 +48,6 @@ void MapLoader::loadMaps() {
             "europe.map",
             "europe.gif",
             "europe.gif",
-            "haiti.cards",
-            "haiti.map",
-            "haiti.gif",
-            "haiti.gif",
     };
 
     for(auto &fileName : fileNames) {
@@ -57,31 +77,32 @@ bool MapLoader::isMapType(const string& path) {
         return false;
     }
 
-    ifstream PathFile(path);
+	ifstream myFile (path);
     // check for errors opening the file
-    if (PathFile.fail()) {
+    if (!myFile.is_open()) {
         cout<<"It failed\n"<<strerror(errno)<<endl;
         return false;
     }
 
     // close the file
-    PathFile.close();
+	myFile.close();
     return true;
 }
 
 // extract map data
 vector<string> MapLoader::getContent(const string& path) {
-    ifstream PathFile(path);
+	ifstream myFile (path);
+
     string lineContent;
     vector<string> vecOfStr;
 
     // push each line of file into vector of strings (easier to find / parse information)
-    while (getline (PathFile, lineContent)) {
+    while ( getline(myFile, lineContent)) {
         vecOfStr.push_back(lineContent);
     }
 
     // Close the file
-    PathFile.close();
+	myFile.close();
 
     return vecOfStr;
 }

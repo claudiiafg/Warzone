@@ -1,11 +1,12 @@
 #pragma once
 
-using namespace std;
 #include <vector>
 #include "Map.h"
 #include "Cards.h"
 #include "Orders.h"
 #include "GameObservers.h"
+
+using namespace std;
 
 class Player: public Observable {
 

@@ -15,9 +15,9 @@ Map::Map() = default;
 Map::Map(string _name, vector<string> mapData): Observable() {
     name = _name;
 
-    int contI;
-    int terrI;
-    int borderI;
+    int contI = 0;
+    int terrI = 0;
+    int borderI = 0;
 
     // get indexes that limit the data necessary
     for (size_t i = 0; i < mapData.size(); ++i){
@@ -74,49 +74,48 @@ bool Map::validate() {
     vector<string> sequence;
     int idInt = 0;
     int nodeInt = 0;
+    bool isInvalid = false;
 
     sequence.push_back(territories[0]->id);
     for (auto & initialAdjacent : territories[0]->getAdjacentNodes()) {
         sequence.push_back(initialAdjacent);
     }
+     // attention! t starts at 1 -> territory[0] is node with id 1
+    for (int i = 0; i < sequence.size(); i++) {
+        // turn string to int
+        stringstream geek(sequence[i]);
+        geek >> idInt;
 
-    try {
-        // attention! t starts at 1 -> territory[0] is node with id 1
-        for (int i = 0; i < sequence.size(); i++) {
-            // turn string to int
-            stringstream geek(sequence[i]);
-            geek >> idInt;
+        // check if enough
+        if(sequence.size() == territories.size()){
+            break;
+        }
 
-            // check if enough
+        // check each adjacent of current node in the sequence
+        for (auto & node : territories[idInt - 1]->getAdjacentNodes()) {
+
+            stringstream geek(node);
+            geek >> nodeInt;
+
+            vector<string> tempAdjacent = territories[nodeInt - 1]->getAdjacentNodes();
+
+            // look territory id inside it's adjacent node's adjacentList (must have each other)
+            if(!(std::count(tempAdjacent.begin(), tempAdjacent.end(), territories[idInt - 1]->id)))
+            {
+                isInvalid = true;
+                break;
+            } else {
+            }
+
+            // check ft enough
             if(sequence.size() == territories.size()){
                 break;
             }
 
-            // check each adjacent of current node in the sequence
-            for (auto & node : territories[idInt - 1]->getAdjacentNodes()) {
-
-                stringstream geek(node);
-                geek >> nodeInt;
-
-                vector<string> tempAdjacent = territories[nodeInt - 1]->getAdjacentNodes();
-
-                // look territory id inside it's adjacent node's adjacentList (must have each other)
-                if(!(std::count(tempAdjacent.begin(), tempAdjacent.end(), territories[idInt - 1]->id)))
-                {
-                    throw 2;
-                } else {
-                }
-
-                // check ft enough
-                if(sequence.size() == territories.size()){
-                    break;
-                }
-
-                // if not in the sequence yet add it
-                if (!(std::find(sequence.begin(), sequence.end(), node) != sequence.end()))
-                {
-                    sequence.push_back(node);
-                }
+            // if not in the sequence yet add it
+            if (!(std::find(sequence.begin(), sequence.end(), node) != sequence.end()))
+            {
+                sequence.push_back(node);
             }
         }
 
@@ -126,11 +125,12 @@ bool Map::validate() {
             return true;
         }
 
-    } catch(int e) {
+    }
+
+    if( isInvalid) {
         cout << "Invalid map!" << endl;
         return false;
     }
-
 }
 
 // get territories
@@ -269,6 +269,16 @@ bool Map::continentHasUniqueOwner(string continentID, int playerName) {
     }
     // if finish loop -> all the same
     return true;
+}
+
+vector<Territory *> Map::getTerritoriesByOwnerID(int ownerID) {
+    vector<Territory *> tempList = {};
+    for (auto &t : territories) {
+        if(t->getOwnerID() == ownerID) {
+            tempList.push_back(t);
+        }
+    }
+    return tempList;
 }
 
 /////////////////////////////////////////////////////////////////////////////
