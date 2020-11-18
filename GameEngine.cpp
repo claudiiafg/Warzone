@@ -295,11 +295,7 @@ void GameEngine::issueOrdersPhase() {
 
     while (issuingFlag > 0) {
         for (auto player : players) {
-            player->issueOrder();
-            issuingFlag--;
-            OrderList* playerOrders = (player)->getMyOrders();
-            cout << "Player " << player->name << " orders: ";
-            if(playerOrders->containsDeployOrders()) cout << "Deploy orders.\n";
+            player->issueOrder(map);
         }
     }
 }

@@ -1,6 +1,7 @@
 #include "Player.h"
 #include "GameObservers.h"
 
+
 using namespace std;
 
 //Default constructor
@@ -79,20 +80,84 @@ void Player::setPhase(int phase) {
     this->phase = phase;
 }
 
+vector<Territory*> Player::adjacentEnemies(string terrID) {
+    vector<Territory*> adjacentEnemies;
 
-vector<Territory*> Player::toDefend() {
-    return playerTerritories;
+    for (auto& terr : getMyTerritories()) {
+        for (auto& adj : terr->getAdjacentNodes()) {
+            for (auto& within : getMyTerritories()) {
+                if (within->id != adj) {
+                    //Territory* toAdd = getTerritoryById(adj);
+                }
+            }
+        }
+    }
+    return adjacentEnemies;
 }
 
-vector<Territory*> Player::toAttack() {
-    return playerTerritories;
+bool compare(const Territory* &x, const Territory* &y) {
+    if (x->priority > y->priority)
+        return (true);
+    else
+        return(false);
 }
 
-void Player::issueOrder() {
-    Deploy* deploy1 = new Deploy(1, "Alberta", 1, 5);
+list<Territory*> Player::toDefend(Map* map) {
+    list<Territory*> defend;
+
+    for (auto territory : playerTerritories) {
+        //Territories that don't border allies get no priority
+        //if (!(hasEnemyAdjacent(territory->id))) continue; ;
+
+        //Priority point distribution (more points = higher priority)
+
+        //Territories with fewer armies get higher priority
+        if (territory->getArmies() < 1) territory->priority+=3;
+        else if (territory->getArmies() < 2) territory->priority+=2;
+        else if (territory->getArmies() < 3) territory->priority++;
+
+        defend.push_back(territory);
+    }
+
+    //Sort territories from highest to lowest priority
+    defend.sort(compare);
+
+    return defend;
+}
+
+list<Territory*> Player::toAttack(Map* map) {
+    list<Territory*> attack;
+
+    return attack;
+}
+
+void Player::issueOrder(Map* map) {
+    /*Deploy* deploy1 = new Deploy(1, "Alberta", 1, 5);
     Blockade* blockade1 = new Blockade(this->name, "Alberta", 1, 5);
     playerOrders->addOrder(blockade1);
-    playerOrders->addOrder(deploy1);
+    playerOrders->addOrder(deploy1);*/
+
+    list <Territory*> deployTo = toDefend(map);
+
+    if (reinforcements > 0) {
+        //Territory* currTerr = deployTo.at(deployCounter);
+       // playerOrders->addOrder(new Deploy(name, currTerr->name, name, 1));
+        reinforcements--;
+    }
+
+    else {
+        //Airlift if: Hand contain
+        
+
+        //Blockade
+
+        //Bomb
+
+        //Negotiate
+
+        //Advance
+    }
+
 }
 
 //Stream operator overload

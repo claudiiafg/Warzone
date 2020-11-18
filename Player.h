@@ -1,12 +1,15 @@
 #pragma once
 
 #include <vector>
+#include <map>
 #include "Map.h"
 #include "Cards.h"
 #include "Orders.h"
 #include "GameObservers.h"
 
 using namespace std;
+
+class GameEngine;
 
 class Player: public Observable {
 
@@ -15,6 +18,7 @@ public:
     int armies;
 	int reinforcements;
 	int phase;
+	int deployCounter = 1;
 
 	//Constructors
 	Player();
@@ -42,10 +46,12 @@ public:
 	void setReinforcements(int reinforcements);
 	void setPhase(int phase);
 
-	//Required Methods
-	vector<Territory *> toDefend();
-	vector<Territory *> toAttack();
-	void issueOrder();
+	//Methods
+	list<Territory*> toDefend(Map* map);
+	list<Territory*> toAttack(Map* map);
+	void issueOrder(Map* map);
+	vector<Territory*> Player::adjacentEnemies(string terrID);
+	bool compare(Territory* x, Territory* y);
 
 	//Stream operator overload
 	 friend ostream& operator << (ostream& out, const Player& p);

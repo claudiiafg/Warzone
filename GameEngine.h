@@ -30,9 +30,9 @@ public:
     //attributes
     Map* map;
     vector<Player*> players;
-    int deployFlag;
-    int issuingFlag;
-    int executeFlag;
+    int deployFlag=0;
+    int issuingFlag=0;
+    int executeFlag=0;
 
     // startup functions
     void startupPhase();

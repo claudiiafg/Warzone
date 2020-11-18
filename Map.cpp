@@ -346,6 +346,7 @@ Territory::Territory() = default;
 // contructor
 Territory::Territory(string territoryString, string borderString) {
     armiesNumber = 0;
+    priority = 0;
     ownerID = NULL;
 
     // seperate strings by spaces
@@ -376,6 +377,7 @@ Territory::Territory(const Territory& otherTerritory) {
     name = otherTerritory.name;
     continentID = otherTerritory.continentID;
     adjacent = otherTerritory.adjacent;
+    priority = otherTerritory.priority;
 
 }
 

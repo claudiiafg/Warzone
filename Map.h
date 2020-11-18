@@ -51,6 +51,7 @@ public:
     // attributes
     string name;
     string id;  // node number
+    int priority;
 
     // methods
     string getContinentID();
