@@ -6,9 +6,13 @@
 #include <iostream>
 #include "Map.h"
 #include "MapLoader.h"
+#include "Player.h"
 
 int main(){
-
+    vector<Territory*> playerTerritories = { new Territory("1 England 1 164 126", "1 8 21 6 7 5 2 3 4") };
+    Hand* playerHand = new Hand();
+    OrderList* playerOrders = new OrderList();
+    Player* testPlayer = new Player(0, 5, playerTerritories, playerHand, playerOrders);
     MapLoader loader;
     loader.loadMaps();
     vector<MapFile*> rawMaps = loader.getMaps();

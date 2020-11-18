@@ -255,9 +255,9 @@ void GameEngine::activateObservers() {
 void GameEngine::mainGameLoop() {
     //Loop until only one player remains
     while (players.size() > 1) { 
-        //reinforcementPhase();
-        //issueOrdersPhase();
-        //executeOrdersPhase();
+        reinforcementPhase();
+        issueOrdersPhase();
+        executeOrdersPhase();
     }
 }
 

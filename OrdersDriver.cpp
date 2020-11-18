@@ -8,9 +8,13 @@ using namespace std;
 
 int main()
 {
+
+	vector<Territory*> playerTerritories = { new Territory("1 England 1 164 126", "1 8 21 6 7 5 2 3 4") };
+	Hand* playerHand = new Hand();
+	OrderList* playerOrders = new OrderList();
+	Player* testPlayer = new Player(0, 5, playerTerritories, playerHand, playerOrders);
+
 	OrderList player1Orders;
-
-
 
 	Deploy* deploy1 = new Deploy(1, "Alberta", 1, 5);
 	Deploy* deploy2 = new Deploy(1, "Italy", 1, 10);
@@ -30,7 +34,7 @@ int main()
 
 	//player1Orders.removeOrder(bomb1);
 	//player1Orders.moveOrder(airlift1, "up");
-	player1Orders.executeOrderList();
+	//player1Orders.executeOrderList();
 
 	
     deploy1 = NULL;
