@@ -3,7 +3,8 @@
 //
 
 #include "MapLoader.h"
-
+#include <string.h>
+#include <errno.h>
 using namespace std;
 
 MapLoader::MapLoader()= default;
@@ -26,7 +27,7 @@ void MapLoader::loadMaps() {
         mainPath = "C:/Users/gini/source/repos/claudiiafg/Warzone/testing/";
 
     } else if (name == "ian") {
-        mainPath = "C://Users/";
+        mainPath = "/home/ian/CLion-workspace/Warzone/testing/";
 
     } else if (name == "ta") {
         mainPath = "../testing/";
