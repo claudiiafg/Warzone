@@ -51,7 +51,7 @@ public:
 	//Methods
 	vector<Territory*> toDefend(vector<int> &defPriority, Map* map);
 	vector<string> toAttack(vector<int>& atkPriority, Map* map);
-	void issueOrder(Map* map, vector<Territory*> toAttack, vector<string> toDefend);
+	void issueOrder(Map* map, vector<string> toAttack, vector<Territory*> toDefend, vector<int> defPriorities, vector<int> atkPriorities);
 	vector<Territory*> Player::adjacentEnemies(string terrID, Map* map);
 
 	//Stream operator overload

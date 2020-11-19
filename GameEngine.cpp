@@ -292,10 +292,21 @@ void GameEngine::reinforcementPhase() {
 
 void GameEngine::issueOrdersPhase() {
     cout << "\nIssue Orders Phase\n";
+    vector<vector<Territory*>> defenceLists;
+    vector<vector<int>> defPriorities;
+    vector<vector<string>> attackLists;
+    vector<vector<int>> atkPriorities;
+    int counter = 0;
+
+    for (auto player : players) {
+        defenceLists.push_back(player->toDefend(defPriorities.at(counter), map));
+        attackLists.push_back(player->toAttack(atkPriorities.at(counter), map));
+        counter++;
+    }
 
     while (issuingFlag > 0) {
         for (auto player : players) {
-            player->issueOrder(map);
+            player->issueOrder(map,defenceLists);
         }
     }
 }

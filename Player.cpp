@@ -135,6 +135,7 @@ vector<string> Player::toAttack(vector<int>& atkPriority, Map* map) {
 
 
         for (auto enemies : adjacentEnemy) {
+            //Priority point distribution (more points = higher priority)
 
             //If easy to defend once taken, higher priority
             vector<string> adjacentNodes = enemies->getAdjacentNodes();
@@ -144,7 +145,10 @@ vector<string> Player::toAttack(vector<int>& atkPriority, Map* map) {
             int armyDiff = territory->getArmies() - enemies->getArmies();
             atkPriority.at(counter) += (armyDiff/2);
 
-            attack.push_back(territory->name + " " + enemies->name);
+            //Store attacking territory and territory to be attacked
+            attack.push_back(territory->name + " " + enemies->name); 
+
+            //Increment counter to store twin priority array at same index
             counter;
         }
         
@@ -154,16 +158,14 @@ vector<string> Player::toAttack(vector<int>& atkPriority, Map* map) {
     return attack;
 }
 
-void Player::issueOrder(Map* map, vector<Territory*> toAttack, vector<string> toDefend) {
+void Player::issueOrder(Map* map, vector<string> toAttack, vector<Territory*> toDefend, vector<int> defPriorities, vector<int> atkPriorities) {
     /*Deploy* deploy1 = new Deploy(1, "Alberta", 1, 5);
     Blockade* blockade1 = new Blockade(this->name, "Alberta", 1, 5);
     playerOrders->addOrder(blockade1);
     playerOrders->addOrder(deploy1);*/
 
-    vector <Territory*> deployTo = toDefend(map);
-
     if (reinforcements > 0) {
-        auto it = deployTo.begin();
+        auto it = toDefend.begin();
         advance(it, deployCounter);
         Territory* currTerr = *it;
 
@@ -172,8 +174,33 @@ void Player::issueOrder(Map* map, vector<Territory*> toAttack, vector<string> to
     }
 
     else {
+        //Highest priority defense
+        vector<int>::iterator it = max_element(begin(defPriorities), end(defPriorities));
+        int index = distance(defPriorities.begin(), it);
+        Territory* defTerr = toDefend.at(index);
+        
+        //Highest priority attack
+        vector<int>::iterator it = max_element(begin(defPriorities), end(defPriorities));
+        int index = distance(defPriorities.begin(), it);
+        string atkTerrStr = toAttack.at(index);
+        stringstream split(atkTerrStr);
+        string intermediate;
+
+        getline(split, intermediate, ' ');
+        string ownedTerr = intermediate;
+        getline(split, intermediate, ' ');
+        string enemyTerr = intermediate;
+
+        //STRATEGY 
+
         //Airlift - If hand contains card, use on highest priority defense
-//        if (playerHand.)
+        for (auto card : playerHand->getHand()) {
+            string cardType = card->getType();
+
+            if (cardType.compare("Airlift") == 0) {
+                playerOrders->addOrder(new Airlift(this, ownedTerr, enemyTerr, 1));
+            }
+        }
 
         //Blockade - If hand contains card, use on highest priority defense
 
@@ -182,7 +209,7 @@ void Player::issueOrder(Map* map, vector<Territory*> toAttack, vector<string> to
         //Negotiate - If hand contains card, use on next player
 
         //Advance - Use advance to alternate atk or def by toAttack and toDefend priority
-        if ()
+        
     }
 
 }
