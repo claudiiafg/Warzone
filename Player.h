@@ -19,10 +19,12 @@ public:
 	int reinforcements;
 	int phase;
 	int deployCounter = 1;
+	int cardFlag = false;
+	vector<Player*> allies;
 
 	//Constructors
 	Player();
-	Player(int name, int armies, vector<Territory*> playerTerritories, Hand* playerHand, OrderList* playerOrders);
+	Player(int name, int armies, vector<Territory*> playerTerritories, Hand* playerHand, OrderList* playerOrders, vector<Player*> allies);
 	Player(const Player& otherPlayer);
 
 	//Destructor

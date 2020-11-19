@@ -5,12 +5,12 @@
 using namespace std;
 
 //Default constructor
-Player::Player() : name(rand()%10), armies(0), reinforcements(0), phase(1), playerTerritories(), playerHand(nullptr), playerOrders(nullptr), Observable() {
+Player::Player() : name(rand()%10), armies(0), reinforcements(0), phase(1), cardFlag(false), allies(), playerTerritories(), playerHand(nullptr), playerOrders(nullptr), Observable() {
 }
 
 //Parametrized constructor
-Player::Player(int name, int armies, vector<Territory*> playerTerritories, Hand* playerHand, OrderList* playerOrders) :
-        name(name), armies(armies), playerTerritories(playerTerritories), playerHand(playerHand), playerOrders(playerOrders), reinforcements(0), phase(1), Observable() {
+Player::Player(int name, int armies, vector<Territory*> playerTerritories, Hand* playerHand, OrderList* playerOrders, vector<Player*> allies) :
+        name(name), armies(armies), playerTerritories(playerTerritories), playerHand(playerHand), playerOrders(playerOrders), reinforcements(0), phase(1), cardFlag(cardFlag), allies(allies), Observable() {
 }
 
 //Copy constructor
@@ -19,12 +19,18 @@ Player::Player(const Player &otherPlayer): Observable() {
         playerTerritories.at(i) = *new Territory * (otherPlayer.playerTerritories.at(i));
     }
 
+    for (int i = 0; i < (int)otherPlayer.allies.size(); i++) {
+        allies.at(i) = *new Player * (otherPlayer.allies.at(i));
+    }
+
     playerHand = *new Hand * (otherPlayer.playerHand);
     playerOrders = *new OrderList * (otherPlayer.playerOrders);
     armies = 0;
     reinforcements = 0;
     phase = 1;
-    name = 0;
+    name = otherPlayer.name + 1;
+    cardFlag = otherPlayer.cardFlag;
+
   }
 
 //= operator overload
@@ -150,7 +156,7 @@ void Player::issueOrder(Map* map) {
 
     else {
         //Airlift - If hand contains card, use on highest priority defense
-        if (playerHand.)
+//        if (playerHand.)
 
         //Blockade - If hand contains card, use on highest priority defense
 
