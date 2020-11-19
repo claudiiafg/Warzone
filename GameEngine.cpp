@@ -90,6 +90,7 @@ void GameEngine::createPlayers(int amount) {
         //Attach observer
         players.back()->Attach(new PhaseObserver (players.back()));
     }
+
 }
 
 // get initial amount of armies per player
