@@ -120,7 +120,7 @@ list<Territory*> Player::toDefend(Map* map) {
     }
 
     //Sort territories from highest to lowest priority
-    defend.sort(compare);
+    //defend.sort(compare);
 
     return defend;
 }
@@ -140,22 +140,25 @@ void Player::issueOrder(Map* map) {
     list <Territory*> deployTo = toDefend(map);
 
     if (reinforcements > 0) {
-        //Territory* currTerr = deployTo.at(deployCounter);
-       // playerOrders->addOrder(new Deploy(name, currTerr->name, name, 1));
+        auto it = deployTo.begin();
+        advance(it, deployCounter);
+        Territory* currTerr = *it;
+
+        playerOrders->addOrder(new Deploy(name, currTerr->name, name, 1));
         reinforcements--;
     }
 
     else {
-        //Airlift if: Hand contain
-        
+        //Airlift - If hand contains card, use on highest priority defense
+        if (playerHand.)
 
-        //Blockade
+        //Blockade - If hand contains card, use on highest priority defense
 
-        //Bomb
+        //Bomb - If hand contains card, use on highest priority attack
 
-        //Negotiate
+        //Negotiate - If hand contains card, use on next player
 
-        //Advance
+        //Advance - for each owned territory with low defense priority and more than 2 armies, use advance to alternate atk or def
     }
 
 }

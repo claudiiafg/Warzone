@@ -381,6 +381,11 @@ Territory::Territory(const Territory& otherTerritory) {
 
 }
 
+// > operator overload
+bool Territory::operator <(const Territory& playerObj) const {
+    return priority < playerObj.priority;
+}
+
 // destructor
 Territory::~Territory() = default;
 

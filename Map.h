@@ -65,6 +65,7 @@ public:
     // operators
     friend ostream& operator<<(ostream &os, const  Territory& n);
     Territory& operator = (const Territory& _file);
+    bool operator <(const Territory& playerObj) const;
 
 private:
     // attributes
