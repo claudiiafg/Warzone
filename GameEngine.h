@@ -30,9 +30,9 @@ public:
     //attributes
     Map* map;
     vector<Player*> players;
-    int deployFlag;
-    int issuingFlag;
-    int executeFlag;
+    int deployFlag=0;
+    int issuingFlag=0;
+    int executeFlag=0;
 
     // startup functions
     void startupPhase();
@@ -42,14 +42,13 @@ public:
     void setMap(Map* mapToSet);
     void createPlayers(int amount);
 
+    void updateTerritoryOwner(int ownerID, string territoryID);
+
     //main game functions
     void mainGameLoop();
     void reinforcementPhase();
     void issueOrdersPhase();
-    void updateTerritoryOwner(int ownerID, string territoryID);
     void executeOrdersPhase();
- 
-
 
     // operators
     friend ostream& operator<<(ostream &os, const GameEngine& n);

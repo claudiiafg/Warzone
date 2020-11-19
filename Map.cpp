@@ -271,6 +271,16 @@ bool Map::continentHasUniqueOwner(string continentID, int playerName) {
     return true;
 }
 
+vector<Territory *> Map::getTerritoriesByOwnerID(int ownerID) {
+    vector<Territory *> tempList = {};
+    for (auto &t : territories) {
+        if(t->getOwnerID() == ownerID) {
+            tempList.push_back(t);
+        }
+    }
+    return tempList;
+}
+
 /////////////////////////////////////////////////////////////////////////////
 ///   CONTINENT					   	                                      ///
 /////////////////////////////////////////////////////////////////////////////
@@ -336,6 +346,7 @@ Territory::Territory() = default;
 // contructor
 Territory::Territory(string territoryString, string borderString) {
     armiesNumber = 0;
+    priority = 0;
     ownerID = NULL;
 
     // seperate strings by spaces
@@ -366,7 +377,13 @@ Territory::Territory(const Territory& otherTerritory) {
     name = otherTerritory.name;
     continentID = otherTerritory.continentID;
     adjacent = otherTerritory.adjacent;
+    priority = otherTerritory.priority;
 
+}
+
+// > operator overload
+bool Territory::operator <(const Territory& playerObj) const {
+    return priority < playerObj.priority;
 }
 
 // destructor
@@ -410,16 +427,6 @@ int Territory::getOwnerID() {
 // set owner
 void Territory::setOwner(int _ownerID) {
     ownerID = _ownerID;
-}
-
-vector<Territory*> Map::getTerritoriesByOwnerID(int ownerID) {
-    vector<Territory*> tempList = {};
-    for (auto& t : territories) {
-        if (t->getOwnerID() == ownerID) {
-            tempList.push_back(t);
-        }
-    }
-    return tempList;
 }
 
 // stream insertion operator

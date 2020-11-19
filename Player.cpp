@@ -1,15 +1,16 @@
 #include "Player.h"
 #include "GameObservers.h"
 
+
 using namespace std;
 
 //Default constructor
-Player::Player() : name(rand()%10), armies(0), reinforcements(0), phase(1), playerTerritories(), playerHand(nullptr), playerOrders(nullptr) {
+Player::Player() : name(rand()%10), armies(0), reinforcements(0), phase(1), cardFlag(false), allies(), playerTerritories(), playerHand(nullptr), playerOrders(nullptr), Observable() {
 }
 
 //Parametrized constructor
-Player::Player(int name, int armies, vector<Territory*> playerTerritories, Hand* playerHand, OrderList* playerOrders) :
-        name(name), armies(armies), playerTerritories(playerTerritories), playerHand(playerHand), playerOrders(playerOrders), reinforcements(0), phase(1) {
+Player::Player(int name, int armies, vector<Territory*> playerTerritories, Hand* playerHand, OrderList* playerOrders, vector<Player*> allies) :
+        name(name), armies(armies), playerTerritories(playerTerritories), playerHand(playerHand), playerOrders(playerOrders), reinforcements(0), phase(1), cardFlag(cardFlag), allies(allies), Observable() {
 }
 
 //Copy constructor
@@ -18,12 +19,18 @@ Player::Player(const Player &otherPlayer): Observable() {
         playerTerritories.at(i) = *new Territory * (otherPlayer.playerTerritories.at(i));
     }
 
+    for (int i = 0; i < (int)otherPlayer.allies.size(); i++) {
+        allies.at(i) = *new Player * (otherPlayer.allies.at(i));
+    }
+
     playerHand = *new Hand * (otherPlayer.playerHand);
     playerOrders = *new OrderList * (otherPlayer.playerOrders);
     armies = 0;
     reinforcements = 0;
     phase = 1;
-    name = 0;
+    name = otherPlayer.name + 1;
+    cardFlag = otherPlayer.cardFlag;
+
   }
 
 //= operator overload
@@ -79,20 +86,87 @@ void Player::setPhase(int phase) {
     this->phase = phase;
 }
 
+vector<Territory*> Player::adjacentEnemies(string terrID) {
+    vector<Territory*> adjacentEnemies;
 
-vector<Territory*> Player::toDefend() {
-    return playerTerritories;
+    for (auto& terr : getMyTerritories()) {
+        for (auto& adj : terr->getAdjacentNodes()) {
+            for (auto& within : getMyTerritories()) {
+                if (within->id != adj) {
+                    //Territory* toAdd = getTerritoryById(adj);
+                }
+            }
+        }
+    }
+    return adjacentEnemies;
 }
 
-vector<Territory*> Player::toAttack() {
-    return playerTerritories;
+bool compare(const Territory* &x, const Territory* &y) {
+    if (x->priority > y->priority)
+        return (true);
+    else
+        return(false);
 }
 
-void Player::issueOrder() {
-    //Deploy* deploy1 = new Deploy(1, "Alberta", 1, 5);
-    //Blockade* blockade1 = new Blockade(this->name, "Alberta", 1, 5);
-    //playerOrders->addOrder(blockade1);
-    //playerOrders->addOrder(deploy1);
+list<Territory*> Player::toDefend(Map* map) {
+    list<Territory*> defend;
+
+    for (auto territory : playerTerritories) {
+        //Territories that don't border allies get no priority
+        //if (!(hasEnemyAdjacent(territory->id))) continue; ;
+
+        //Priority point distribution (more points = higher priority)
+
+        //Territories with fewer armies get higher priority
+        if (territory->getArmies() < 1) territory->priority+=3;
+        else if (territory->getArmies() < 2) territory->priority+=2;
+        else if (territory->getArmies() < 3) territory->priority++;
+
+        defend.push_back(territory);
+    }
+
+    //Sort territories from highest to lowest priority
+    //defend.sort(compare);
+
+    return defend;
+}
+
+list<Territory*> Player::toAttack(Map* map) {
+    list<Territory*> attack;
+
+    return attack;
+}
+
+void Player::issueOrder(Map* map) {
+    /*Deploy* deploy1 = new Deploy(1, "Alberta", 1, 5);
+    Blockade* blockade1 = new Blockade(this->name, "Alberta", 1, 5);
+    playerOrders->addOrder(blockade1);
+    playerOrders->addOrder(deploy1);*/
+
+    list <Territory*> deployTo = toDefend(map);
+
+    if (reinforcements > 0) {
+        auto it = deployTo.begin();
+        advance(it, deployCounter);
+        Territory* currTerr = *it;
+
+        playerOrders->addOrder(new Deploy(this, currTerr, 1));
+        reinforcements--;
+    }
+
+    else {
+        //Airlift - If hand contains card, use on highest priority defense
+//        if (playerHand.)
+
+        //Blockade - If hand contains card, use on highest priority defense
+
+        //Bomb - If hand contains card, use on highest priority attack
+
+        //Negotiate - If hand contains card, use on next player
+
+        //Advance - for each owned territory with low defense priority and more than 2 armies, use advance to alternate atk or def
+    }
+
 }
 
 //Stream operator overload

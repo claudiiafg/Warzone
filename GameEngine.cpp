@@ -86,7 +86,7 @@ void GameEngine::createPlayers(int amount) {
         OrderList* playerOrders = new OrderList();
 
         //create player
-        players.push_back(new Player(PLAYER_ID, initialArmies, playerTerr, playerHand, playerOrders));
+        players.push_back(new Player(PLAYER_ID, initialArmies, playerTerr, playerHand, playerOrders, {}));
     }
 }
 
@@ -295,11 +295,7 @@ void GameEngine::issueOrdersPhase() {
 
     while (issuingFlag > 0) {
         for (auto player : players) {
-            player->issueOrder();
-            issuingFlag--;
-            OrderList* playerOrders = (player)->getMyOrders();
-            cout << "Player " << player->name << " orders: ";
-            if(playerOrders->containsDeployOrders()) cout << "Deploy orders.\n";
+            player->issueOrder(map);
         }
     }
 }
@@ -339,19 +335,19 @@ void GameEngine::executeOrdersPhase() {
     }
 }
 
-//int main() {
-//    try{
-//        GameEngine* game = new GameEngine();
-//        game->startupPhase();
-//        game->mainGameLoop();
-//
-//        //cout << "Current game in engine: " << endl;
-//        //cout << *game << endl;
-//
-//    } catch(int e) {
-//        cout << "You exited the game. Goodbye!" << endl;
-//    }
-//
-//
-//    return 0;
-//}
+int main() {
+    try{
+        GameEngine* game = new GameEngine();
+        game->mainGameLoop();
+        game->startupPhase();
+
+        //cout << "Current game in engine: " << endl;
+        //cout << *game << endl;
+
+    } catch(int e) {
+        cout << "You exited the game. Goodbye!" << endl;
+    }
+
+
+    return 0;
+}

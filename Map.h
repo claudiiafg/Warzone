@@ -51,6 +51,7 @@ public:
     // attributes
     string name;
     string id;  // node number
+    int priority;
 
     // methods
     string getContinentID();
@@ -64,6 +65,7 @@ public:
     // operators
     friend ostream& operator<<(ostream &os, const  Territory& n);
     Territory& operator = (const Territory& _file);
+    bool operator <(const Territory& playerObj) const;
 
 private:
     // attributes
