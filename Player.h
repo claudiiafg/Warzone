@@ -9,8 +9,6 @@
 
 using namespace std;
 
-class GameEngine;
-
 class Player: public Observable {
 
 public:
