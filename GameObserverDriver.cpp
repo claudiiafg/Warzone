@@ -7,7 +7,6 @@
 using namespace std;
 
 int main(){
-    //Player(int name, int armies, vector<Territory*> playerTerritories, Hand* playerHand, OrderList* playerOrders);
     Hand *h1 = new Hand;
     OrderList *ol1 = new OrderList;
     vector<Territory*> vt1;
@@ -34,9 +33,6 @@ int main(){
     PhaseObserver *po3 = new PhaseObserver(p3);
     p3->Attach(po3);
     p3->Notify();
-
-
-
 
 
     return 0;

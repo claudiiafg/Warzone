@@ -13,7 +13,7 @@ Player::Player(int name, int armies, vector<Territory*> playerTerritories, Hand*
 }
 
 //Copy constructor
-Player::Player(const Player &otherPlayer): Observable() {
+Player::Player(const Player &otherPlayer): PhaseObserver(), GameStatObserver() {
     for (int i = 0; i < (int)otherPlayer.playerTerritories.size(); i++) {
         playerTerritories.at(i) = *new Territory * (otherPlayer.playerTerritories.at(i));
     }

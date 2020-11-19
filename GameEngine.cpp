@@ -386,11 +386,11 @@ void GameEngine::executeOrdersPhase() {
 int main() {
     try{
         GameEngine* game = new GameEngine();
-        game->mainGameLoop();
         game->startupPhase();
+        game->mainGameLoop();
 
-        //cout << "Current game in engine: " << endl;
-        //cout << *game << endl;
+        cout << "Current game in engine: " << endl;
+        cout << *game << endl;
 
     } catch(int e) {
         cout << "You exited the game. Goodbye!" << endl;
