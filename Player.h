@@ -49,11 +49,10 @@ public:
 	void setPhase(int phase);
 
 	//Methods
-	list<Territory*> toDefend(Map* map);
-	list<Territory*> toAttack(Map* map);
-	void issueOrder(Map* map);
-	vector<Territory*> adjacentEnemies(string terrID);
-	bool compare(Territory* x, Territory* y);
+	vector<Territory*> toDefend(vector<int> &defPriority, Map* map);
+	vector<string> toAttack(vector<int>& atkPriority, Map* map);
+	void issueOrder(Map* map, vector<Territory*> toAttack, vector<string> toDefend);
+	vector<Territory*> Player::adjacentEnemies(string terrID, Map* map);
 
 	//Stream operator overload
 	 friend ostream& operator << (ostream& out, const Player& p);
