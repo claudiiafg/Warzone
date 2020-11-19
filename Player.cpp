@@ -175,10 +175,6 @@ vector<string> Player::toAttack(vector<int>& atkPriority, Map* map) {
 }
 
 void Player::issueOrder(Map* map, vector<string> toAttack, vector<Territory*> toDefend, vector<int> defPriorities, vector<int> atkPriorities) {
-    /*Deploy* deploy1 = new Deploy(1, "Alberta", 1, 5);
-    Blockade* blockade1 = new Blockade(this->name, "Alberta", 1, 5);
-    playerOrders->addOrder(blockade1);
-    playerOrders->addOrder(deploy1);*/
 
     if (reinforcements > 0) {
         auto it = toDefend.begin();
