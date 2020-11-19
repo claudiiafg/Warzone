@@ -122,7 +122,7 @@ using namespace std;
 
 	ostream& operator<<(std::ostream& out, const Deploy& b)
 	{
-		out << "A Deploy order has been created {" << "\n\tPlayerID: " << b.playerID << "\n\tcountryName: " << b.countryName << "\n\tcountryOwner: "
+		out << "A Deploy order has been created {" << "\n\tPlayerID: " << b.playerID << "\n\tcountryOwner: "
 			<< b.countryOwner << "\n\tunits: " << b.units << "}\n";
 		return out;
 	}
@@ -180,6 +180,7 @@ using namespace std;
 		bool playerOwnsCountry = false;
 		bool validUnitsToMoveOrAtt = false;
 		bool validMove = false;
+		bool validOpponent = false;
 
 		//check if the player owns the country
 		if (playerID == countryOwner) {
@@ -193,9 +194,12 @@ using namespace std;
 		if (territory->isAdjacentNode(attTerritory->id)) {
 			validMove = true;
 		}
-		//needed: check if players are negotiating
+		//check if negotiating
+		if (!player->checkForAllies(attTerritory->getOwnerID())) {
+			validOpponent = true;
+		}
 
-		return (playerOwnsCountry && validUnitsToMoveOrAtt && validMove);
+		return (playerOwnsCountry && validUnitsToMoveOrAtt && validMove && validOpponent);
 	}
 
 	//Executes an advance order
@@ -240,15 +244,18 @@ using namespace std;
 				if (att > 0) {
 					attTerritory->setArmiesNumber(att);
 					attTerritory->setOwner(territory->getOwnerID());
+					player->setCardFlag(true);
 
 					cout << "Player " << playerID << " attacked " << attTerritory->name << " owned by player " <<
-						attCountryOwner << " with " << units << " units and conquered the territory.\n";
+						attCountryOwner << " with " << units << " units and conquered the territory with " << attTerritory->getArmies() 
+						<< " remaining on the new territory.\n";
 				}
 				if (def > 0) {
 					attTerritory->setArmiesNumber(def);
 
 					cout << "Player " << playerID << " attacked " << attTerritory->name << " owned by player " <<
-						attCountryOwner << " with " << units << " units and failed to conquer the territory.\n";
+						attCountryOwner << " with " << units << " units and failed to conquer the territory with " << 
+						attTerritory->getArmies() << " remaining.\n";
 				}
 
 			}
@@ -258,9 +265,9 @@ using namespace std;
 
 	ostream& operator<<(std::ostream& out, const Advance& b)
 	{
-		out << "An Advance order has been created {" << "\n\tPlayerID: " << b.playerID << "\n\tcountryName: " << "" << "\n\tcountryOwner: "
+		out << "An Advance order has been created {" << "\n\tPlayerID: " << b.playerID << "\n\tcountryOwner: "
 			<< b.countryOwner << "\n\tunits: " << b.units << "\n\tattCountryOwner: " << b.attCountryOwner << "\n\tattCountryName: "
-			<< "" << "\n\tattUnits: " << "" << "}\n";
+			<< b.attCountryOwner << "}\n";
 		return out;
 	}
 
@@ -360,7 +367,6 @@ using namespace std;
 		playerID = pl->name;
 		player = pl;
 		territory = terr;
-//		cout << *this << endl;
 	}
 
 	//Copy constructor
@@ -410,7 +416,7 @@ using namespace std;
 			territory->setOwner(NULL);
 
 			cout << "Player " << playerID << " has blockaded " << territory->name << ", it now has " << territory->getArmies() << ".\n";
-			//logic to return that the player no longer owns the country and that the units have tripled
+
 		}
 
 	}
@@ -418,7 +424,7 @@ using namespace std;
 	ostream& operator<<(std::ostream& out, const Blockade& b)
 	{
 		out << "A Blockade order has been created {" << "\n\tPlayerID: " << b.playerID << "\n\tcountryName: " << b.countryName << "\n\tcountryOwner: "
-			<< b.countryOwner << "\n\tunits: " << "" << "}\n";
+			<< b.countryOwner << "}\n";
 		return out;
 	}
 
@@ -474,6 +480,7 @@ using namespace std;
 	bool Airlift::validate() {
 		bool playerOwnsCountry = false;
 		bool validUnitsToMoveOrAtt = false;
+		bool validOpponent = false;
 
 		//check if the player owns the country
 		if (playerID == countryOwner) {
@@ -483,9 +490,12 @@ using namespace std;
 		if (units >= 1 && territory->getArmies() >= units) {
 			validUnitsToMoveOrAtt = true;
 		}
-		//needed: check if players are negotiating
+		//check if negotiating
+		if (!player->checkForAllies(attTerritory->getOwnerID())) {
+			validOpponent = true;
+		}
 
-		return (playerOwnsCountry && validUnitsToMoveOrAtt);
+		return (playerOwnsCountry && validUnitsToMoveOrAtt && validOpponent);
 	}
 
 	//Executes an airlift order
@@ -532,13 +542,15 @@ using namespace std;
 					attTerritory->setOwner(territory->getOwnerID());
 
 					cout << "Player " << playerID << " attacked " << attTerritory->name << " via airlift, owned by player " <<
-						attCountryOwner << " with " << units << " units and conquered the territory.\n";
+						attCountryOwner << " with " << units << " units and conquered the territory with " << 
+						attTerritory->getArmies() << " remaining on the new territory.\n";
 				}
 				if (def > 0) {
 					attTerritory->setArmiesNumber(def);
 
 					cout << "Player " << playerID << " attacked " << attTerritory->name << " via airlift, owned by player " <<
-						attCountryOwner << " with " << units << " units and failed to conquer the territory.\n";
+						attCountryOwner << " with " << units << " units and failed to conquer the territory with " <<
+						attTerritory->getArmies() << " remaining.\n";
 				}
 
 			}
@@ -548,9 +560,9 @@ using namespace std;
 
 	ostream& operator<<(std::ostream& out, const Airlift& b)
 	{
-		out << "An Airlift order has been created {" << "\n\tPlayerID: " << b.playerID << "\n\tcountryName: " << "" << "\n\tcountryOwner: "
+		out << "An Airlift order has been created {" << "\n\tPlayerID: " << b.playerID << "\n\tcountryOwner: "
 			<< b.countryOwner << "\n\tunits: " << b.units << "\n\tattCountryOwner: " << b.attCountryOwner << "\n\tattCountryName: "
-			<< "" << "\n\tattUnits: " << "" << "}\n";
+			<< b.attCountryOwner << "}\n";
 		return out;
 	}
 
@@ -559,21 +571,26 @@ using namespace std;
 /////////////////////////////////////////////////////////////////////////////
 
 	//Overloaded constructor
-	Negotiate::Negotiate(int thePlayerID, int theOtherPlayer) {
-		playerID = thePlayerID;
-		otherPlayer = theOtherPlayer;
-//		cout << *this << endl;
+	Negotiate::Negotiate(Player* pl, Player* otherPl) {
+		playerID = pl->name;
+		otherPlayerID = otherPl->name;
+		player = pl;
+		otherPlayer = otherPl;
 	}
 
 	//Copy constructor
 	Negotiate::Negotiate(const Negotiate& b) {
 		playerID = b.playerID;
+		otherPlayerID = b.otherPlayerID;
+		player = b.player;
 		otherPlayer = b.otherPlayer;
 	}
 
 	//Assignment operator
 	Negotiate& Negotiate::operator = (const Negotiate& b) {
 		playerID = b.playerID;
+		otherPlayerID = b.otherPlayerID;
+		player = b.player;
 		otherPlayer = b.otherPlayer;
 		return *this;
 	}
@@ -593,7 +610,7 @@ using namespace std;
 	bool Negotiate::validate() {
 		bool validOpponent = false;
 
-		if (playerID != otherPlayer) {
+		if (playerID != otherPlayerID) {
 			validOpponent = true;
 		}
 
@@ -604,13 +621,17 @@ using namespace std;
 	void Negotiate::execute() {
 
 		if (validate()) {
-			cout << "Player " << playerID << " and Player " << otherPlayer << " are now negotiating" << ".\n";
+
+			player->addAlly(otherPlayer);
+			otherPlayer->addAlly(player);
+
+			cout << "Player " << playerID << " and Player " << otherPlayerID << " are now negotiating" << ".\n";
 		}
 	}
 
 	ostream& operator<<(std::ostream& out, const Negotiate& b)
 	{
-		out << "A Negotiate order has been created {" << "\n\tPlayerID: " << b.playerID << "\n\totherPlayer: " << b.otherPlayer << "}\n";
+		out << "A Negotiate order has been created {" << "\n\tPlayerID: " << b.playerID << "\n\totherPlayer: " << b.otherPlayerID << "}\n";
 		return out;
 	}
 

@@ -335,19 +335,19 @@ void GameEngine::executeOrdersPhase() {
     }
 }
 
-int main() {
-    try{
-        GameEngine* game = new GameEngine();
-        game->mainGameLoop();
-        game->startupPhase();
-
-        //cout << "Current game in engine: " << endl;
-        //cout << *game << endl;
-
-    } catch(int e) {
-        cout << "You exited the game. Goodbye!" << endl;
-    }
-
-
-    return 0;
-}
+//int main() {
+//    try{
+//        GameEngine* game = new GameEngine();
+//        game->mainGameLoop();
+//        game->startupPhase();
+//
+//        //cout << "Current game in engine: " << endl;
+//        //cout << *game << endl;
+//
+//    } catch(int e) {
+//        cout << "You exited the game. Goodbye!" << endl;
+//    }
+//
+//
+//    return 0;
+//}

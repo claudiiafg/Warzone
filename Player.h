@@ -47,6 +47,8 @@ public:
 	void setOrders(OrderList* playerOrders);
 	void setReinforcements(int reinforcements);
 	void setPhase(int phase);
+	void addAlly(Player* player);
+	void setCardFlag(bool flag);
 
 	//Methods
 	list<Territory*> toDefend(Map* map);
@@ -54,6 +56,7 @@ public:
 	void issueOrder(Map* map);
 	vector<Territory*> adjacentEnemies(string terrID);
 	bool compare(Territory* x, Territory* y);
+	bool checkForAllies(int playerName);
 
 	//Stream operator overload
 	 friend ostream& operator << (ostream& out, const Player& p);

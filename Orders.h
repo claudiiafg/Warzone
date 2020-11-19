@@ -216,11 +216,13 @@ public:
 class Negotiate : public Order {
 	int priority = 4;
 	int playerID;
-	int otherPlayer;
+	int otherPlayerID;
+	Player* player;
+	Player* otherPlayer;
 
 public:
 	//Overloaded constructor
-	Negotiate(int thePlayerID, int theOtherPlayer);
+	Negotiate(Player* player, Player* otherPlayer);
 
 	//Copy constructor
 	Negotiate(const Negotiate& b);

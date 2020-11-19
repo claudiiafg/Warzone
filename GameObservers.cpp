@@ -48,6 +48,7 @@ list<Observer*> Observable::getObservers(){
 ostream& operator<<(ostream &os, const Observable& o){
 
     cout<<"This is an observable object";
+    return os;
 }
 
 Observable& Observable::operator = (const Observable& _file) {
@@ -81,6 +82,7 @@ void Observer::Update(){
 ostream& operator<<(ostream &os, const Observer& o){
 
     cout<<"This is an observer";
+    return os;
 }
 
 Observer& Observer::operator = (const Observer& _file) {
@@ -143,6 +145,7 @@ void PhaseObserver::display(){
 ostream& operator<<(ostream &os, const PhaseObserver& po){
 
     cout<<"This is a phase observer, used to monitor the progression of the game";
+    return os;
 }
 
 
@@ -199,6 +202,7 @@ void GameStatObserver::display(){
 ostream& operator<<(ostream &os, const GameStatObserver& o){
 
     cout<<"This is a game statistics observer observer, used to monitor control of the board";
+    return os;
 }
 
 
