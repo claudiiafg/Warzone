@@ -244,13 +244,14 @@ using namespace std;
 				if (att > 0) {
 					attTerritory->setArmiesNumber(att);
 					attTerritory->setOwner(territory->getOwnerID());
-					player->setCardFlag(true);
-					Deck *deck = new Deck();
-					player->getMyHand()->add(deck->draw());
 
 					cout << "Player " << playerID << " attacked " << attTerritory->name << " owned by player " <<
 						attCountryOwner << " with " << units << " units and conquered the territory with " << attTerritory->getArmies() 
 						<< " attacekrs remaining on the new territory.\n";
+
+					Deck* deck = new Deck();
+					player->getMyHand()->add(deck->draw());
+					player->setCardFlag(true);
 				}
 				if (def > 0) {
 					attTerritory->setArmiesNumber(def);
@@ -542,13 +543,14 @@ using namespace std;
 				if (att > 0) {
 					attTerritory->setArmiesNumber(att);
 					attTerritory->setOwner(territory->getOwnerID());
-					player->setCardFlag(true);
-					Deck* deck = new Deck();
-					player->getMyHand()->add(deck->draw());
 
 					cout << "Player " << playerID << " attacked " << attTerritory->name << " via airlift, owned by player " <<
 						attCountryOwner << " with " << units << " units and conquered the territory with " << 
 						attTerritory->getArmies() << " attackers remaining on the new territory.\n";
+
+					Deck* deck = new Deck();
+					player->getMyHand()->add(deck->draw());
+					player->setCardFlag(true);
 				}
 				if (def > 0) {
 					attTerritory->setArmiesNumber(def);
