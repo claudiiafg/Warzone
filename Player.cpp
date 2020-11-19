@@ -146,7 +146,7 @@ vector<string> Player::toAttack(vector<int>& atkPriority, Map* map) {
             atkPriority.at(counter) += (armyDiff/2);
 
             //Store attacking territory and territory to be attacked
-            attack.push_back(territory->name + " " + enemies->name); 
+            attack.push_back(territory->id + " " + enemies->id); 
 
             //Increment counter to store twin priority array at same index
             counter;
@@ -158,7 +158,7 @@ vector<string> Player::toAttack(vector<int>& atkPriority, Map* map) {
     return attack;
 }
 
-void Player::issueOrder(Map* map, vector<string> toAttack, vector<Territory*> toDefend, vector<int> defPriorities, vector<int> atkPriorities) {
+void Player::issueOrder(Map* map, vector<string> &toAttack, vector<Territory*> &toDefend, vector<int> &defPriorities, vector<int> &atkPriorities) {
     /*Deploy* deploy1 = new Deploy(1, "Alberta", 1, 5);
     Blockade* blockade1 = new Blockade(this->name, "Alberta", 1, 5);
     playerOrders->addOrder(blockade1);
@@ -175,41 +175,97 @@ void Player::issueOrder(Map* map, vector<string> toAttack, vector<Territory*> to
 
     else {
         //Highest priority defense
-        vector<int>::iterator it = max_element(begin(defPriorities), end(defPriorities));
-        int index = distance(defPriorities.begin(), it);
-        Territory* defTerr = toDefend.at(index);
+        vector<int>::iterator defit = max_element(begin(defPriorities), end(defPriorities)); //Returns pointer to highest priority element
+        int atkIndex = distance(defPriorities.begin(), defit); //Returns  index of highest priority element
+        Territory* defTerr = toDefend.at(atkIndex); //Returns highest defence priority territory
         
         //Highest priority attack
-        vector<int>::iterator it = max_element(begin(defPriorities), end(defPriorities));
-        int index = distance(defPriorities.begin(), it);
-        string atkTerrStr = toAttack.at(index);
+        vector<int>::iterator atkit = max_element(begin(atkPriorities), end(atkPriorities)); //Returns pointer to highest priority element
+        int defIndex = distance(defPriorities.begin(), atkit); //Returns  index of highest priority element
+        string atkTerrStr = toAttack.at(defIndex); //Returns string with highest priority territory attacking and to be attacked
+
+        //Split priority string into relevant territories
         stringstream split(atkTerrStr);
         string intermediate;
-
         getline(split, intermediate, ' ');
-        string ownedTerr = intermediate;
+        Territory* ownedTerrAtk = map->getTerritoryById(intermediate);
         getline(split, intermediate, ' ');
-        string enemyTerr = intermediate;
+        Territory* enemyTerrAtk = map->getTerritoryById(intermediate);
 
-        //STRATEGY 
 
-        //Airlift - If hand contains card, use on highest priority defense
-        for (auto card : playerHand->getHand()) {
-            string cardType = card->getType();
+        //Bomb setup
+        vector<string> adjacents = enemyTerrAtk->getAdjacentNodes();
+        Territory* adjTerr;
 
-            if (cardType.compare("Airlift") == 0) {
-                playerOrders->addOrder(new Airlift(this, ownedTerr, enemyTerr, 1));
-            }
+        for (auto adj : adjacents) {
+            adjTerr = map->getTerritoryById(adj);
+            if (adjTerr->getOwnerID() == name) break;
         }
 
-        //Blockade - If hand contains card, use on highest priority defense
+        //STRATEGY 
+        vector<Card*> hand = playerHand->getHand();
+        if (!(hand.empty())) {
+            for (auto card : playerHand->getHand()) {
+                string cardType = card->getType();
 
-        //Bomb - If hand contains card, use on highest priority attack
+                //Airlift - If hand contains card, use on highest priority defense
+                if (cardType.compare("airlift") == 0) {
+                    playerOrders->addOrder(new Airlift(this, ownedTerrAtk, enemyTerrAtk, (ownedTerrAtk->getArmies()) - 1));
+                    break;
+                }
 
-        //Negotiate - If hand contains card, use on next player
+                //Blockade - If hand contains card, use on highest priority defense
+                if (cardType.compare("blockade") == 0) {
+                    playerOrders->addOrder(new Blockade(this, ownedTerrAtk));
+                    break;
+                }
 
-        //Advance - Use advance to alternate atk or def by toAttack and toDefend priority
-        
+                //Bomb - If hand contains card, use on highest priority attack
+                if (cardType.compare("bomb") == 0) {
+                    playerOrders->addOrder(new Bomb(this, adjTerr, enemyTerrAtk));
+                    break;
+                }
+
+                //Negotiate - If hand contains card, use on next player
+                if (cardType.compare("negotiate") == 0) {
+                    playerOrders->addOrder(new Negotiate(name, name++));
+                    break;
+                }
+            }
+        }
+        else {
+            //Advance - Use advance to alternate atk or def by toAttack and toDefend priority
+            for (auto territory : playerTerritories) {
+                if (territory->getArmies() > 2) {
+
+                    //If there are no more territories to attack or defend
+                    if (toDefend.empty() && toAttack.empty()) {
+                        phase++;
+                        this->Notify();
+                    }
+
+                    //If attack if empty or defense is higher priority
+                    else if (toDefend.empty() || *defit < *atkit) {
+                        for (auto defending : toDefend) {
+                            string terrId = territory->id;
+                            if (defending->isAdjacentNode(terrId)) {
+                                playerOrders->addOrder(new Advance(this, territory, defending, territory->getArmies() - 1));
+                            }
+                        }
+                    }
+
+                    else {
+                        playerOrders->addOrder(new Advance(this, ownedTerrAtk, enemyTerrAtk, territory->getArmies() - 1));
+                    }
+
+                    
+                }
+            }
+            if (toDefend.empty() || *defit < *atkit) { //If no more territories to defend or if attack is higher priority than defense
+                playerOrders->addOrder(new Advance(name, name++));
+            }
+        }
+            
     }
 
 }
