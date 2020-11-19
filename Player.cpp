@@ -1,7 +1,6 @@
 #include "Player.h"
 #include "GameObservers.h"
 
-
 using namespace std;
 
 //Default constructor
@@ -84,6 +83,23 @@ void Player::setReinforcements(int reinforcements) {
 
 void Player::setPhase(int phase) {
     this->phase = phase;
+}
+
+void Player::setCardFlag(bool flag) {
+    this->cardFlag = false;
+}
+
+void Player::addAlly(Player* player) {
+    this->allies.push_back(player);
+}
+
+bool Player::checkForAllies(int playerName) {
+    for (auto& i : allies) {
+        if (i->name == playerName) {
+            return true;
+        }
+    }
+    return false;
 }
 
 vector<Territory*> Player::adjacentEnemies(string terrID, Map* map) {
