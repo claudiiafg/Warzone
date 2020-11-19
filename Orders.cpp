@@ -1,6 +1,5 @@
 #include "Orders.h"
 #include "Player.h"
-
 #include <iostream>
 #include <list>
 #include <iterator>
@@ -55,28 +54,30 @@ using namespace std;
 /////////////////////////////////////////////////////////////////////////////
 
 	//Overloaded constructor
-	Deploy::Deploy(int thePlayerID, string theCountryName, int theCountryOwner, int theUnits) {
-		countryOwner = theCountryOwner;
-		countryName = theCountryName;
+	Deploy::Deploy(Player* pl, Territory* terr, int theUnits) {
+		countryOwner = terr->getOwnerID();
 		units = theUnits;
-		playerID = thePlayerID;
-//		cout << *this << endl;
+		playerID = pl->name;
+		player = pl;
+		territory = terr;
 	}
 
 	//Copy constructor
 	Deploy::Deploy(const Deploy& d2) {
 		countryOwner = d2.countryOwner;
-		countryName = d2.countryName;
 		units = d2.units;
 		playerID = d2.playerID;
+		player = d2.player;
+		territory = d2.territory;
 	}
 
 	//Assignment operator
 	Deploy& Deploy::operator = (const Deploy& d2) {
 		countryOwner = d2.countryOwner;
-		countryName = d2.countryName;
 		units = d2.units;
 		playerID = d2.playerID;
+		player = d2.player;
+		territory = d2.territory;
 		return *this;
 	}
 
@@ -94,11 +95,12 @@ using namespace std;
 	bool Deploy::validate() {
 		bool playerOwnsCountry = false;
 		bool validUnits = false;
+		bool validReinforcments = false;
 
 		if (playerID == countryOwner) {
 			playerOwnsCountry = true;
 		}
-		if (units >= 3) {
+		if (units >= 1) {
 			validUnits = true;
 		}
 		return (playerOwnsCountry && validUnits);
@@ -108,7 +110,12 @@ using namespace std;
 	void Deploy::execute() {
 
 		if (validate()) {
-			cout << "Player " << playerID << " has deployed " << units << " units to " << countryName << ".\n";
+
+			int tempArmies = territory->getArmies();
+			tempArmies += units;
+			territory->setArmiesNumber(tempArmies);
+
+			cout << "Player " << playerID << " has deployed " << units << " units to " << territory->name << ".\n";
 		}
 
 	}
@@ -125,37 +132,36 @@ using namespace std;
 /////////////////////////////////////////////////////////////////////////////
 
 	//Overloaded constructor
-	Advance::Advance(int thePlayerID, string theCountryName, int theCountryOwner, int theUnits, int theAttCountryOwner, string theAttCountryName, int theAttUnits) {
-		playerID = thePlayerID;
-		countryOwner = theCountryOwner;
-		countryName = theCountryName;
-		units = theUnits;
-		attCountryOwner = theAttCountryOwner;
-		attCountryName = theAttCountryName;
-		attUnits = theAttUnits;
-//		cout << *this << endl;
+	Advance::Advance(Player* pl, Territory* terr, Territory* attTerr, int unitsAttackingWith) {
+		countryOwner = terr->getOwnerID();
+		units = unitsAttackingWith;
+		playerID = pl->name;
+		player = pl;
+		territory = terr;
+		attTerritory = attTerr;
+		attCountryOwner = attTerr->getOwnerID();
 	}
 
 	//Copy constructor
 	Advance::Advance(const Advance& b) {
 		playerID = b.playerID;
-		countryOwner = b.countryOwner;
-		countryName = b.countryName;
-		attCountryOwner = b.attCountryOwner;
-		attCountryName = b.attCountryName;
 		units = b.units;
-		attUnits = b.attUnits;
+		countryOwner = b.countryOwner;
+		player = b.player;
+		territory = b.territory;
+		attTerritory = b.attTerritory;
+		attCountryOwner = b.attCountryOwner;
 	}
 
 	//Assignment operator
 	Advance& Advance::operator = (const Advance& b) {
 		playerID = b.playerID;
-		countryOwner = b.countryOwner;
-		countryName = b.countryName;
-		attCountryOwner = b.attCountryOwner;
-		attCountryName = b.attCountryName;
 		units = b.units;
-		attUnits = b.attUnits;
+		countryOwner = b.countryOwner;
+		player = b.player;
+		territory = b.territory;
+		attTerritory = b.attTerritory;
+		attCountryOwner = b.attCountryOwner;
 		return *this;
 	}
 
@@ -173,19 +179,23 @@ using namespace std;
 	bool Advance::validate() {
 		bool playerOwnsCountry = false;
 		bool validUnitsToMoveOrAtt = false;
+		bool validMove = false;
 
 		//check if the player owns the country
 		if (playerID == countryOwner) {
 			playerOwnsCountry = true;
 		}
 		//check if player has more 1 or more units to attack with and if they are advancing with valid units
-		if (attUnits >= 1 && attUnits <= units) {
+		if (units >= 1 && territory->getArmies() >= units) {
 			validUnitsToMoveOrAtt = true;
 		}
 		//needed: assure the 2 countries and ajdacent
+		if (territory->isAdjacentNode(attTerritory->id)) {
+			validMove = true;
+		}
 		//needed: check if players are negotiating
 
-		return (playerOwnsCountry && validUnitsToMoveOrAtt);
+		return (playerOwnsCountry && validUnitsToMoveOrAtt && validMove);
 	}
 
 	//Executes an advance order
@@ -193,12 +203,54 @@ using namespace std;
 
 		if (validate()) {
 
+			//player move
 			if (playerID == attCountryOwner) {
-				cout << "Player " << playerID << " moved " << units << " units to " << countryName << ".\n";
+
+				int tempArmies = territory->getArmies();
+				tempArmies -= units;
+				territory->setArmiesNumber(tempArmies);
+				int tempAttArmies = attTerritory->getArmies();
+				tempAttArmies += units;
+				attTerritory->setArmiesNumber(tempAttArmies);
+
+				cout << "Player " << playerID << " moved " << units << " units to " << attTerritory->name << ".\n";
 			}
+			//player attack
 			else {
-				cout << "Player " << playerID << " is attacking " << attCountryName << " owned by player " <<
-					attCountryOwner << " with " << units << " units.\n";
+
+				int tempArmies = territory->getArmies();
+				tempArmies -= units;
+				territory->setArmiesNumber(tempArmies);
+
+				//dice rolling
+				int att = units;
+				int def = attTerritory->getArmies();
+				srand(time(0));
+
+				while (att > 0 && def > 0) {
+					int result = 1 + (rand() % 10);
+					if (result >= 6)
+						--att;
+
+					result = 1 + (rand() % 10);
+					if (result >= 7)
+						--def;
+				}
+
+				if (att > 0) {
+					attTerritory->setArmiesNumber(att);
+					attTerritory->setOwner(territory->getOwnerID());
+
+					cout << "Player " << playerID << " attacked " << attTerritory->name << " owned by player " <<
+						attCountryOwner << " with " << units << " units and conquered the territory.\n";
+				}
+				if (def > 0) {
+					attTerritory->setArmiesNumber(def);
+
+					cout << "Player " << playerID << " attacked " << attTerritory->name << " owned by player " <<
+						attCountryOwner << " with " << units << " units and failed to conquer the territory.\n";
+				}
+
 			}
 		}
 
@@ -206,9 +258,9 @@ using namespace std;
 
 	ostream& operator<<(std::ostream& out, const Advance& b)
 	{
-		out << "An Advance order has been created {" << "\n\tPlayerID: " << b.playerID << "\n\tcountryName: " << b.countryName << "\n\tcountryOwner: "
+		out << "An Advance order has been created {" << "\n\tPlayerID: " << b.playerID << "\n\tcountryName: " << "" << "\n\tcountryOwner: "
 			<< b.countryOwner << "\n\tunits: " << b.units << "\n\tattCountryOwner: " << b.attCountryOwner << "\n\tattCountryName: "
-			<< b.attCountryName << "\n\tattUnits: " << b.attUnits << "}\n";
+			<< "" << "\n\tattUnits: " << "" << "}\n";
 		return out;
 	}
 
@@ -364,37 +416,36 @@ using namespace std;
 /////////////////////////////////////////////////////////////////////////////
 
 	//Overloaded constructor
-	Airlift::Airlift(int thePlayerID, string theCountryName, int theCountryOwner, int theUnits, int theAttCountryOwner, string theAttCountryName, int theAttUnits) {
-		playerID = thePlayerID;
-		countryOwner = theCountryOwner;
-		countryName = theCountryName;
-		units = theUnits;
-		attCountryOwner = theAttCountryOwner;
-		attCountryName = theAttCountryName;
-		attUnits = theAttUnits;
-//		cout << *this << endl;
+	Airlift::Airlift(Player* pl, Territory* terr, Territory* attTerr, int unitsAttackingWith) {
+		countryOwner = terr->getOwnerID();
+		units = unitsAttackingWith;
+		playerID = pl->name;
+		player = pl;
+		territory = terr;
+		attTerritory = attTerr;
+		attCountryOwner = attTerr->getOwnerID();
 	}
 
 	//Copy constructor
 	Airlift::Airlift(const Airlift& b) {
 		playerID = b.playerID;
-		countryOwner = b.countryOwner;
-		countryName = b.countryName;
-		attCountryOwner = b.attCountryOwner;
-		attCountryName = b.attCountryName;
 		units = b.units;
-		attUnits = b.attUnits;
+		countryOwner = b.countryOwner;
+		player = b.player;
+		territory = b.territory;
+		attTerritory = b.attTerritory;
+		attCountryOwner = b.attCountryOwner;
 	}
 
 	//Assignment operator
 	Airlift& Airlift::operator = (const Airlift& b) {
 		playerID = b.playerID;
-		countryOwner = b.countryOwner;
-		countryName = b.countryName;
-		attCountryOwner = b.attCountryOwner;
-		attCountryName = b.attCountryName;
 		units = b.units;
-		attUnits = b.attUnits;
+		countryOwner = b.countryOwner;
+		player = b.player;
+		territory = b.territory;
+		attTerritory = b.attTerritory;
+		attCountryOwner = b.attCountryOwner;
 		return *this;
 	}
 
@@ -418,7 +469,7 @@ using namespace std;
 			playerOwnsCountry = true;
 		}
 		//check if player has more 1 or more units to attack with and if they are advancing with valid units
-		if (attUnits >= 1 && attUnits <= units) {
+		if (units >= 1 && territory->getArmies() >= units) {
 			validUnitsToMoveOrAtt = true;
 		}
 		//needed: check if players are negotiating
@@ -431,11 +482,54 @@ using namespace std;
 
 		if (validate()) {
 
+			//player move
 			if (playerID == attCountryOwner) {
-				cout << "Player " << playerID << " airlifted " << units << " units to " << countryName << ".\n";
+
+				int tempArmies = territory->getArmies();
+				tempArmies -= units;
+				territory->setArmiesNumber(tempArmies);
+				int tempAttArmies = attTerritory->getArmies();
+				tempAttArmies += units;
+				attTerritory->setArmiesNumber(tempAttArmies);
+
+				cout << "Player " << playerID << " moved " << units << " units to " << attTerritory->name << ".\n";
 			}
+			//player attack
 			else {
-				cout << "Player " << playerID << " is attacking " << attCountryName << " owned by player " << attCountryOwner << " with " << units << " units via airlift" << ".\n";
+
+				int tempArmies = territory->getArmies();
+				tempArmies -= units;
+				territory->setArmiesNumber(tempArmies);
+
+				//dice rolling
+				int att = units;
+				int def = attTerritory->getArmies();
+				srand(time(0));
+
+				while (att > 0 && def > 0) {
+					int result = 1 + (rand() % 10);
+					if (result >= 6)
+						--att;
+
+					result = 1 + (rand() % 10);
+					if (result >= 7)
+						--def;
+				}
+
+				if (att > 0) {
+					attTerritory->setArmiesNumber(att);
+					attTerritory->setOwner(territory->getOwnerID());
+
+					cout << "Player " << playerID << " attacked " << attTerritory->name << " via airlift, owned by player " <<
+						attCountryOwner << " with " << units << " units and conquered the territory.\n";
+				}
+				if (def > 0) {
+					attTerritory->setArmiesNumber(def);
+
+					cout << "Player " << playerID << " attacked " << attTerritory->name << " via airlift, owned by player " <<
+						attCountryOwner << " with " << units << " units and failed to conquer the territory.\n";
+				}
+
 			}
 		}
 
@@ -443,9 +537,9 @@ using namespace std;
 
 	ostream& operator<<(std::ostream& out, const Airlift& b)
 	{
-		out << "An Airlift order has been created {" << "\n\tPlayerID: " << b.playerID << "\n\tcountryName: " << b.countryName << "\n\tcountryOwner: "
+		out << "An Airlift order has been created {" << "\n\tPlayerID: " << b.playerID << "\n\tcountryName: " << "" << "\n\tcountryOwner: "
 			<< b.countryOwner << "\n\tunits: " << b.units << "\n\tattCountryOwner: " << b.attCountryOwner << "\n\tattCountryName: "
-			<< b.attCountryName << "\n\tattUnits: " << b.attUnits << "}\n";
+			<< "" << "\n\tattUnits: " << "" << "}\n";
 		return out;
 	}
 
@@ -627,7 +721,8 @@ using namespace std;
 	void OrderList::viewOrderList() {
 		list <Order*> ::iterator it;
 		for (it = orders.begin(); it != orders.end(); ++it) {
-			cout << (*it) << endl;
+			//cout << (*it) << endl;
+			(*it)->execute();
 		}
 	}
 	

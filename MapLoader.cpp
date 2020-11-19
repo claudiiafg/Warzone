@@ -20,7 +20,7 @@ void MapLoader::loadMaps() {
         mainPath = "../testing/";
 
     } else if (name == "james") {
-        mainPath = "C://Users/James/repos/TempWarzone1/testing/";
+        mainPath = "C://Users/James/source/repos/TestWarzone1/testing/";
 
     } else if ( name == "gini") {
         mainPath = "C:/Users/gini/source/repos/claudiiafg/Warzone/testing/";

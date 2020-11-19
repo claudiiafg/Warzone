@@ -46,6 +46,7 @@ public:
     void mainGameLoop();
     void reinforcementPhase();
     void issueOrdersPhase();
+    void updateTerritoryOwner(int ownerID, string territoryID);
     void executeOrdersPhase();
  
 

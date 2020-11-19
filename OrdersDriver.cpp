@@ -1,44 +1,55 @@
 #include "Orders.h"
 #include "Player.h"
+#include "MapLoader.h"
+#include "GameEngine.h"
 #include <vector>
-
 
 using namespace std;
 
-
 int main()
-{
+{	
+	GameEngine* game = new GameEngine();
+	game->startupPhase();
 
-	vector<Territory*> playerTerritories = { new Territory("1 England 1 164 126", "1 8 21 6 7 5 2 3 4") };
-	Hand* playerHand = new Hand();
-	OrderList* playerOrders = new OrderList();
-	Player* testPlayer = new Player(0, 5, playerTerritories, playerHand, playerOrders);
+	for (auto& m : game->map->getTerritories()) {
+		cout << *m << endl;
+	}
+
 
 	OrderList player1Orders;
 
-	Deploy* deploy1 = new Deploy(1, "Alberta", 1, 5);
-	Deploy* deploy2 = new Deploy(1, "Italy", 1, 10);
-	Advance* advance1 = new Advance(1, "China", 1, 10, 2, "Japan", 3);
+	Deploy* deploy1 = new Deploy(game->players[0], game->map->territories[0], 10);
+	Deploy* deploy2 = new Deploy(game->players[1], game->map->territories[1], 7);
+	Deploy* deploy3 = new Deploy(game->players[0], game->map->territories[3], 20);
+	Deploy* deploy4 = new Deploy(game->players[0], game->map->territories[5], 7);
+	Deploy* deploy5 = new Deploy(game->players[1], game->map->territories[6], 8);
+	//Advance* advance1 = new Advance(game->players[0], game->map->territories[0], game->map->territories[1], 5);
+	//Advance* advance2 = new Advance(game->players[0], game->map->territories[3], game->map->territories[1], 2);
 	Bomb* bomb1 = new Bomb(1, "Quebec", 1, 2, "Ontario");
 	Blockade* blockade1 = new Blockade(1, "Washington", 1, 15);
-	Airlift* airlift1 = new Airlift(1, "Brazil", 1, 10, 2, "Eygpt", 9);
+	Airlift* airlift1 = new Airlift(game->players[0], game->map->territories[3], game->map->territories[1], 15);
 	Negotiate* negotiate1 = new Negotiate(1, 2);
 
 	player1Orders.addOrder(deploy1);
-	player1Orders.addOrder(advance1);
+	player1Orders.addOrder(deploy2);
+	player1Orders.addOrder(deploy3);
+	player1Orders.addOrder(deploy4);
+	player1Orders.addOrder(deploy5);
 	player1Orders.addOrder(bomb1);
 	player1Orders.addOrder(blockade1);
 	player1Orders.addOrder(airlift1);
 	player1Orders.addOrder(negotiate1);
-	player1Orders.addOrder(deploy2);
+	//player1Orders.addOrder(advance1);
+	//player1Orders.addOrder(advance2);
 
 	//player1Orders.removeOrder(bomb1);
 	//player1Orders.moveOrder(airlift1, "up");
 	//player1Orders.executeOrderList();
 
+	player1Orders.viewOrderList();
 	
-    deploy1 = NULL;
-	delete deploy1;
+   // deploy1 = NULL;
+	//delete deploy1;
  //   delete advance1;
  //   advance1 = NULL;
  //   delete bomb1;

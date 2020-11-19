@@ -412,6 +412,16 @@ void Territory::setOwner(int _ownerID) {
     ownerID = _ownerID;
 }
 
+vector<Territory*> Map::getTerritoriesByOwnerID(int ownerID) {
+    vector<Territory*> tempList = {};
+    for (auto& t : territories) {
+        if (t->getOwnerID() == ownerID) {
+            tempList.push_back(t);
+        }
+    }
+    return tempList;
+}
+
 // stream insertion operator
 ostream &operator<<(ostream &os, const Territory &n) {
     os << n.name << " is node #" << n.id << " from continent #" << n.continentID;

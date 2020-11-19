@@ -304,6 +304,11 @@ void GameEngine::issueOrdersPhase() {
     }
 }
 
+void GameEngine::updateTerritoryOwner(int ownerID, string territoryID) {
+    map->getTerritoryById(territoryID)->setOwner(ownerID);
+    players[ownerID]->setTerritories(map->getTerritoriesByOwnerID(ownerID));
+}
+
 void GameEngine::executeOrdersPhase() {
     while (executeFlag > 0) {
         if (players.size() <= 1) break;
@@ -334,19 +339,19 @@ void GameEngine::executeOrdersPhase() {
     }
 }
 
-int main() {
-    try{
-        GameEngine* game = new GameEngine();
-        game->startupPhase();
-        game->mainGameLoop();
-
-        //cout << "Current game in engine: " << endl;
-        //cout << *game << endl;
-
-    } catch(int e) {
-        cout << "You exited the game. Goodbye!" << endl;
-    }
-
-
-    return 0;
-}
+//int main() {
+//    try{
+//        GameEngine* game = new GameEngine();
+//        game->startupPhase();
+//        game->mainGameLoop();
+//
+//        //cout << "Current game in engine: " << endl;
+//        //cout << *game << endl;
+//
+//    } catch(int e) {
+//        cout << "You exited the game. Goodbye!" << endl;
+//    }
+//
+//
+//    return 0;
+//}

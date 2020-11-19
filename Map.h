@@ -97,6 +97,7 @@ public:
     Continent* getContinentById(string id);
     vector<Territory*> getAdjacentTerritories(string territoryID);
     vector<Territory*> getTerritoriesByContinentId(string id);
+    vector<Territory*> getTerritoriesByOwnerID(int ownerID);
 
     bool continentHasUniqueOwner(string continentID, int playerName);
 
