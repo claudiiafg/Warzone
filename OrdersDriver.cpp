@@ -19,15 +19,15 @@ int main()
 	OrderList player1Orders;
 
 	Deploy* deploy1 = new Deploy(game->players[0], game->map->territories[0], 10);
-	Deploy* deploy2 = new Deploy(game->players[1], game->map->territories[1], 7);
+	Deploy* deploy2 = new Deploy(game->players[1], game->map->territories[1], 40);
 	Deploy* deploy3 = new Deploy(game->players[0], game->map->territories[3], 20);
 	Deploy* deploy4 = new Deploy(game->players[0], game->map->territories[5], 7);
 	Deploy* deploy5 = new Deploy(game->players[1], game->map->territories[6], 8);
-	//Advance* advance1 = new Advance(game->players[0], game->map->territories[0], game->map->territories[1], 5);
-	//Advance* advance2 = new Advance(game->players[0], game->map->territories[3], game->map->territories[1], 2);
-	Bomb* bomb1 = new Bomb(1, "Quebec", 1, 2, "Ontario");
-	Blockade* blockade1 = new Blockade(1, "Washington", 1, 15);
-	Airlift* airlift1 = new Airlift(game->players[0], game->map->territories[3], game->map->territories[1], 15);
+	//Advance* advance1 = new Advance(game->players[0], game->map->territories[0], game->map->territories[1], 5); //move
+	//Advance* advance2 = new Advance(game->players[0], game->map->territories[3], game->map->territories[1], 2); //attack
+	Bomb* bomb1 = new Bomb(game->players[0], game->map->territories[3], game->map->territories[1]);
+	Blockade* blockade1 = new Blockade(game->players[0], game->map->territories[3]);
+	//Airlift* airlift1 = new Airlift(game->players[0], game->map->territories[3], game->map->territories[1], 15); //attack
 	Negotiate* negotiate1 = new Negotiate(1, 2);
 
 	player1Orders.addOrder(deploy1);
@@ -35,9 +35,10 @@ int main()
 	player1Orders.addOrder(deploy3);
 	player1Orders.addOrder(deploy4);
 	player1Orders.addOrder(deploy5);
-	player1Orders.addOrder(bomb1);
 	player1Orders.addOrder(blockade1);
-	player1Orders.addOrder(airlift1);
+	player1Orders.addOrder(bomb1);
+
+	//player1Orders.addOrder(airlift1);
 	player1Orders.addOrder(negotiate1);
 	//player1Orders.addOrder(advance1);
 	//player1Orders.addOrder(advance2);
