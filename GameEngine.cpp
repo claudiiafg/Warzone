@@ -3,7 +3,10 @@
 //
 
 #include "GameEngine.h"
-#include <typeinfo>
+#include "Map.h"
+#include "MapLoader.h"
+#include "Player.h"
+#include "Orders.h"
 
 // default constructor
 GameEngine::GameEngine() = default;
@@ -86,7 +89,7 @@ void GameEngine::createPlayers(int amount) {
         OrderList* playerOrders = new OrderList();
 
         //create player
-        players.push_back(new Player(PLAYER_ID, initialArmies, playerTerr, playerHand, playerOrders));
+        players.push_back(new Player(PLAYER_ID, initialArmies, playerTerr, playerHand, playerOrders, {}));
         //Attach observer
         players.back()->Attach(new PhaseObserver (players.back()));
     }
@@ -285,11 +288,11 @@ void GameEngine::mainGameLoop() {
     executeFlag = players.size();
 
     //Loop until only one player remains
-   // while (players.size() > 1) { 
+    while (players.size() > 1) {
         reinforcementPhase();
         issueOrdersPhase();
         executeOrdersPhase();
-   // }
+    }
 }
 
 void GameEngine::reinforcementPhase() {
@@ -321,22 +324,33 @@ void GameEngine::reinforcementPhase() {
 
 void GameEngine::issueOrdersPhase() {
     cout << "\nIssue Orders Phase\n";
-    vector<vector<Territory*>> defenceLists;
-    vector<vector<int>> defPriorities;
-    vector<vector<int>> atkPriorities;
-    vector<vector<string>> attackLists;
-    int counter = 0;
+
+    vector<vector<Territory*>> defenceLists = {};
+    vector<vector<int>> defPriorities = {};
+    vector<vector<int>> atkPriorities = {};
+    vector<vector<string>> attackLists = {};
+
     map->Notify();
 
     for (auto player : players) {
-        defenceLists.push_back(player->toDefend(defPriorities.at(counter), map));
-        attackLists.push_back(player->toAttack(atkPriorities.at(counter), map));
+        defPriorities[player->name].push_back(rand() % players.size());
+        atkPriorities[player->name].push_back(rand() % players.size());
+    }
+
+    int counter = 0;
+    for (auto player : players) {
+        defenceLists.push_back(player->toDefend(defPriorities[counter], map));
+        attackLists.push_back(player->toAttack(atkPriorities[counter], map));
         counter++;
     }
 
     while (issuingFlag > 0) {
         for (auto player : players) {
-            player->issueOrder(map,defenceLists);
+            Player* otherP;
+            if(player->name == 0) otherP = players[0];
+            else otherP = players[1];
+
+            player->issueOrder(map, attackLists[player->name], defenceLists[player->name], defPriorities[player->name], atkPriorities[player->name], otherP);
             player->Notify();
             issuingFlag--;
             OrderList* playerOrders = (player)->getMyOrders();

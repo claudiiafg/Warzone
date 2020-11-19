@@ -12,9 +12,11 @@
 #include <regex>
 #include <sstream>
 #include <algorithm>
-#include "Map.h"
-#include "MapLoader.h"
-#include "Player.h"
+#include <typeinfo>
+
+class Map;
+class Player;
+class Territory;
 
 using namespace std;
 

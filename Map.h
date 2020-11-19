@@ -12,10 +12,9 @@
 #include <algorithm>
 #include "GameObservers.h"
 
+using namespace std;
 
 class Player;
-
-using namespace std;
 
 class Continent{
 public:
@@ -74,7 +73,7 @@ private:
 };
 
 
-class Map: public Observable{
+class Map: public Observable {
 public:
     // constructors
     Map();

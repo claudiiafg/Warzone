@@ -1,19 +1,20 @@
 #include "Player.h"
-#include "GameObservers.h"
+#include "Orders.h"
+#include "Map.h"
 
 using namespace std;
 
 //Default constructor
-Player::Player() : name(rand()%10), armies(0), reinforcements(0), phase(1), cardFlag(false), allies(), playerTerritories(), playerHand(nullptr), playerOrders(nullptr), Observable() {
+Player::Player() : name(rand()%10), armies(0), reinforcements(0), phase(1), cardFlag(false), allies(), playerTerritories(), playerHand(nullptr), playerOrders(nullptr) {
 }
 
 //Parametrized constructor
 Player::Player(int name, int armies, vector<Territory*> playerTerritories, Hand* playerHand, OrderList* playerOrders, vector<Player*> allies) :
-        name(name), armies(armies), playerTerritories(playerTerritories), playerHand(playerHand), playerOrders(playerOrders), reinforcements(0), phase(1), cardFlag(false), allies(allies), Observable() {
+        name(name), armies(armies), playerTerritories(playerTerritories), playerHand(playerHand), playerOrders(playerOrders), reinforcements(0), phase(1), cardFlag(false), allies(allies) {
 }
 
 //Copy constructor
-Player::Player(const Player &otherPlayer): PhaseObserver(), GameStatObserver() {
+Player::Player(const Player &otherPlayer) {
     for (int i = 0; i < (int)otherPlayer.playerTerritories.size(); i++) {
         playerTerritories.at(i) = *new Territory * (otherPlayer.playerTerritories.at(i));
     }
@@ -167,14 +168,11 @@ vector<string> Player::toAttack(vector<int>& atkPriority, Map* map) {
             //Increment counter to store twin priority array at same index
             counter;
         }
-        
-        
-    
     }
     return attack;
 }
 
-void Player::issueOrder(Map* map, vector<string> toAttack, vector<Territory*> toDefend, vector<int> defPriorities, vector<int> atkPriorities) {
+void Player::issueOrder(Map* map, vector<string> toAttack, vector<Territory*> toDefend, vector<int> defPriorities, vector<int> atkPriorities, Player* player) {
 
     if (reinforcements > 0) {
         auto it = toDefend.begin();
@@ -240,7 +238,7 @@ void Player::issueOrder(Map* map, vector<string> toAttack, vector<Territory*> to
 
                 //Negotiate - If hand contains card, use on next player
                 if (cardType.compare("negotiate") == 0) {
-                    playerOrders->addOrder(new Negotiate(name, name++));
+                    playerOrders->addOrder(new Negotiate(this, player));
                     break;
                 }
             }
@@ -296,4 +294,8 @@ ostream& operator<<(ostream &out, const Player &p) {
     out << endl;
     out << "Hand: " << *p.playerHand << endl;
     return out;
+}
+
+void Player::Attach(PhaseObserver *pObserver) {
+
 }

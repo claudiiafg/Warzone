@@ -2,14 +2,15 @@
 
 #include <vector>
 #include <map>
-#include "Map.h"
-#include "Cards.h"
-#include "Orders.h"
 #include "GameObservers.h"
+
+class Territory;
+class OrderList;
+class Hand;
 
 using namespace std;
 
-class Player: public PhaseObserver, public GameStatObserver {
+class Player: public Observable {
 
 public:
     int name;
@@ -18,7 +19,11 @@ public:
 	int phase;
 	int deployCounter = 1;
 	int cardFlag = false;
-	vector<Player*> allies;
+    //Required data members
+    vector<Player*> allies;
+    vector<Territory *> playerTerritories;
+    Hand *playerHand;
+    OrderList* playerOrders;
 
 	//Constructors
 	Player();
@@ -49,20 +54,17 @@ public:
 	void setCardFlag(bool flag);
 
 	//Methods
-	list<Territory*> toDefend(Map* map);
-	list<Territory*> toAttack(Map* map);
-	void issueOrder(Map* map);
-	vector<Territory*> adjacentEnemies(string terrID);
+    vector<Territory*> toDefend(vector<int> &defPriority, Map* map);
+    vector<string> toAttack(vector<int>& atkPriority, Map* map);
+	void issueOrder(Map* map, vector<string> toAttack, vector<Territory*> toDefend, vector<int> defPriorities, vector<int> atkPriorities, Player* player);
+	vector<Territory*> adjacentEnemies(string terrID, Map* map);
 	bool compare(Territory* x, Territory* y);
 	bool checkForAllies(int playerName);
 
 	//Stream operator overload
 	 friend ostream& operator << (ostream& out, const Player& p);
 
-private:
-	//Required data members
-	vector<Territory *> playerTerritories;
-	Hand *playerHand;
-	OrderList *playerOrders;
+    void Attach(PhaseObserver *pObserver);
+
 };
 

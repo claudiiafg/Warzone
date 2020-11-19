@@ -6,7 +6,6 @@
 #include <iostream>
 using namespace std;
 
-
 //////////OBSERVABLE//////////
 
 Observable::Observable(){
@@ -189,7 +188,7 @@ void GameStatObserver::display(){
 
     cout << "\n\n********WORLD DOMINATION********\n\n";
         int dominationID[5]{0, 1, 2, 3, 4};
-        string[5] dominationCounter;
+        string dominationCounter[5]{};
         string unconquered = "";
         //loop to determine which territory is conquered by whom
     for(int i = 0; i < mapSubject->territories.size(); i++) {

@@ -1,14 +1,17 @@
 #pragma once
-
-using namespace std;
 #include <list>
 #include <iterator>
 #include <fstream>
 #include <istream>
 #include <string>
 #include <iostream>
+
+#include "Player.h"
 #include "Cards.h"
 #include "Player.h"
+#include "Map.h"
+using namespace std;
+
 
 class Order {
 
@@ -40,7 +43,7 @@ public:
 };
 
 class Deploy : public Order {
-	int priority = 1;
+    int priority = 1;
 	int playerID;
 	string countryName;
 	int countryOwner;
@@ -50,11 +53,13 @@ class Deploy : public Order {
 
 
 public:
-	//Overloaded constructor
-	Deploy(Player* player, Territory* terr, int theUnits);
+    Deploy() = default;
 
-	//Copy constructor
-	Deploy(const Deploy& d2);
+    //Copy constructor
+    Deploy(const Deploy& d2);
+
+	//Overloaded constructor
+	Deploy(Player* pl, Territory* terr, int theUnits);
 
 	//Assignment operator
 	Deploy& operator = (const Deploy& d2);
@@ -75,7 +80,7 @@ public:
 };
 
 class Advance : public Order {
-	int priority = 4;
+    int priority = 4;
 	int playerID;
 	int countryOwner;
 	int units;
@@ -86,9 +91,9 @@ class Advance : public Order {
 
 public:
 	//Overloaded constructor
-	Advance(Player* pl, Territory* terr, Territory* attTerr, int theUnits);
+	Advance(Player* pl, Territory* terr, Territory* attTerr, int unitsAttackingWith);
 
-	//Copy constructor
+    //Copy constructor
 	Advance(const Advance& b);
 
 	//Assignment operator
@@ -107,6 +112,7 @@ public:
 	void execute();
 
 	friend std::ostream& operator<<(std::ostream& out, const Advance& b);
+
 };
 
 class Bomb : public Order {

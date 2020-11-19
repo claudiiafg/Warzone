@@ -1,8 +1,5 @@
+
 #include "Orders.h"
-#include "Player.h"
-#include <iostream>
-#include <list>
-#include <iterator>
 
 using namespace std;
 
