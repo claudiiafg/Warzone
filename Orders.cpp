@@ -245,17 +245,19 @@ using namespace std;
 					attTerritory->setArmiesNumber(att);
 					attTerritory->setOwner(territory->getOwnerID());
 					player->setCardFlag(true);
+					Deck *deck = new Deck();
+					player->getMyHand()->add(deck->draw());
 
 					cout << "Player " << playerID << " attacked " << attTerritory->name << " owned by player " <<
 						attCountryOwner << " with " << units << " units and conquered the territory with " << attTerritory->getArmies() 
-						<< " remaining on the new territory.\n";
+						<< " attacekrs remaining on the new territory.\n";
 				}
 				if (def > 0) {
 					attTerritory->setArmiesNumber(def);
 
 					cout << "Player " << playerID << " attacked " << attTerritory->name << " owned by player " <<
 						attCountryOwner << " with " << units << " units and failed to conquer the territory with " << 
-						attTerritory->getArmies() << " remaining.\n";
+						attTerritory->getArmies() << " defenders remaining.\n";
 				}
 
 			}
@@ -344,7 +346,7 @@ using namespace std;
 		if (validate()) {
 
 			int armies = attTerritory->getArmies();
-			attTerritory->setArmiesNumber(armies/2);
+			attTerritory->setArmiesNumber((armies+1)/2); //rounding up
 
 			cout << "Player " << this->playerID << " bombed " << attTerritory->name << " it has only " << attTerritory->getArmies() << " units remaining.\n";
 		}
@@ -540,17 +542,20 @@ using namespace std;
 				if (att > 0) {
 					attTerritory->setArmiesNumber(att);
 					attTerritory->setOwner(territory->getOwnerID());
+					player->setCardFlag(true);
+					Deck* deck = new Deck();
+					player->getMyHand()->add(deck->draw());
 
 					cout << "Player " << playerID << " attacked " << attTerritory->name << " via airlift, owned by player " <<
 						attCountryOwner << " with " << units << " units and conquered the territory with " << 
-						attTerritory->getArmies() << " remaining on the new territory.\n";
+						attTerritory->getArmies() << " attackers remaining on the new territory.\n";
 				}
 				if (def > 0) {
 					attTerritory->setArmiesNumber(def);
 
 					cout << "Player " << playerID << " attacked " << attTerritory->name << " via airlift, owned by player " <<
 						attCountryOwner << " with " << units << " units and failed to conquer the territory with " <<
-						attTerritory->getArmies() << " remaining.\n";
+						attTerritory->getArmies() << " defenders remaining.\n";
 				}
 
 			}
@@ -753,8 +758,7 @@ using namespace std;
 	void OrderList::viewOrderList() {
 		list <Order*> ::iterator it;
 		for (it = orders.begin(); it != orders.end(); ++it) {
-			//cout << (*it) << endl;
-			(*it)->execute();
+			cout << (*it) << endl;
 		}
 	}
 	
@@ -769,15 +773,14 @@ using namespace std;
 	
 
 	//Execute orders then deletes pointers to objects and clears list
-	/*void OrderList::executeOrderList() {
-		orders.sort(compare);
+	void OrderList::executeOrderList() {
 		list <Order*> ::iterator it;
 		for (it = orders.begin(); it != orders.end(); ++it) {
 			(*it)->execute();
 			delete *it;
 		}
 		orders.clear();
-	}*/
+	}
 
 	void OrderList::sortOrderList() {
 		orders.sort(compare);

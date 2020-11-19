@@ -281,7 +281,7 @@ public:
 	bool containsDeployOrders();
 
 	//Execute orders then deletes pointers to objects and clears list
-	//void executeOrderList();
+	void executeOrderList();
 
 	//Sorts orderlist by order priority
 	void sortOrderList();

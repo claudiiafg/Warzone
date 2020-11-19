@@ -95,7 +95,6 @@ void Player::addAlly(Player* player) {
 
 bool Player::checkForAllies(int playerName) {
     for (auto& i : allies) {
-        cout << i->name << " && " << playerName << endl;
         if (i->name == playerName) {
             return true;
         }
