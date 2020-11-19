@@ -158,7 +158,7 @@ vector<string> Player::toAttack(vector<int>& atkPriority, Map* map) {
     return attack;
 }
 
-void Player::issueOrder(Map* map, vector<string> &toAttack, vector<Territory*> &toDefend, vector<int> &defPriorities, vector<int> &atkPriorities) {
+void Player::issueOrder(Map* map, vector<string> toAttack, vector<Territory*> toDefend, vector<int> defPriorities, vector<int> atkPriorities) {
     /*Deploy* deploy1 = new Deploy(1, "Alberta", 1, 5);
     Blockade* blockade1 = new Blockade(this->name, "Alberta", 1, 5);
     playerOrders->addOrder(blockade1);
@@ -260,9 +260,6 @@ void Player::issueOrder(Map* map, vector<string> &toAttack, vector<Territory*> &
 
                     
                 }
-            }
-            if (toDefend.empty() || *defit < *atkit) { //If no more territories to defend or if attack is higher priority than defense
-                playerOrders->addOrder(new Advance(name, name++));
             }
         }
             
