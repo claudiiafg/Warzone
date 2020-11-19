@@ -184,14 +184,32 @@ void GameStatObserver::Update(){
  */
 void GameStatObserver::display(){
 
-    cout << "********WORLD DOMINATION********\n\n";
+    cout << "\n\n********WORLD DOMINATION********\n\n";
+        array<int, 5> dominationID{0, 1, 2, 3, 4};
+        array<string, 5> dominationCounter;
+        string unconquered = "";
+        //loop to determine which territory is conquered by whom
+    for(int i = 0; i < mapSubject->territories.size(); i++) {
 
-    for(int i = 0; i < mapSubject->territories.size(); i++){
+        if(mapSubject->territories.at(i)->getOwnerID() == NULL) {
+            unconquered += " *";
+            continue;
+        }
 
-        cout<< "TERRITORY: " << mapSubject->territories[i]->name << " OWNER: " << mapSubject->territories[i]->getOwnerID() << " ARMIES: " << mapSubject->territories[i]->getArmies() << "\n";
+        for (int j = 0; j < 5; j++) {
 
+            if (mapSubject->territories.at(i)->getOwnerID() == dominationID[j])
+                dominationCounter[j] += " *";
+            }
     }
 
+    for(int x = 0; x < 5; x++) {
+        if(dominationCounter[x] != "")
+        cout << "PLAYER " << dominationID[x] << " " << dominationCounter[x] << "\n";
+    }
+        cout << "NEUTRAL: " << unconquered;
+    if(dominationCounter.size() == 1)
+        cout << "**********THE WORLD HAS BEEN CONQUERED!**********";
     cout<< "\n\n\n\n";
 }
 

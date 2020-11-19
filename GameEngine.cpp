@@ -86,7 +86,9 @@ void GameEngine::createPlayers(int amount) {
         OrderList* playerOrders = new OrderList();
 
         //create player
-        players.push_back(new Player(PLAYER_ID, initialArmies, playerTerr, playerHand, playerOrders, {}));
+        players.push_back(new Player(PLAYER_ID, initialArmies, playerTerr, playerHand, playerOrders));
+        //Attach observer
+        players.back()->Attach(new PhaseObserver (players.back()));
     }
 }
 
@@ -219,25 +221,49 @@ void GameEngine::activateObservers() {
 
         if(option == 1) {
             // activate phase observers
-            // TODO
-            cout << "**** Phase Observer ON! ****" << endl;
-            option = EXIT;
+            for(int i = 0; i < players.size(); i++) {
+                if (players.at(i)->getObservers().empty() == true)
+                    players.at(i)->Attach(new PhaseObserver(players.at(i)));
+            }
 
-        } else if(option == 2) {
+            if(map->getObservers().empty() == false);
+            map->Detach(map->getObservers().front());
+                cout << "**** Phase Observer ON! ****" << endl;
+                option = EXIT;
+
+            }  else if(option == 2) {
             // activate statistics observer
-            // TODO
-            cout << "**** Statistics Observer ON! ****" << endl;
+
+            for(int i = 0; i < players.size(); i++){
+                if(players.at(i)->getObservers().empty() == false)
+                    players.at(i)->Detach(players.at(i)->getObservers().front());
+            }
+            if(map->getObservers().empty() == true);
+                map->Attach(new GameStatObserver(map));
+                cout << "**** Statistics Observer ON! ****" << endl;
             option = EXIT;
 
         } else if (option == 3) {
             // activate both observers
-            // TODO
-            cout << "**** All Observer ON! ****" << endl;
+            for(int i = 0; i < players.size(); i++){
+                if(players.at(i)->getObservers().empty() == true)
+                    players.at(i)->Attach(new PhaseObserver(players.at(i)));
+            }
+            if(map->getObservers().empty() == true);
+                map->Attach(new GameStatObserver(map));
+            cout << "**** All Observers ON! ****" << endl;
             option = EXIT;
 
         } else if (option == 4) {
             // deactivate both observers
-            // TODO
+
+            for(int i = 0; i < players.size(); i++){
+                if(players.at(i)->getObservers().empty() == false)
+                    players.at(i)->Detach(players.at(i)->getObservers().front());
+            }
+
+            if(map->getObservers().empty() == false);
+            map->Detach(map->getObservers().front());
             cout << "**** All Observer OFF! ****" << endl;
             option = EXIT;
 
@@ -266,9 +292,10 @@ void GameEngine::mainGameLoop() {
 }
 
 void GameEngine::reinforcementPhase() {
-    cout << "\nReinforcement Phase:\n";
+    map->Notify();
     for (auto player : players) {
         player->phase++;
+        player->Notify();
         int reinforcements = 0;
         int bonus = 0;
 
@@ -285,6 +312,7 @@ void GameEngine::reinforcementPhase() {
        
         player->reinforcements=reinforcements+bonus;
         player->phase++;
+        player->Notify();
 
         cout << "Player " << player->name << " received " << reinforcements << " reinforcements\n";
     }
@@ -294,9 +322,10 @@ void GameEngine::issueOrdersPhase() {
     cout << "\nIssue Orders Phase\n";
     vector<vector<Territory*>> defenceLists;
     vector<vector<int>> defPriorities;
-    vector<vector<string>> attackLists;
     vector<vector<int>> atkPriorities;
+    vector<vector<string>> attackLists;
     int counter = 0;
+    map->Notify();
 
     for (auto player : players) {
         defenceLists.push_back(player->toDefend(defPriorities.at(counter), map));
@@ -307,6 +336,11 @@ void GameEngine::issueOrdersPhase() {
     while (issuingFlag > 0) {
         for (auto player : players) {
             player->issueOrder(map,defenceLists);
+            player->Notify();
+            issuingFlag--;
+            OrderList* playerOrders = (player)->getMyOrders();
+            cout << "Player " << player->name << " orders: ";
+            if(playerOrders->containsDeployOrders()) cout << "Deploy orders.\n";
         }
     }
 }
@@ -317,6 +351,7 @@ void GameEngine::updateTerritoryOwner(int ownerID, string territoryID) {
 }
 
 void GameEngine::executeOrdersPhase() {
+    map->Notify();
     while (executeFlag > 0) {
         if (players.size() <= 1) break;
 
@@ -328,6 +363,7 @@ void GameEngine::executeOrdersPhase() {
             vector<Territory*> playerTerritories = (*player)->getMyTerritories();
             if (playerTerritories.empty()) {
                 (*player)->phase++; //Send player to phase 5 (conquered)
+                (*player)->Notify();
                 players.erase(player); //Remove player from player list
                 --player; //Wind iterator back to account for left shift from deletion
                 break;

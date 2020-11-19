@@ -5,7 +5,7 @@
 #include <iostream>
 using namespace std;
 
-int main(){
+int main(){/**
 
     Hand *h = new Hand;
     OrderList *ol = new OrderList;
@@ -15,6 +15,6 @@ int main(){
     PhaseObserver *po = new PhaseObserver(p1);
     p1->Attach(po);
     p1->update();
-
+*/
     return 0;
 }
