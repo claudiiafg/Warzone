@@ -269,31 +269,33 @@ using namespace std;
 /////////////////////////////////////////////////////////////////////////////
 
 	//Overloaded constructor
-	Bomb::Bomb(int thePlayerID, string theCountryName, int theCountryOwner, int theAttCountryOwner, string theAttCountryName) {
-		playerID = thePlayerID;
-		countryOwner = theCountryOwner;
-		countryName = theCountryName;
-		attCountryOwner = theAttCountryOwner;
-		attCountryName = theAttCountryName;
-//		cout << *this << endl;
+	Bomb::Bomb(Player* pl, Territory* terr, Territory* attTerr) {
+		countryOwner = terr->getOwnerID();
+		playerID = pl->name;
+		player = pl;
+		territory = terr;
+		attTerritory = attTerr;
+		attCountryOwner = attTerr->getOwnerID();
 	}
 
 	//Copy constructor
 	Bomb::Bomb(const Bomb& b) {
 		playerID = b.playerID;
 		countryOwner = b.countryOwner;
-		countryName = b.countryName;
+		player = b.player;
+		territory = b.territory;
+		attTerritory = b.attTerritory;
 		attCountryOwner = b.attCountryOwner;
-		attCountryName = b.attCountryName;
 	}
 
 	//Assignment operator
 	Bomb& Bomb::operator = (const Bomb& b) {
 		playerID = b.playerID;
 		countryOwner = b.countryOwner;
-		countryName = b.countryName;
+		player = b.player;
+		territory = b.territory;
+		attTerritory = b.attTerritory;
 		attCountryOwner = b.attCountryOwner;
-		attCountryName = b.attCountryName;
 		return *this;
 	}
 
@@ -310,33 +312,41 @@ using namespace std;
 	//Validates a bomb order
 	bool Bomb::validate() {
 		bool playerOwnsCountry = false;
-		bool validOpponent = false;
+		bool enemyTerritory = false;
+		bool validMove = false;
 
 		//check if the player owns the country
-		if (this->playerID == this->countryOwner) {
+		if (playerID == countryOwner) {
 			playerOwnsCountry = true;
 		}
-		//
-		if (this->playerID != this->attCountryOwner) {
-			validOpponent = true;
+		//check if other territory is owned by another player
+		if (playerID != attCountryOwner) {
+			enemyTerritory = true;
 		}
 		//needed: assure the 2 countries and ajdacent
+		if (territory->isAdjacentNode(attTerritory->id)) {
+			validMove = true;
+		}
 		//needed: check if players are negotiating
 
-		return (playerOwnsCountry && validOpponent);
+		return (playerOwnsCountry && enemyTerritory && validMove);
 	}
 
 	//Executes a bomb order
 	void Bomb::execute() {
 		if (validate()) {
-			cout << "Player " << this->playerID << " bombed " << this->attCountryName << ".\n";
+
+			int armies = attTerritory->getArmies();
+			attTerritory->setArmiesNumber(armies/2);
+
+			cout << "Player " << this->playerID << " bombed " << attTerritory->name << " it has only " << attTerritory->getArmies() << " units remaining.\n";
 		}
 	}
 
 	ostream& operator<<(std::ostream& out, const Bomb& b)
 	{
-		out << "A Bomb order has been created {" << "\n\tPlayerID: " << b.playerID << "\n\tcountryName: " << b.countryName << "\n\tcountryOwner: "
-			<< b.countryOwner << "\n\tattCountryOwner: " << b.attCountryOwner << "\n\tattCountryName: " << b.attCountryName << "}\n";
+		out << "A Bomb order has been created {" << "\n\tPlayerID: " << b.playerID << "\n\tcountryName: " << "" << "\n\tcountryOwner: "
+			<< b.countryOwner << "\n\tattCountryOwner: " << b.attCountryOwner << "\n\tattCountryName: " << "" << "}\n";
 		return out;
 	}
 
@@ -345,28 +355,28 @@ using namespace std;
 /////////////////////////////////////////////////////////////////////////////
 
 	//Overloaded constructor
-	Blockade::Blockade(int thePlayerID, string theCountryName, int theCountryOwner, int theUnits) {
-		playerID = thePlayerID;
-		countryOwner = theCountryOwner;
-		countryName = theCountryName;
-		units = theUnits;
+	Blockade::Blockade(Player* pl, Territory* terr) {
+		countryOwner = terr->getOwnerID();
+		playerID = pl->name;
+		player = pl;
+		territory = terr;
 //		cout << *this << endl;
 	}
 
 	//Copy constructor
-	Blockade::Blockade(const Blockade& b) {
-		playerID = b.playerID;
-		countryOwner = b.countryOwner;
-		countryName = b.countryName;
-		units = b.units;
+	Blockade::Blockade(const Blockade& d2) {
+		countryOwner = d2.countryOwner;
+		playerID = d2.playerID;
+		player = d2.player;
+		territory = d2.territory;
 	}
 
 	//Assignment operator
-	Blockade& Blockade::operator = (const Blockade& b) {
-		playerID = b.playerID;
-		countryOwner = b.countryOwner;
-		countryName = b.countryName;
-		units = b.units;
+	Blockade& Blockade::operator = (const Blockade& d2) {
+		countryOwner = d2.countryOwner;
+		playerID = d2.playerID;
+		player = d2.player;
+		territory = d2.territory;
 		return *this;
 	}
 
@@ -383,22 +393,23 @@ using namespace std;
 	//Validates a blockade order
 	bool Blockade::validate() {
 		bool playerOwnsCountry = false;
-		bool validUnits = false;
 
 		if (playerID == countryOwner) {
 			playerOwnsCountry = true;
 		}
-		if (units >= 0) {
-			validUnits = true;
-		}
-		return (playerOwnsCountry && validUnits);
+		return (playerOwnsCountry);
 	}
 
 	//Executes a blockade order
 	void Blockade::execute() {
 
 		if (validate()) {
-			cout << "Player " << playerID << " has blockaded " << countryName << ".\n";
+
+			int tempArmies = territory->getArmies();
+			territory->setArmiesNumber(tempArmies * 2);
+			territory->setOwner(NULL);
+
+			cout << "Player " << playerID << " has blockaded " << territory->name << ", it now has " << territory->getArmies() << ".\n";
 			//logic to return that the player no longer owns the country and that the units have tripled
 		}
 
@@ -407,7 +418,7 @@ using namespace std;
 	ostream& operator<<(std::ostream& out, const Blockade& b)
 	{
 		out << "A Blockade order has been created {" << "\n\tPlayerID: " << b.playerID << "\n\tcountryName: " << b.countryName << "\n\tcountryOwner: "
-			<< b.countryOwner << "\n\tunits: " << b.units << "}\n";
+			<< b.countryOwner << "\n\tunits: " << "" << "}\n";
 		return out;
 	}
 

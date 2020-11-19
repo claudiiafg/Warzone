@@ -113,13 +113,14 @@ class Bomb : public Order {
 	int priority = 4;
 	int playerID;
 	int countryOwner;
-	string countryName;
+	Player* player;
+	Territory* territory;
+	Territory* attTerritory;
 	int attCountryOwner;
-	string attCountryName;
 
 public:
 	//Overloaded constructor
-	Bomb(int thePlayerID, string theCountryName, int theCountryOwner, int theAttCountryOwner, string theAttCountryName);
+	Bomb(Player* pl, Territory* terr, Territory* attTerr);
 
 	//Copy constructor
 	Bomb(const Bomb& b);
@@ -147,12 +148,13 @@ class Blockade : public Order {
 	int playerID;
 	string countryName;
 	int countryOwner;
-	int units;
+	Player* player;
+	Territory* territory;
 
 
 public:
 	//Overloaded constructor
-	Blockade(int thePlayerID, string theCountryName, int theCountryOwner, int theUnits);
+	Blockade(Player* pl, Territory* terr);
 
 	//Copy constructor
 	Blockade(const Blockade& b);
