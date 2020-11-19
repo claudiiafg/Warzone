@@ -24,7 +24,7 @@ int main()
 	Deploy* deploy9 = new Deploy(game->players[1], game->map->territories[8], 13);
 	Deploy* deploy10 = new Deploy(game->players[1], game->map->territories[9], 4);
 	Advance* advance1 = new Advance(game->players[1], game->map->territories[0], game->map->territories[1], 1); //move
-	Advance* advance2 = new Advance(game->players[0], game->map->territories[3], game->map->territories[1], 7); //attack
+	Advance* advance2 = new Advance(game->players[0], game->map->territories[3], game->map->territories[1], 8); //attack
 	Bomb* bomb1 = new Bomb(game->players[0], game->map->territories[5], game->map->territories[7]);
 	Blockade* blockade1 = new Blockade(game->players[0], game->map->territories[3]);
 	Airlift* airlift1 = new Airlift(game->players[1], game->map->territories[7], game->map->territories[9], 2); //move
@@ -63,21 +63,21 @@ int main()
 	deploy1 = NULL;
 	delete deploy1;
 	deploy2 = NULL;
-	delete deploy1;
+	delete deploy2;
 	deploy3 = NULL;
-	delete deploy1;
+	delete deploy3;
 	deploy4 = NULL;
-	delete deploy1;
+	delete deploy4;
 	deploy5 = NULL;
-	delete deploy1;
+	delete deploy5;
 	deploy6 = NULL;
-	delete deploy1;
+	delete deploy6;
 	deploy7 = NULL;
-	delete deploy1;
+	delete deploy7;
 	deploy8 = NULL;
-	delete deploy1;
+	delete deploy8;
 	deploy9 = NULL;
-	delete deploy1;
+	delete deploy9;
 	advance1 = NULL;
     delete advance1;
 	advance2 = NULL;
