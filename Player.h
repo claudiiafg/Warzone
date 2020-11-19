@@ -9,7 +9,7 @@
 
 using namespace std;
 
-class Player: public Observable {
+class Player: public PhaseObserver, public GameStatObserver {
 
 public:
     int name;

@@ -188,8 +188,8 @@ void GameStatObserver::Update(){
 void GameStatObserver::display(){
 
     cout << "\n\n********WORLD DOMINATION********\n\n";
-        array<int, 5> dominationID{0, 1, 2, 3, 4};
-        array<string, 5> dominationCounter;
+        int dominationID[5]{0, 1, 2, 3, 4};
+        string[5] dominationCounter;
         string unconquered = "";
         //loop to determine which territory is conquered by whom
     for(int i = 0; i < mapSubject->territories.size(); i++) {
@@ -211,7 +211,7 @@ void GameStatObserver::display(){
         cout << "PLAYER " << dominationID[x] << " " << dominationCounter[x] << "\n";
     }
         cout << "NEUTRAL: " << unconquered;
-    if(dominationCounter.size() == 1)
+    if(dominationCounter->size() == 1)
         cout << "**********THE WORLD HAS BEEN CONQUERED!**********";
     cout<< "\n\n\n\n";
 }
