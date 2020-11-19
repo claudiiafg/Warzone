@@ -1,6 +1,12 @@
 #pragma once
 #include <iostream>
 #include <list>
+#include "GameObservers.h"
+#include "Player.h"
+#include "Cards.h"
+#include "Orders.h"
+#include "Map.h"
+
 using namespace std;
 
 class Player;
