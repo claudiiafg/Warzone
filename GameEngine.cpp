@@ -86,7 +86,7 @@ void GameEngine::createPlayers(int amount) {
         OrderList* playerOrders = new OrderList();
 
         //create player
-        players.push_back(new Player(PLAYER_ID, initialArmies, playerTerr, playerHand, playerOrders));
+        players.push_back(new Player(PLAYER_ID, initialArmies, playerTerr, playerHand, playerOrders, {}));
     }
 }
 
@@ -300,6 +300,11 @@ void GameEngine::issueOrdersPhase() {
     }
 }
 
+void GameEngine::updateTerritoryOwner(int ownerID, string territoryID) {
+    map->getTerritoryById(territoryID)->setOwner(ownerID);
+    players[ownerID]->setTerritories(map->getTerritoriesByOwnerID(ownerID));
+}
+
 void GameEngine::executeOrdersPhase() {
     while (executeFlag > 0) {
         if (players.size() <= 1) break;
@@ -330,16 +335,11 @@ void GameEngine::executeOrdersPhase() {
     }
 }
 
-void GameEngine::updateTerritoryOwner(int ownerID, string territoryID) {
-    map->getTerritoryById(territoryID)->setOwner(ownerID);
-    players[ownerID]->setTerritories(map->getTerritoriesByOwnerID(ownerID));
-}
-
 int main() {
     try{
         GameEngine* game = new GameEngine();
-        game->startupPhase();
         game->mainGameLoop();
+        game->startupPhase();
 
         //cout << "Current game in engine: " << endl;
         //cout << *game << endl;

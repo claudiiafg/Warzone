@@ -49,8 +49,6 @@ public:
     void reinforcementPhase();
     void issueOrdersPhase();
     void executeOrdersPhase();
- 
-
 
     // operators
     friend ostream& operator<<(ostream &os, const GameEngine& n);

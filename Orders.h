@@ -8,6 +8,7 @@ using namespace std;
 #include <string>
 #include <iostream>
 #include "Cards.h"
+#include "Player.h"
 
 class Order {
 
@@ -44,11 +45,13 @@ class Deploy : public Order {
 	string countryName;
 	int countryOwner;
 	int units;
+	Player* player;
+	Territory* territory;
 
 
 public:
 	//Overloaded constructor
-	Deploy(int thePlayerID, string theCountryName, int theCountryOwner, int theUnits);
+	Deploy(Player* player, Territory* terr, int theUnits);
 
 	//Copy constructor
 	Deploy(const Deploy& d2);
@@ -74,16 +77,16 @@ public:
 class Advance : public Order {
 	int priority = 4;
 	int playerID;
-	string countryName;
 	int countryOwner;
 	int units;
+	Player* player;
+	Territory* territory;
+	Territory * attTerritory;
 	int attCountryOwner;
-	string attCountryName;
-	int attUnits;
 
 public:
 	//Overloaded constructor
-	Advance(int thePlayerID, string theCountryName, int theCountryOwner, int theUnits, int theAttCountryOwner, string theAttCountryName, int theAttUnits);
+	Advance(Player* pl, Territory* terr, Territory* attTerr, int theUnits);
 
 	//Copy constructor
 	Advance(const Advance& b);
@@ -175,16 +178,16 @@ public:
 class Airlift : public Order {
 	int priority = 2;
 	int playerID;
-	string countryName;
 	int countryOwner;
 	int units;
+	Player* player;
+	Territory* territory;
+	Territory* attTerritory;
 	int attCountryOwner;
-	string attCountryName;
-	int attUnits;
 
 public:
 	//Overloaded constructor
-	Airlift(int thePlayerID, string theCountryName, int theCountryOwner, int theUnits, int theAttCountryOwner, string theAttCountryName, int theAttUnits);
+	Airlift(Player* pl, Territory* terr, Territory* attTerr, int unitsAttackingWith);
 
 	//Copy constructor
 	Airlift(const Airlift& b);

@@ -52,7 +52,7 @@ public:
 	list<Territory*> toDefend(Map* map);
 	list<Territory*> toAttack(Map* map);
 	void issueOrder(Map* map);
-	vector<Territory*> Player::adjacentEnemies(string terrID);
+	vector<Territory*> adjacentEnemies(string terrID);
 	bool compare(Territory* x, Territory* y);
 
 	//Stream operator overload

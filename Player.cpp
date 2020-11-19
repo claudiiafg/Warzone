@@ -150,7 +150,7 @@ void Player::issueOrder(Map* map) {
         advance(it, deployCounter);
         Territory* currTerr = *it;
 
-        playerOrders->addOrder(new Deploy(name, currTerr->name, name, 1));
+        playerOrders->addOrder(new Deploy(this, currTerr, 1));
         reinforcements--;
     }
 
