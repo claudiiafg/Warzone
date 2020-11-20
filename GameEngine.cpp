@@ -303,22 +303,27 @@ void GameEngine::reinforcementPhase() {
         int reinforcements = 0;
         int bonus = 0;
 
+        cout << "Player " << player->name << ":\n\tTerritory num: " << player->getTerritoryNum();
+
         reinforcements = (player->getTerritoryNum()) / 3; //Reinforcements equal to territories owned divided by 3, round down
         if (reinforcements < 3) reinforcements = 3; //Minimum reinforcements is 3
         
+        cout << "\nReinforcements: " << reinforcements << "\n";
+
         for (auto continent : map->continents) {
             if (map->continentHasUniqueOwner(continent->id, player->name)) {
                 bonus = continent->bonus;
+                cout << "Continent bonus: " << bonus;
             }
 
             
         }
-       
+        
         player->reinforcements=reinforcements+bonus;
         player->phase++;
         player->Notify();
 
-        cout << "Player " << player->name << " received " << reinforcements << " reinforcements\n";
+       
     }
 }
 
@@ -332,10 +337,6 @@ void GameEngine::issueOrdersPhase() {
 
     map->Notify();
 
-    for (auto player : players) {
-        defPriorities[player->name].push_back(rand() % players.size());
-        atkPriorities[player->name].push_back(rand() % players.size());
-    }
 
     int counter = 0;
     for (auto player : players) {
@@ -400,8 +401,7 @@ void GameEngine::executeOrdersPhase() {
 int main() {
     try{
         GameEngine* game = new GameEngine();
-        game->startupPhase();
-        game->mainGameLoop();
+        MainGameLoopDriver(game);
 
         cout << "Current game in engine: " << endl;
         cout << *game << endl;
@@ -412,4 +412,9 @@ int main() {
 
 
     return 0;
+}
+
+void MainGameLoopDriver(GameEngine* game) {
+    game->startupPhase();
+    game->mainGameLoop();
 }

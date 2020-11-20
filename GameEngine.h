@@ -61,5 +61,7 @@ private:
     vector<vector<Territory*>> getTerritoriesPerPlayer(int amount, vector<Territory*> tempTerr);
 };
 
+//Driver free functions
+void MainGameLoopDriver(GameEngine* game);
 
 #endif //WARZONE_GAMEENGINE_H
