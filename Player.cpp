@@ -306,6 +306,3 @@ ostream& operator<<(ostream &out, const Player &p) {
     return out;
 }
 
-void Player::Attach(PhaseObserver *pObserver) {
-
-}

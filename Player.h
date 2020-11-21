@@ -64,7 +64,6 @@ public:
 	//Stream operator overload
 	 friend ostream& operator << (ostream& out, const Player& p);
 
-    void Attach(PhaseObserver *pObserver);
 
 };
 

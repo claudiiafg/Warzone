@@ -185,7 +185,7 @@ void GameStatObserver::Update(){
  * 
  */
 void GameStatObserver::display(){
-
+    bool victory = false;
     cout << "\n\n********WORLD DOMINATION********\n\n";
         int dominationID[5]{0, 1, 2, 3, 4};
         string dominationCounter[5]{};
@@ -206,12 +206,15 @@ void GameStatObserver::display(){
     }
 
     for(int x = 0; x < 5; x++) {
-        if(dominationCounter[x] != "")
-        cout << "PLAYER " << dominationID[x] << " " << dominationCounter[x] << "\n";
+        if(dominationCounter[x] != "") {
+            cout << "PLAYER " << dominationID[x] << " " << dominationCounter[x] << "\n";
+            if(dominationCounter[x].length() == 56)
+                victory = true;
+        }
     }
         cout << "NEUTRAL: " << unconquered;
-    if(dominationCounter->size() == 1)
-        cout << "**********THE WORLD HAS BEEN CONQUERED!**********";
+    if(victory == true)
+        cout << "\n\n**********THE WORLD HAS BEEN CONQUERED!**********";
     cout<< "\n\n\n\n";
 }
 
