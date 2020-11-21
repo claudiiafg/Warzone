@@ -208,7 +208,7 @@ void GameStatObserver::display(){
     for(int x = 0; x < 5; x++) {
         if(dominationCounter[x] != "") {
             cout << "PLAYER " << dominationID[x] << " " << dominationCounter[x] << "\n";
-            if(dominationCounter[x].length() == 56)
+            if(dominationCounter[x].length() == mapSubject->territories.size()*2)
                 victory = true;
         }
     }
