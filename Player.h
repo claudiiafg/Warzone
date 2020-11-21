@@ -56,8 +56,8 @@ public:
 	void setCardFlag(bool flag);
 
 	//Methods
-	vector<Territory*> Player::toDefend(Map* map);
-	vector<string> Player::toAttack(Map* map);
+	vector<Territory*> toDefend(Map* map);
+	vector<string> toAttack(Map* map);
 	int issueOrder(Map* map, vector<string> toAttack, vector<Territory*> toDefend);
 	vector<Territory*> adjacentEnemies(string terrID, Map* map);
 	bool checkForAllies(int playerName);
