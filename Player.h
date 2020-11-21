@@ -22,6 +22,8 @@ public:
     //Required data members
     vector<Player*> allies;
     vector<Territory *> playerTerritories;
+	vector<int> defPriority = { 0 };
+	vector<int> atkPriority = { 0 };
     Hand *playerHand;
     OrderList* playerOrders;
 
@@ -54,11 +56,10 @@ public:
 	void setCardFlag(bool flag);
 
 	//Methods
-    vector<Territory*> toDefend(vector<int> &defPriority, Map* map);
-    vector<string> toAttack(vector<int>& atkPriority, Map* map);
-	void issueOrder(Map* map, vector<string> toAttack, vector<Territory*> toDefend, vector<int> defPriorities, vector<int> atkPriorities, Player* player);
+	vector<Territory*> toDefend(Map* map);
+	vector<string> toAttack(Map* map);
+	int issueOrder(Map* map, vector<string> toAttack, vector<Territory*> toDefend);
 	vector<Territory*> adjacentEnemies(string terrID, Map* map);
-	bool compare(Territory* x, Territory* y);
 	bool checkForAllies(int playerName);
 
 	//Stream operator overload

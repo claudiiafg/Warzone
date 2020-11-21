@@ -283,23 +283,28 @@ void GameEngine::activateObservers() {
 }
 
 void GameEngine::mainGameLoop() {
-    deployFlag = players.size();
-    issuingFlag = players.size();
-    executeFlag = players.size();
-
+    int roundCounter = 1;
     //Loop until only one player remains
     while (players.size() > 1) {
+        cout << "\n\n==================================\nROUND " << roundCounter << "\n==================================\n\n";
+        deployFlag = players.size();
+        issuingFlag = players.size();
+        executeFlag = players.size();
+
         reinforcementPhase();
         issueOrdersPhase();
         executeOrdersPhase();
+        roundCounter++;
     }
+    Player* last=players.front();
+    cout << "\nOnly " << last->name << "remains - Congratulations you are the winner!";
 }
 
 void GameEngine::reinforcementPhase() {
-    map->Notify();
+   // map->Notify();
     for (auto player : players) {
         player->phase++;
-        player->Notify();
+        //player->Notify();
         int reinforcements = 0;
         int bonus = 0;
 
@@ -331,32 +336,29 @@ void GameEngine::issueOrdersPhase() {
     cout << "\nIssue Orders Phase\n";
 
     vector<vector<Territory*>> defenceLists = {};
-    vector<vector<int>> defPriorities = {};
-    vector<vector<int>> atkPriorities = {};
+    vector<vector<int>*> defPriorities = {0};
+    vector<vector<int>*> atkPriorities = {0};
     vector<vector<string>> attackLists = {};
-
-    map->Notify();
-
 
     int counter = 0;
     for (auto player : players) {
-        defenceLists.push_back(player->toDefend(defPriorities[counter], map));
-        attackLists.push_back(player->toAttack(atkPriorities[counter], map));
+        player->deployCounter = 1;
+        player->allies.clear();
+        player->cardFlag = false;
+
+        defenceLists.push_back(player->toDefend(map));
+        attackLists.push_back(player->toAttack(map));
         counter++;
     }
 
+    
     while (issuingFlag > 0) {
-        for (auto player : players) {
-            Player* otherP;
-            if(player->name == 0) otherP = players[0];
-            else otherP = players[1];
-
-            player->issueOrder(map, attackLists[player->name], defenceLists[player->name], defPriorities[player->name], atkPriorities[player->name], otherP);
-            player->Notify();
-            issuingFlag--;
+        counter = 0;
+        for (auto player : players) {     
+            int issueResult = player->issueOrder(map, attackLists.at(counter), defenceLists.at(counter));
+            if (issueResult == 1) issuingFlag--;
             OrderList* playerOrders = (player)->getMyOrders();
-            cout << "Player " << player->name << " orders: ";
-            if(playerOrders->containsDeployOrders()) cout << "Deploy orders.\n";
+            counter++;
         }
     }
 }
@@ -371,9 +373,15 @@ void GameEngine::executeOrdersPhase() {
     while (executeFlag > 0) {
         if (players.size() <= 1) break;
 
+        OrderList* playerOrders;
         for(std::vector<Player*>::iterator player = players.begin(); player != players.end(); ++player) {
-            OrderList* playerOrders = (*player)->getMyOrders();
-            if (playerOrders->isEmpty()) break; //Check if player has orders remaining
+            try {
+                playerOrders = (*player)->getMyOrders();
+            }
+            catch  (exception e){
+                break;
+            }
+             //Check if player has orders remaining
             
             //If player has no remaining territories, remove from game
             vector<Territory*> playerTerritories = (*player)->getMyTerritories();
@@ -385,10 +393,10 @@ void GameEngine::executeOrdersPhase() {
                 break;
             }
 
-            if (deployFlag == 0 || (deployFlag != 0 && playerOrders->containsDeployOrders())) { //Only execute orders if still in deploy phase or if all players are done deploying
+            if (deployFlag < 1 || (deployFlag != 0 && playerOrders->containsDeployOrders())) { //Only execute orders if still in deploy phase or if all players are done deploying
                 playerOrders->sortOrderList(); //Move highest priority orders to front of list
                 Order* toExecute=playerOrders->front(); 
-                toExecute->execute(); //Execute highest priority order
+                if (toExecute->priority>0) toExecute->execute(); //Execute highest priority order
                 playerOrders->removeOrder(toExecute);
 
                 if (!(playerOrders->containsDeployOrders())) deployFlag--;
