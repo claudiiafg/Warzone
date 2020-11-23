@@ -57,6 +57,7 @@ using namespace std;
 		playerID = pl->name;
 		player = pl;
 		territory = terr;
+        terr->setArmiesNumber(theUnits);
 	}
 
 	//Copy constructor

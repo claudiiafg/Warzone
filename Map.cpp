@@ -425,15 +425,16 @@ void Territory::setOwner(int _ownerID) {
 // stream insertion operator
 ostream &operator<<(ostream &os, const Territory &n) {
     os << n.name << " is node #" << n.id << " from continent #" << n.continentID;
-    os << " and has " << n.adjacent.size() << " adjacent territories -> ";
+    os << ", has " << n.adjacent.size() << " adjacent territories -> ";
 
     for(int i = 0; i < n.adjacent.size(); i++) {
         if(i == n.adjacent.size()-1) {
-            os << n.adjacent.at(i) << ". "<< endl;
+            os << n.adjacent.at(i) << " ";
         } else {
             os << n.adjacent.at(i) << ", ";
         }
     }
+    os << "and has " << n.armiesNumber << " armies." << endl;
 
     return os;
 }

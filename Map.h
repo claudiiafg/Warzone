@@ -50,6 +50,7 @@ public:
     // attributes
     string name;
     string id;  // node number
+    int armiesNumber;
 
     // methods
     string getContinentID();
@@ -68,7 +69,6 @@ private:
     // attributes
     string continentID;
     vector<string> adjacent;   // adjacent nodes
-    int armiesNumber{};
     int ownerID;
 };
 

@@ -118,7 +118,6 @@ Card *Deck::draw() {
     oldCard = deck.back();
     deck.pop_back();
     return oldCard;
-    delete oldCard;
 }
 
 Hand::Hand() {
@@ -169,14 +168,13 @@ Hand::~Hand() {
 Card *Hand::play(string cardType) {
     Card *oldCard = new Card;
     for (int i = 0; i < hand.size(); i++) {
-        if (hand.at(i)->getType() == cardType) {
-            oldCard = hand.at(i);
+        if (hand[i]->getType() == cardType) {
+            oldCard = hand[i];
             cout << "You played " << cardType << "! \n\n";
             hand.erase(hand.begin() + i);
             return oldCard;
         }
     }
-
     cout << "You don't have any " + cardType + "s in your hand!\n\n";
     return oldCard;
 }
@@ -201,34 +199,21 @@ void Hand::add(Card *card) {
  * Displays the number of each card in the hand after counting them
  */
 void Hand::display() {
-
-    for (int i = 0; i < hand.size(); i++) {
-        if (hand.at(i)->getType() == "bomb")
-            bombCounter += 1;
-        else if (hand.at(i)->getType() == "reinforcements")
-            reinforcementCounter += 1;
-        else if (hand.at(i)->getType() == "blockade")
-            blockadeCounter += 1;
-        else if (hand.at(i)->getType() == "airlift")
-            airliftCounter += 1;
-        else if (hand.at(i)->getType() == "diplomacy")
-            diplomacyCounter += 1;
-    }
     cout << "Here are the cards in your hand:";
-    cout << "\n Bombs: " << bombCounter;
-    cout << "\n Reinforcements: " << reinforcementCounter;
-    cout << "\n Blockades: " << blockadeCounter;
-    cout << "\n Airlifts: " << airliftCounter;
-    cout << "\n Diplomacy: " << diplomacyCounter << "\n \n";
-    bombCounter = 0;
-    reinforcementCounter = 0;
-    blockadeCounter = 0;
-    airliftCounter = 0;
-    diplomacyCounter = 0;
+    cout << "\n Bombs: " << getBombCount();
+    cout << "\n Reinforcements: " << getReinCount();
+    cout << "\n Blockades: " << getBlockCount();
+    cout << "\n Airlifts: " << getAirCount();
+    cout << "\n Diplomacy: " << getDiplomCount() << "\n \n";
 }
 
 int Hand::getBombCount() {
-    return bombCounter;
+    int count = 0;
+    for (int i = 0; i < hand.size(); i++) {
+        if (hand.at(i)->getType() == "bomb")
+            count += 1;
+    }
+    return count;
 }
 
 void Hand::setBombCount(int x) {
@@ -236,7 +221,12 @@ void Hand::setBombCount(int x) {
 }
 
 int Hand::getReinCount() {
-    return reinforcementCounter;
+    int count = 0;
+    for (int i = 0; i < hand.size(); i++) {
+        if (hand.at(i)->getType() == "reinforcements")
+            count += 1;
+    }
+    return count;
 }
 
 void Hand::setReinCount(int x) {
@@ -244,7 +234,12 @@ void Hand::setReinCount(int x) {
 }
 
 int Hand::getBlockCount() {
-    return blockadeCounter;
+    int count = 0;
+    for (int i = 0; i < hand.size(); i++) {
+        if (hand.at(i)->getType() == "blockade")
+            count += 1;
+    }
+    return count;
 }
 
 void Hand::setBlockCount(int x) {
@@ -252,7 +247,12 @@ void Hand::setBlockCount(int x) {
 }
 
 int Hand::getAirCount() {
-    return airliftCounter;
+    int count = 0;
+    for (int i = 0; i < hand.size(); i++) {
+        if (hand.at(i)->getType() == "airlift")
+            count += 1;
+    }
+    return count;
 }
 
 void Hand::setAirCount(int x) {
@@ -260,7 +260,12 @@ void Hand::setAirCount(int x) {
 }
 
 int Hand::getDiplomCount() {
-    return diplomacyCounter;
+    int count = 0;
+    for (int i = 0; i < hand.size(); i++) {
+        if (hand.at(i)->getType() == "diplomacy")
+            count += 1;
+    }
+    return count;
 }
 
 void Hand::setDipCount(int x) {

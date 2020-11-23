@@ -284,26 +284,37 @@ void GameEngine::activateObservers() {
 
 void GameEngine::mainGameLoop() {
     int roundCounter = 1;
+    int counter = 0;
+
     //Loop until only one player remains
-    while (players.size() > 1) {
-        cout << "\n\n==================================\nROUND " << roundCounter << "\n==================================\n\n";
+//    while (players.size() > 1) {
+
+    while (counter < 3) {
+            cout << "\n\n==================================\nROUND " << roundCounter << "\n==================================\n\n";
         deployFlag = players.size();
         issuingFlag = players.size();
         executeFlag = players.size();
+
+        for (auto player : players) {
+            player->playerHand->add(new Card());
+        }
 
         reinforcementPhase();
         issueOrdersPhase();
         executeOrdersPhase();
         roundCounter++;
+        counter++;
     }
     Player* last=players.front();
-    cout << "\nOnly " << last->name << "remains - Congratulations you are the winner!";
+    cout << "\nOnly " << last->name << "remains - Congratulations you are the winner!" << endl;
 }
 
 void GameEngine::reinforcementPhase() {
    // map->Notify();
     for (auto player : players) {
         player->phase++;
+        player->playerHand->add(new Card());
+
         //player->Notify();
         int reinforcements = 0;
         int bonus = 0;
@@ -350,8 +361,6 @@ void GameEngine::issueOrdersPhase() {
         attackLists.push_back(player->toAttack(map));
         counter++;
     }
-
-    
     while (issuingFlag > 0) {
         counter = 0;
         for (auto player : players) {     
@@ -379,6 +388,7 @@ void GameEngine::executeOrdersPhase() {
                 playerOrders = (*player)->getMyOrders();
             }
             catch  (exception e){
+                cout << "error with getMyOrders() for player " << (*player)->name << endl;
                 break;
             }
              //Check if player has orders remaining
@@ -403,16 +413,17 @@ void GameEngine::executeOrdersPhase() {
                 if (playerOrders->isEmpty()) executeFlag--;
             }
         }
+
     }
 }
 
 int main() {
     try{
         GameEngine* game = new GameEngine();
-        MainGameLoopDriver(game);
+//        cout << "Current game in engine: " << endl;
+//        cout << *game << endl;
 
-        cout << "Current game in engine: " << endl;
-        cout << *game << endl;
+        MainGameLoopDriver(game);
 
     } catch(int e) {
         cout << "You exited the game. Goodbye!" << endl;
