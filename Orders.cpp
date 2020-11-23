@@ -190,7 +190,7 @@ bool Advance::validate() {
         validMove = true;
     }
     //check if negotiating
-    if (!player->checkForAllies(attTerritory->getOwnerID())) {
+    if (!(player->checkForAllies(attTerritory->getOwnerID()))) {
         validOpponent = true;
     }
 

@@ -292,11 +292,11 @@ void GameEngine::activateObservers() {
 void GameEngine::mainGameLoop() {
     int roundCounter = 1;
     int counter = 0;
+    defenceLists.clear();
+    attackLists.clear();
 
     //Loop until only one player remains
-//    while (players.size() > 1) {
-
-    while (counter < 10) {
+while (players.size() > 1) {
         cout << "\n\n==================================\nROUND " << roundCounter << "\n==================================\n\n";
         deployFlag = players.size();
         issuingFlag = players.size();
@@ -310,7 +310,7 @@ void GameEngine::mainGameLoop() {
     }
 
     Player* last = players.front();
-    cout << "\nOnly " << last->name << "remains - Congratulations you are the winner!" << endl;
+    cout << "\nOnly " << last->name << " remains - Congratulations you are the winner!" << endl;
 }
 
 void GameEngine::updateMapTerritories() {
@@ -358,10 +358,6 @@ void GameEngine::reinforcementPhase() {
 
 void GameEngine::issueOrdersPhase() {
     cout << "\nIssue Orders Phase\n";
-    vector<vector<Territory*>> defenceLists = {};
-    vector<vector<int>*> defPriorities = {0};
-    vector<vector<int>*> atkPriorities = {0};
-    vector<vector<string>> attackLists = {};
 
     int counter = 0;
     for (auto player : players) {
@@ -397,6 +393,7 @@ void GameEngine::executeOrdersPhase() {
         if (players.size() <= 1) break;
 
         for(auto player = players.begin(); player != players.end(); ++player) {
+
             //If player has no remaining territories, remove from game
             vector<Territory*> playerTerritories = (*player)->getMyTerritories();
             if (playerTerritories.empty()) {
@@ -405,6 +402,12 @@ void GameEngine::executeOrdersPhase() {
                 players.erase(player); //Remove player from player list
                 --player; //Wind iterator back to account for left shift from deletion
                 break;
+            }
+
+            //If player has no more orders, move to next player
+            if ((*player)->playerOrders->isEmpty()) {
+                executeFlag--;
+                continue;
             }
 
             //Only execute orders if still in deploy phase or if all players are done deploying

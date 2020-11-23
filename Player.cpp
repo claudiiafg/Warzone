@@ -124,6 +124,7 @@ vector<Territory*> Player::adjacentEnemies(string terrID, Map* map) {
 
 
 vector<Territory*> Player::toDefend(Map* map) {
+    defPriority.clear();
     vector<Territory*> defend;
     int counter = 0;
 
@@ -148,6 +149,7 @@ vector<Territory*> Player::toDefend(Map* map) {
 }
 
 vector<string> Player::toAttack(Map* map) {
+    atkPriority.clear();
     vector<string> attack;
     int counter = 0;
 
@@ -178,10 +180,10 @@ vector<string> Player::toAttack(Map* map) {
 }
 
 int Player::issueOrder(Map* map, vector<string> toAttack, vector<Territory*> toDefend, Player* nextPlayer) {
-    cout << endl << "***Player " << this->name << "***" << endl;
+    //cout << endl << "***Player " << this->name << "***" << endl;
 
     if (reinforcements > 0) {
-        cout << "Reinforcements remaining: " << reinforcements << "\n";
+        //cout << "Reinforcements remaining: " << reinforcements << "\n";
         auto it = toDefend.begin();
         advance(it, deployCounter);
         Territory* currTerr = *it;
@@ -192,7 +194,6 @@ int Player::issueOrder(Map* map, vector<string> toAttack, vector<Territory*> toD
         return 0;
 
     } else {
-        cout << "Non-deploy orders:" << endl;
         //Highest priority defense
         auto defit = max_element(begin(defPriority), end(defPriority)); //Returns pointer to highest priority element
         int defIndex = distance(defPriority.begin(), defit); //Returns  index of highest priority element
@@ -255,36 +256,42 @@ int Player::issueOrder(Map* map, vector<string> toAttack, vector<Territory*> toD
         }
 
         list<Order*> orders = playerOrders->orders;
-        //Advance - Use advance to alternate atk or def by toAttack and toDefend priority
-        for (auto territory : playerTerritories) {
-            if (territory->getArmies() > 0) {
-                //If there are no more territories to attack or defend
-                if (toDefend.empty() && toAttack.empty() || orders.size() > 10) {
-                    cout << "toAttack and toDefend lists completed, done issuing!" << endl;
-                    phase++;
-                    this->Notify();
-                    return 1;
-                }
 
-                //If attack if empty or defense is higher priority
-                else if (toDefend.empty() || *defit < *atkit) {
-                    cout << "Defense is highest priority at priority " << *defit << ". Taking highest priority defense order..." << endl;
+        //If there are no more territories to attack or defend
+        if (toDefend.empty() && toAttack.empty() || orders.size() > 10) {
+            //cout << "toAttack and toDefend lists completed, done issuing!" << endl;
+            phase++;
+            this->Notify();
+            return 1;
+        }
+
+        //Advance - Defend - Any territory with enough armies should relocate armies to territories in need
+        if (toAttack.empty() || *defit > * atkit) {
+            for (auto territory : playerTerritories) {
+                if (territory->getArmies() > 1) {
                     for (auto defending : toDefend) {
                         string terrId = territory->id;
                         if (defending->isAdjacentNode(terrId)) {
+                            //cout << "Advance order issued : " << territory->name << " to " << defending->name << " with " << territory->getArmies() - 1 << " units";
                             playerOrders->addOrder(new Advance(this, territory, defending, territory->getArmies() - 1));
+                            return 0;
                         }
                     }
                     return 0;
-                }
 
-                else {
-                    cout << "Attack is highest priority at priority " << *atkit << ". Taking highest priority attack order..." << endl;
-                    playerOrders->addOrder(new Advance(this, ownedTerrAtk, enemyTerrAtk, territory->getArmies() - 1));
-                    return 0;
                 }
             }
         }
+
+        //Advance - Attack - Issue attack order on highest priority border
+        else {
+            //cout << "Advance order issued : " << ownedTerrAtk->name << " to " << enemyTerrAtk->name << " with " << territory->getArmies() - 1 << " units";
+            if (ownedTerrAtk->getArmies() > 1) {
+                playerOrders->addOrder(new Advance(this, ownedTerrAtk, enemyTerrAtk, ownedTerrAtk->getArmies() - 1));
+                return 0;
+            }
+        }
+
 
         return 1;
     }
