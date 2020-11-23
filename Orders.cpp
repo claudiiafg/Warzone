@@ -214,7 +214,8 @@ void Advance::execute() {
 
             cout << "Player " << playerID << " moved " << units << " units to " << attTerritory->name << ".\n";
         }
-            //player attack
+
+        //player attack
         else {
 
             int tempArmies = territory->getArmies();

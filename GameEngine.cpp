@@ -294,11 +294,7 @@ void GameEngine::mainGameLoop() {
         deployFlag = players.size();
         issuingFlag = players.size();
         executeFlag = players.size();
-
-        for (auto player : players) {
-            player->playerHand->add(new Card());
-        }
-
+        
         reinforcementPhase();
         issueOrdersPhase();
         executeOrdersPhase();
