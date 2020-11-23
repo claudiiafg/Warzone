@@ -175,7 +175,7 @@ vector<string> Player::toAttack(Map* map) {
     return attack;
 }
 
-int Player::issueOrder(Map* map, vector<string> toAttack, vector<Territory*> toDefend) {
+int Player::issueOrder(Map* map, vector<string> toAttack, vector<Territory*> toDefend, Player* nextPlayer) {
     cout << endl << "***Player " << this->name << "***" << endl;
 
     if (reinforcements > 0) {
@@ -195,12 +195,12 @@ int Player::issueOrder(Map* map, vector<string> toAttack, vector<Territory*> toD
     } else {
         cout << "Non-deploy orders:" << endl;
         //Highest priority defense
-        vector<int>::iterator defit = max_element(begin(defPriority), end(defPriority)); //Returns pointer to highest priority element
+        auto defit = max_element(begin(defPriority), end(defPriority)); //Returns pointer to highest priority element
         int defIndex = distance(defPriority.begin(), defit); //Returns  index of highest priority element
         Territory* defTerr = toDefend.at(defIndex); //Returns highest defence priority territory
 
         //Highest priority attack
-        vector<int>::iterator atkit = max_element(begin(atkPriority), end(atkPriority)); //Returns pointer to highest priority element
+        auto atkit = max_element(begin(atkPriority), end(atkPriority)); //Returns pointer to highest priority element
         int atkIndex = distance(atkPriority.begin(), atkit); //Returns  index of highest priority element
         string atkTerrStr = toAttack.at(atkIndex); //Returns string with highest priority territory attacking and to be attacked
 
@@ -249,10 +249,9 @@ int Player::issueOrder(Map* map, vector<string> toAttack, vector<Territory*> toD
         //Negotiate - If hand contains card, use on next player
         if (playerHand->getDiplomCount() != 0) {
             cout << "Player has negotiate card, card will be played" << endl;
-            Player* otherP = this;
-            otherP->name = this->name + 1;
+
             playerHand->play("diplomacy");
-            playerOrders->addOrder(new Negotiate(this, otherP));
+            playerOrders->addOrder(new Negotiate(this, nextPlayer));
             return 0;
         }
 

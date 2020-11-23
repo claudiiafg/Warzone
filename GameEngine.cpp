@@ -290,7 +290,7 @@ void GameEngine::mainGameLoop() {
 //    while (players.size() > 1) {
 
     while (counter < 3) {
-            cout << "\n\n==================================\nROUND " << roundCounter << "\n==================================\n\n";
+        cout << "\n\n==================================\nROUND " << roundCounter << "\n==================================\n\n";
         deployFlag = players.size();
         issuingFlag = players.size();
         executeFlag = players.size();
@@ -305,7 +305,8 @@ void GameEngine::mainGameLoop() {
         roundCounter++;
         counter++;
     }
-    Player* last=players.front();
+
+    Player* last = players.front();
     cout << "\nOnly " << last->name << "remains - Congratulations you are the winner!" << endl;
 }
 
@@ -363,10 +364,11 @@ void GameEngine::issueOrdersPhase() {
     }
     while (issuingFlag > 0) {
         counter = 0;
-        for (auto player : players) {     
-            int issueResult = player->issueOrder(map, attackLists.at(counter), defenceLists.at(counter));
+        for (int i = 0; i < players.size(); i++) {
+            int j = 0;
+            if (i == 0) j = 1;
+            int issueResult = players[i]->issueOrder(map, attackLists.at(counter), defenceLists.at(counter), players[j]);
             if (issueResult == 1) issuingFlag--;
-            OrderList* playerOrders = (player)->getMyOrders();
             counter++;
         }
     }
@@ -379,20 +381,11 @@ void GameEngine::updateTerritoryOwner(int ownerID, string territoryID) {
 
 void GameEngine::executeOrdersPhase() {
     map->Notify();
+
     while (executeFlag > 0) {
         if (players.size() <= 1) break;
 
-        OrderList* playerOrders;
-        for(std::vector<Player*>::iterator player = players.begin(); player != players.end(); ++player) {
-            try {
-                playerOrders = (*player)->getMyOrders();
-            }
-            catch  (exception e){
-                cout << "error with getMyOrders() for player " << (*player)->name << endl;
-                break;
-            }
-             //Check if player has orders remaining
-            
+        for(auto player = players.begin(); player != players.end(); ++player) {
             //If player has no remaining territories, remove from game
             vector<Territory*> playerTerritories = (*player)->getMyTerritories();
             if (playerTerritories.empty()) {
@@ -402,28 +395,31 @@ void GameEngine::executeOrdersPhase() {
                 --player; //Wind iterator back to account for left shift from deletion
                 break;
             }
+            //Only execute orders if still in deploy phase or if all players are done deploying
+            if (deployFlag < 1 || (deployFlag != 0 && (*player)->playerOrders->containsDeployOrders() != 0)) {
 
-            if (deployFlag < 1 || (deployFlag != 0 && playerOrders->containsDeployOrders())) { //Only execute orders if still in deploy phase or if all players are done deploying
-                playerOrders->sortOrderList(); //Move highest priority orders to front of list
-                Order* toExecute=playerOrders->front(); 
-                if (toExecute->priority>0) toExecute->execute(); //Execute highest priority order
-                playerOrders->removeOrder(toExecute);
+                //Move highest priority orders to front of list
+                (*player)->playerOrders->sortOrderList();
+                Order* toExecute = (*player)->playerOrders->front();
 
-                if (!(playerOrders->containsDeployOrders())) deployFlag--;
-                if (playerOrders->isEmpty()) executeFlag--;
+                //Execute highest priority order
+                if (toExecute->priority == 0) toExecute->execute();
+                (*player)->playerOrders->removeOrder(toExecute);
+
+                if ((*player)->playerOrders->containsDeployOrders() == 0) deployFlag--;
+                if ((*player)->playerOrders->isEmpty() == 0) executeFlag--;
             }
         }
-
     }
 }
 
 int main() {
     try{
         GameEngine* game = new GameEngine();
+        MainGameLoopDriver(game);
+
 //        cout << "Current game in engine: " << endl;
 //        cout << *game << endl;
-
-        MainGameLoopDriver(game);
 
     } catch(int e) {
         cout << "You exited the game. Goodbye!" << endl;

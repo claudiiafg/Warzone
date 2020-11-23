@@ -58,7 +58,7 @@ public:
 	//Methods
 	vector<Territory*> toDefend(Map* map);
 	vector<string> toAttack(Map* map);
-	int issueOrder(Map* map, vector<string> toAttack, vector<Territory*> toDefend);
+	int issueOrder(Map* map, vector<string> toAttack, vector<Territory*> toDefend, Player* nextPlayer);
 	vector<Territory*> adjacentEnemies(string terrID, Map* map);
 	bool checkForAllies(int playerName);
 
