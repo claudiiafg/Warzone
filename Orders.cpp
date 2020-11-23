@@ -242,7 +242,7 @@ void Advance::execute() {
 
                 cout << "Player " << playerID << " attacked " << attTerritory->name << " owned by player " <<
                      attCountryOwner << " with " << units << " units and conquered the territory with " << attTerritory->getArmies()
-                     << " attacekrs remaining on the new territory.\n";
+                     << " attackers remaining on the new territory.\n";
 
                 Deck* deck = new Deck();
                 player->getMyHand()->add(deck->draw());
@@ -345,6 +345,10 @@ void Bomb::execute() {
         attTerritory->setArmiesNumber((armies+1)/2); //rounding up
 
         cout << "Player " << this->playerID << " bombed " << attTerritory->name << " it has only " << attTerritory->getArmies() << " units remaining.\n";
+        if(attTerritory->getArmies() == 0){
+            cout << "Congrats, you conquered: " << attTerritory->name << endl;
+            attTerritory->setOwner(this->playerID);
+        }
     }
 }
 
@@ -408,13 +412,11 @@ bool Blockade::validate() {
 void Blockade::execute() {
 
     if (validate()) {
-
         int tempArmies = territory->getArmies();
         territory->setArmiesNumber(tempArmies * 2);
-        territory->setOwner(NULL);
+        territory->setOwner(99);
 
         cout << "Player " << playerID << " has blockaded " << territory->name << ", it now has " << territory->getArmies() << ".\n";
-
     }
 
 }
@@ -503,7 +505,6 @@ void Airlift::execute() {
 
         //player move
         if (playerID == attCountryOwner) {
-
             int tempArmies = territory->getArmies();
             tempArmies -= units;
             territory->setArmiesNumber(tempArmies);
@@ -512,9 +513,9 @@ void Airlift::execute() {
             attTerritory->setArmiesNumber(tempAttArmies);
 
             cout << "Player " << playerID << " moved " << units << " units to " << attTerritory->name << ".\n";
-        }
-            //player attack
-        else {
+
+        //player attack
+        } else {
 
             int tempArmies = territory->getArmies();
             tempArmies -= units;

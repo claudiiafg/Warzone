@@ -289,7 +289,7 @@ void GameEngine::mainGameLoop() {
     //Loop until only one player remains
 //    while (players.size() > 1) {
 
-    while (counter < 3) {
+    while (counter < 10) {
         cout << "\n\n==================================\nROUND " << roundCounter << "\n==================================\n\n";
         deployFlag = players.size();
         issuingFlag = players.size();
@@ -310,20 +310,33 @@ void GameEngine::mainGameLoop() {
     cout << "\nOnly " << last->name << "remains - Congratulations you are the winner!" << endl;
 }
 
+void GameEngine::updateMapTerritories() {
+    for(auto player : players) {
+        vector<Territory*> newList = {};
+        for(auto terr : map->territories) {
+            if(terr->getOwnerID() == player->name){
+                newList.push_back(terr);
+            }
+        }
+        player->setTerritories(newList);
+    }
+}
+
 void GameEngine::reinforcementPhase() {
-   // map->Notify();
+    map->Notify();
+    updateMapTerritories();
     for (auto player : players) {
         player->phase++;
         player->playerHand->add(new Card());
 
-        //player->Notify();
+        player->Notify();
         int reinforcements = 0;
         int bonus = 0;
 
         cout << "Player " << player->name << ":\n\tTerritory num: " << player->getTerritoryNum();
 
-        reinforcements = (player->getTerritoryNum()) / 3; //Reinforcements equal to territories owned divided by 3, round down
-        if (reinforcements < 3) reinforcements = 3; //Minimum reinforcements is 3
+        reinforcements = (player->getTerritoryNum()) / 3;   //Reinforcements equal to territories owned divided by 3, round down
+        if (reinforcements < 3) reinforcements = 3;         //Minimum reinforcements is 3
         
         cout << "\nReinforcements: " << reinforcements << "\n";
 
@@ -332,21 +345,16 @@ void GameEngine::reinforcementPhase() {
                 bonus = continent->bonus;
                 cout << "Continent bonus: " << bonus;
             }
-
-            
         }
         
-        player->reinforcements=reinforcements+bonus;
+        player->reinforcements = reinforcements+bonus;
         player->phase++;
         player->Notify();
-
-       
     }
 }
 
 void GameEngine::issueOrdersPhase() {
     cout << "\nIssue Orders Phase\n";
-
     vector<vector<Territory*>> defenceLists = {};
     vector<vector<int>*> defPriorities = {0};
     vector<vector<int>*> atkPriorities = {0};
@@ -395,19 +403,19 @@ void GameEngine::executeOrdersPhase() {
                 --player; //Wind iterator back to account for left shift from deletion
                 break;
             }
+
             //Only execute orders if still in deploy phase or if all players are done deploying
-            if (deployFlag < 1 || (deployFlag != 0 && (*player)->playerOrders->containsDeployOrders() != 0)) {
+            if (deployFlag < 1 || (deployFlag != 0 && (*player)->playerOrders->containsDeployOrders())) {
 
                 //Move highest priority orders to front of list
                 (*player)->playerOrders->sortOrderList();
                 Order* toExecute = (*player)->playerOrders->front();
 
                 //Execute highest priority order
-                if (toExecute->priority == 0) toExecute->execute();
+                if (toExecute && toExecute->priority == 0) toExecute->execute();
                 (*player)->playerOrders->removeOrder(toExecute);
-
-                if ((*player)->playerOrders->containsDeployOrders() == 0) deployFlag--;
-                if ((*player)->playerOrders->isEmpty() == 0) executeFlag--;
+                if (!((*player)->playerOrders->containsDeployOrders())) deployFlag--;
+                if ((*player)->playerOrders->isEmpty()) executeFlag--;
             }
         }
     }

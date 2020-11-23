@@ -61,6 +61,7 @@ public:
 	int issueOrder(Map* map, vector<string> toAttack, vector<Territory*> toDefend, Player* nextPlayer);
 	vector<Territory*> adjacentEnemies(string terrID, Map* map);
 	bool checkForAllies(int playerName);
+	bool hasTerritory(string terrId);
 
 	//Stream operator overload
 	 friend ostream& operator << (ostream& out, const Player& p);

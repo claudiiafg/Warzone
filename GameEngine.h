@@ -45,6 +45,7 @@ public:
     void createPlayers(int amount);
 
     void updateTerritoryOwner(int ownerID, string territoryID);
+    void updateMapTerritories();
 
     //main game functions
     void mainGameLoop();

@@ -109,10 +109,12 @@ vector<Territory*> Player::adjacentEnemies(string terrID, Map* map) {
 
     for (auto& terr : getMyTerritories()) {
         for (auto& adj : terr->getAdjacentNodes()) {
-            for (auto& within : getMyTerritories()) {
-                if (within->id != adj) {
-                    Territory* toAdd = map->getTerritoryById(adj);
-                    adjacentEnemies.push_back(toAdd);
+            if(map->getTerritoryById(adj)->getOwnerID() != 99) {
+                for (auto& within : getMyTerritories()) {
+                    if (within->id != adj) {
+                        Territory* toAdd = map->getTerritoryById(adj);
+                        adjacentEnemies.push_back(toAdd);
+                    }
                 }
             }
         }
@@ -152,8 +154,6 @@ vector<string> Player::toAttack(Map* map) {
     for (auto territory : playerTerritories) {
         atkPriority.push_back(0);
         vector<Territory*> adjacentEnemy = adjacentEnemies(territory->id, map);
-
-
         for (auto enemies : adjacentEnemy) {
             //Priority point distribution (more points = higher priority)
 
@@ -165,12 +165,14 @@ vector<string> Player::toAttack(Map* map) {
             int armyDiff = territory->getArmies() - enemies->getArmies();
             atkPriority.at(counter) += (armyDiff/2);
 
+            string toPush = territory->id + " " + enemies->id;
             //Store attacking territory and territory to be attacked
-            attack.push_back(territory->id + " " + enemies->id);
-
-            //Increment counter to store twin priority array at same index
-            counter;
+            if (!(std::find(attack.begin(), attack.end(), toPush) != attack.end())) {
+                attack.push_back(toPush);
+            }
         }
+        //Increment counter to store twin priority array at same index
+        counter++;
     }
     return attack;
 }
@@ -180,14 +182,11 @@ int Player::issueOrder(Map* map, vector<string> toAttack, vector<Territory*> toD
 
     if (reinforcements > 0) {
         cout << "Reinforcements remaining: " << reinforcements << "\n";
-        cout << "Deploying armies...\n";
         auto it = toDefend.begin();
         advance(it, deployCounter);
         Territory* currTerr = *it;
 
         playerOrders->addOrder(new Deploy(this, currTerr, 1));
-        cout << "1 army deployed to " << currTerr->name << "\n";
-
         reinforcements--;
         deployCounter++;
         return 0;
@@ -222,9 +221,13 @@ int Player::issueOrder(Map* map, vector<string> toAttack, vector<Territory*> toD
         }
 
         //STRATEGY
+//        cout << "playerHand->getAirCount() " << playerHand->getAirCount() << endl;
+//        cout << "playerHand->getBlockCount() " << playerHand->getBlockCount() << endl;
+//        cout << "playerHand->getBombCount() " << playerHand->getBombCount() << endl;
+//        cout << "playerHand->getDiplomCount() " << playerHand->getDiplomCount() << endl;
+
         //Airlift - If hand contains card, use on highest priority defense
         if (playerHand->getAirCount()!=0) {
-            cout << "Player has airlift card, card will be played" << endl;
             playerHand->play("airlift");
             playerOrders->addOrder(new Airlift(this, ownedTerrAtk, enemyTerrAtk, (ownedTerrAtk->getArmies()) - 1));
             return 0;
@@ -232,7 +235,6 @@ int Player::issueOrder(Map* map, vector<string> toAttack, vector<Territory*> toD
 
         //Blockade - If hand contains card, use on highest priority defense
         if (playerHand->getBlockCount() != 0) {
-            cout << "Player has blockade card, card will be played" << endl;
             playerHand->play("blockade");
             playerOrders->addOrder(new Blockade(this, ownedTerrAtk));
             return 0;
@@ -240,7 +242,6 @@ int Player::issueOrder(Map* map, vector<string> toAttack, vector<Territory*> toD
 
         //Bomb - If hand contains card, use on highest priority attack
         if (playerHand->getBombCount() != 0) {
-            cout << "Player has bomb card, card will be played" << endl;
             playerHand->play("bomb");
             playerOrders->addOrder(new Bomb(this, adjTerr, enemyTerrAtk));
             return 0;
@@ -248,15 +249,12 @@ int Player::issueOrder(Map* map, vector<string> toAttack, vector<Territory*> toD
 
         //Negotiate - If hand contains card, use on next player
         if (playerHand->getDiplomCount() != 0) {
-            cout << "Player has negotiate card, card will be played" << endl;
-
             playerHand->play("diplomacy");
             playerOrders->addOrder(new Negotiate(this, nextPlayer));
             return 0;
         }
 
         list<Order*> orders = playerOrders->orders;
-
         //Advance - Use advance to alternate atk or def by toAttack and toDefend priority
         for (auto territory : playerTerritories) {
             if (territory->getArmies() > 0) {
@@ -309,5 +307,12 @@ ostream& operator<<(ostream &out, const Player &p) {
     out << endl;
     out << "Hand: " << *p.playerHand << endl;
     return out;
+}
+
+bool Player::hasTerritory(string terrId) {
+    for(auto terr: playerTerritories) {
+        if(terr->name == terrId) return true;
+    }
+    return false;
 }
 
