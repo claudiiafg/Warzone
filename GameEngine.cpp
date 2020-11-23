@@ -225,49 +225,56 @@ void GameEngine::activateObservers() {
 
         if(option == 1) {
             // activate phase observers
-            for(int i = 0; i < players.size(); i++) {
-                if (players.at(i)->getObservers().empty() == true)
-                    players.at(i)->Attach(new PhaseObserver(players.at(i)));
+            for(auto & player : players) {
+                if (player->getObservers().empty())
+                    player->Attach(new PhaseObserver(player));
             }
 
-            if(map->getObservers().empty() == false);
-            map->Detach(map->getObservers().front());
-                cout << "**** Phase Observer ON! ****" << endl;
-                option = EXIT;
+            if(!map->getObservers().empty()){
+                map->Detach(map->getObservers().front());
+            }
+            cout << "**** Phase Observer ON! ****" << endl;
+            option = EXIT;
 
-            }  else if(option == 2) {
+
+        }  else if(option == 2) {
             // activate statistics observer
 
-            for(int i = 0; i < players.size(); i++){
-                if(players.at(i)->getObservers().empty() == false)
-                    players.at(i)->Detach(players.at(i)->getObservers().front());
+            for(auto & player : players){
+                if(!player->getObservers().empty())
+                    player->Detach(player->getObservers().front());
             }
-            if(map->getObservers().empty() == true);
+            if(map->getObservers().empty()){
                 map->Attach(new GameStatObserver(map));
                 cout << "**** Statistics Observer ON! ****" << endl;
+            }
+
             option = EXIT;
 
         } else if (option == 3) {
             // activate both observers
-            for(int i = 0; i < players.size(); i++){
-                if(players.at(i)->getObservers().empty() == true)
-                    players.at(i)->Attach(new PhaseObserver(players.at(i)));
+            for(auto & player : players){
+                if(player->getObservers().empty())
+                    player->Attach(new PhaseObserver(player));
             }
-            if(map->getObservers().empty() == true);
+
+            if(map->getObservers().empty()){
                 map->Attach(new GameStatObserver(map));
+            }
             cout << "**** All Observers ON! ****" << endl;
             option = EXIT;
 
         } else if (option == 4) {
             // deactivate both observers
-
-            for(int i = 0; i < players.size(); i++){
-                if(players.at(i)->getObservers().empty() == false)
-                    players.at(i)->Detach(players.at(i)->getObservers().front());
+            for(auto & player : players){
+                if(!player->getObservers().empty())
+                    player->Detach(player->getObservers().front());
             }
 
-            if(map->getObservers().empty() == false);
-            map->Detach(map->getObservers().front());
+            if(!map->getObservers().empty()) {
+                map->Detach(map->getObservers().front());
+            }
+
             cout << "**** All Observer OFF! ****" << endl;
             option = EXIT;
 
@@ -294,7 +301,7 @@ void GameEngine::mainGameLoop() {
         deployFlag = players.size();
         issuingFlag = players.size();
         executeFlag = players.size();
-        
+
         reinforcementPhase();
         issueOrdersPhase();
         executeOrdersPhase();
