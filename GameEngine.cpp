@@ -292,15 +292,24 @@ void GameEngine::activateObservers() {
 void GameEngine::mainGameLoop() {
     int roundCounter = 1;
     int counter = 0;
-    defenceLists.clear();
-    attackLists.clear();
 
     //Loop until only one player remains
-while (players.size() > 1) {
+    while (players.size() > 1) {
         cout << "\n\n==================================\nROUND " << roundCounter << "\n==================================\n\n";
+
+        if(roundCounter > 1000) {
+            cout << "There was a problem with the game. Goodbye.";
+            return;
+        }
+
         deployFlag = players.size();
         issuingFlag = players.size();
         executeFlag = players.size();
+
+        updateMapTerritories();
+        if(players.size() == 1) {
+            break;
+        }
 
         reinforcementPhase();
         issueOrdersPhase();
@@ -314,20 +323,29 @@ while (players.size() > 1) {
 }
 
 void GameEngine::updateMapTerritories() {
-    for(auto player : players) {
-        vector<Territory*> newList = {};
-        for(auto terr : map->territories) {
-            if(terr->getOwnerID() == player->name){
+    for (auto player : players) {
+        vector<Territory *> newList = {};
+        for (auto terr : map->territories) {
+            if (terr->getOwnerID() == player->name) {
                 newList.push_back(terr);
             }
         }
         player->setTerritories(newList);
     }
+
+    for(auto player = players.begin(); player != players.end(); ++player) {
+        if ((*player)->getMyTerritories().empty()) {
+            (*player)->phase++; //Send player to phase 5 (conquered)
+            (*player)->Notify();
+            players.erase(player); //Remove player from player list
+            --player; //Wind iterator back to account for left shift from deletion
+        }
+    }
 }
 
 void GameEngine::reinforcementPhase() {
     map->Notify();
-    updateMapTerritories();
+
     for (auto player : players) {
         player->phase++;
         player->playerHand->add(new Card());
@@ -346,7 +364,7 @@ void GameEngine::reinforcementPhase() {
         for (auto continent : map->continents) {
             if (map->continentHasUniqueOwner(continent->id, player->name)) {
                 bonus = continent->bonus;
-                cout << "Continent bonus: " << bonus;
+                cout << "Continent bonus: " << bonus << endl;
             }
         }
         
@@ -359,7 +377,9 @@ void GameEngine::reinforcementPhase() {
 void GameEngine::issueOrdersPhase() {
     cout << "\nIssue Orders Phase\n";
 
-    int counter = 0;
+    defenceLists.clear();
+    attackLists.clear();
+
     for (auto player : players) {
         player->deployCounter = 1;
         player->allies.clear();
@@ -367,8 +387,9 @@ void GameEngine::issueOrdersPhase() {
 
         defenceLists.push_back(player->toDefend(map));
         attackLists.push_back(player->toAttack(map));
-        counter++;
     }
+
+    int counter = 0;
     while (issuingFlag > 0) {
         counter = 0;
         for (int i = 0; i < players.size(); i++) {
@@ -407,7 +428,7 @@ void GameEngine::executeOrdersPhase() {
             //If player has no more orders, move to next player
             if ((*player)->playerOrders->isEmpty()) {
                 executeFlag--;
-                continue;
+                break;
             }
 
             //Only execute orders if still in deploy phase or if all players are done deploying

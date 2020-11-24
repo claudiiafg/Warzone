@@ -180,15 +180,16 @@ vector<string> Player::toAttack(Map* map) {
 }
 
 int Player::issueOrder(Map* map, vector<string> toAttack, vector<Territory*> toDefend, Player* nextPlayer) {
-    //cout << endl << "***Player " << this->name << "***" << endl;
+//    cout << endl << "***Player " << this->name << "***" << endl;
 
-    if (reinforcements > 0) {
-        //cout << "Reinforcements remaining: " << reinforcements << "\n";
+    if (reinforcements > 0 && !toDefend.empty()) {
+//        cout << "Reinforcements remaining: " << reinforcements << "\n";
         auto it = toDefend.begin();
+        if(deployCounter == toDefend.size()) --deployCounter;
         advance(it, deployCounter);
         Territory* currTerr = *it;
-
         playerOrders->addOrder(new Deploy(this, currTerr, 1));
+
         reinforcements--;
         deployCounter++;
         return 0;
@@ -196,101 +197,100 @@ int Player::issueOrder(Map* map, vector<string> toAttack, vector<Territory*> toD
     } else {
         //Highest priority defense
         auto defit = max_element(begin(defPriority), end(defPriority)); //Returns pointer to highest priority element
-        int defIndex = distance(defPriority.begin(), defit); //Returns  index of highest priority element
-        Territory* defTerr = toDefend.at(defIndex); //Returns highest defence priority territory
-
         //Highest priority attack
         auto atkit = max_element(begin(atkPriority), end(atkPriority)); //Returns pointer to highest priority element
         int atkIndex = distance(atkPriority.begin(), atkit); //Returns  index of highest priority element
-        string atkTerrStr = toAttack.at(atkIndex); //Returns string with highest priority territory attacking and to be attacked
 
-        //Split priority string into relevant territories
-        stringstream split(atkTerrStr);
-        string intermediate;
-        getline(split, intermediate, ' ');
-        Territory* ownedTerrAtk = map->getTerritoryById(intermediate);
-        getline(split, intermediate, ' ');
-        Territory* enemyTerrAtk = map->getTerritoryById(intermediate);
+        Territory* ownedTerrAtk = {};
+        Territory* enemyTerrAtk = {};
 
-        //Bomb setup
-        vector<string> adjacents = enemyTerrAtk->getAdjacentNodes();
-        Territory* adjTerr;
+        if(!toAttack.empty()) {
+            //Returns string with highest priority territory attacking and to be attacked
+            string atkTerrStr = toAttack.at(atkIndex);
 
-        for (auto adj : adjacents) {
-            adjTerr = map->getTerritoryById(adj);
-            if (adjTerr->getOwnerID() == name) break;
-        }
+            //Split priority string into relevant territories
+            stringstream split(atkTerrStr);
+            string intermediate;
+            getline(split, intermediate, ' ');
+            ownedTerrAtk = map->getTerritoryById(intermediate);
+            getline(split, intermediate, ' ');
+            enemyTerrAtk = map->getTerritoryById(intermediate);
 
-        //STRATEGY
-//        cout << "playerHand->getAirCount() " << playerHand->getAirCount() << endl;
-//        cout << "playerHand->getBlockCount() " << playerHand->getBlockCount() << endl;
-//        cout << "playerHand->getBombCount() " << playerHand->getBombCount() << endl;
-//        cout << "playerHand->getDiplomCount() " << playerHand->getDiplomCount() << endl;
+            //Bomb setup
+            vector<string> adjacents = enemyTerrAtk->getAdjacentNodes();
+            Territory* adjTerr;
 
-        //Airlift - If hand contains card, use on highest priority defense
-        if (playerHand->getAirCount()!=0) {
-            playerHand->play("airlift");
-            playerOrders->addOrder(new Airlift(this, ownedTerrAtk, enemyTerrAtk, (ownedTerrAtk->getArmies()) - 1));
-            return 0;
-        }
-
-        //Blockade - If hand contains card, use on highest priority defense
-        if (playerHand->getBlockCount() != 0) {
-            playerHand->play("blockade");
-            playerOrders->addOrder(new Blockade(this, ownedTerrAtk));
-            return 0;
-        }
-
-        //Bomb - If hand contains card, use on highest priority attack
-        if (playerHand->getBombCount() != 0) {
-            playerHand->play("bomb");
-            playerOrders->addOrder(new Bomb(this, adjTerr, enemyTerrAtk));
-            return 0;
-        }
-
-        //Negotiate - If hand contains card, use on next player
-        if (playerHand->getDiplomCount() != 0) {
-            playerHand->play("diplomacy");
-            playerOrders->addOrder(new Negotiate(this, nextPlayer));
-            return 0;
-        }
-
-        list<Order*> orders = playerOrders->orders;
-
-        //If there are no more territories to attack or defend
-        if (toDefend.empty() && toAttack.empty() || orders.size() > 10) {
-            //cout << "toAttack and toDefend lists completed, done issuing!" << endl;
-            phase++;
-            this->Notify();
-            return 1;
-        }
-
-        //Advance - Defend - Any territory with enough armies should relocate armies to territories in need
-        if (toAttack.empty() || *defit > * atkit) {
-            for (auto territory : playerTerritories) {
-                if (territory->getArmies() > 1) {
-                    for (auto defending : toDefend) {
-                        string terrId = territory->id;
-                        if (defending->isAdjacentNode(terrId)) {
-                            //cout << "Advance order issued : " << territory->name << " to " << defending->name << " with " << territory->getArmies() - 1 << " units";
-                            playerOrders->addOrder(new Advance(this, territory, defending, territory->getArmies() - 1));
-                            return 0;
-                        }
-                    }
-                    return 0;
-
-                }
+            for (auto adj : adjacents) {
+                adjTerr = map->getTerritoryById(adj);
+                if (adjTerr->getOwnerID() == name) break;
             }
-        }
 
-        //Advance - Attack - Issue attack order on highest priority border
-        else {
-            //cout << "Advance order issued : " << ownedTerrAtk->name << " to " << enemyTerrAtk->name << " with " << territory->getArmies() - 1 << " units";
-            if (ownedTerrAtk->getArmies() > 1) {
-                playerOrders->addOrder(new Advance(this, ownedTerrAtk, enemyTerrAtk, ownedTerrAtk->getArmies() - 1));
+            //STRATEGY
+            //Airlift - If hand contains card, use on highest priority defense
+            if (playerHand->getAirCount()!=0) {
+                playerHand->play("airlift");
+                playerOrders->addOrder(new Airlift(this, ownedTerrAtk, enemyTerrAtk, (ownedTerrAtk->getArmies()) - 1));
                 return 0;
             }
-        }
+
+            //Blockade - If hand contains card, use on highest priority defense
+            if (playerHand->getBlockCount() != 0) {
+                playerHand->play("blockade");
+                playerOrders->addOrder(new Blockade(this, ownedTerrAtk));
+                return 0;
+            }
+
+            //Bomb - If hand contains card, use on highest priority attack
+            if (playerHand->getBombCount() != 0) {
+                playerHand->play("bomb");
+                playerOrders->addOrder(new Bomb(this, adjTerr, enemyTerrAtk));
+                return 0;
+            }
+
+            //Negotiate - If hand contains card, use on next player
+            if (playerHand->getDiplomCount() != 0) {
+                playerHand->play("diplomacy");
+                playerOrders->addOrder(new Negotiate(this, nextPlayer));
+                return 0;
+            }
+
+            list<Order*> orders = playerOrders->orders;
+
+            //If there are no more territories to attack or defend
+            if (toDefend.empty() && toAttack.empty() || orders.size() > 10) {
+                //cout << "toAttack and toDefend lists completed, done issuing!" << endl;
+                phase++;
+                this->Notify();
+                return 1;
+            }
+
+        //Advance - Defend - Any territory with enough armies should relocate armies to territories in need
+        } else if(*defit > * atkit && !(toDefend.empty() && toAttack.empty())) {
+//            if(*defit > * atkit) {
+                for (auto territory : playerTerritories) {
+                    if (territory->getArmies() > 0) {
+                        for (auto defending : toDefend) {
+                            string terrId = territory->id;
+                            if (defending->isAdjacentNode(terrId)) {
+                                //cout << "Advance order issued : " << territory->name << " to " << defending->name << " with " << territory->getArmies() - 1 << " units";
+                                playerOrders->addOrder(new Advance(this, territory, defending, territory->getArmies() - 1));
+                                return 0;
+                            }
+                        }
+                        return 0;
+
+                    }
+                }
+            //Advance - Attack - Issue attack order on highest priority border
+            } else {
+                //cout << "Advance order issued : " << ownedTerrAtk->name << " to " << enemyTerrAtk->name << " with " << territory->getArmies() - 1 << " units";
+                if (ownedTerrAtk->getArmies() > 1) {
+                    playerOrders->addOrder(
+                            new Advance(this, ownedTerrAtk, enemyTerrAtk, ownedTerrAtk->getArmies() - 1));
+                    return 0;
+                }
+            }
+//        }
 
 
         return 1;

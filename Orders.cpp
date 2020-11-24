@@ -57,6 +57,7 @@ Deploy::Deploy(Player* pl, Territory* terr, int theUnits) {
     playerID = pl->name;
     player = pl;
     territory = terr;
+
 }
 
 //Copy constructor
