@@ -297,9 +297,9 @@ void GameEngine::mainGameLoop() {
     while (players.size() > 1) {
         cout << "\n\n==================================\nROUND " << roundCounter << "\n==================================\n\n";
 
-        if(roundCounter > 1000) {
+        if(roundCounter > 7) {
             cout << "There was a problem with the game. Goodbye.";
-            return;
+            //return;
         }
 
         deployFlag = players.size();
@@ -334,11 +334,18 @@ void GameEngine::updateMapTerritories() {
     }
 
     for(auto player = players.begin(); player != players.end(); ++player) {
+        if (playerDeletedFlag) {
+            player--; //Wind iterator back to account for left shift from deletion
+        }
+
+        playerDeletedFlag = false;
+
         if ((*player)->getMyTerritories().empty()) {
             (*player)->phase++; //Send player to phase 5 (conquered)
             (*player)->Notify();
             players.erase(player); //Remove player from player list
-            --player; //Wind iterator back to account for left shift from deletion
+            if (players.size() == 1) return;
+            playerDeletedFlag = true;
         }
     }
 }

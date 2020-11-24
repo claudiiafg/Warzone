@@ -208,6 +208,7 @@ int Player::issueOrder(Map* map, vector<string> toAttack, vector<Territory*> toD
         //Highest priority attack
         auto atkit = max_element(begin(atkPriority), end(atkPriority)); //Returns pointer to highest priority element
         int atkIndex = distance(atkPriority.begin(), atkit); //Returns  index of highest priority element
+
         Territory* ownedTerrAtk = {};
         Territory* enemyTerrAtk = {};
 

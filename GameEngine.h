@@ -35,6 +35,7 @@ public:
     int deployFlag=0;
     int issuingFlag=0;
     int executeFlag=0;
+    bool playerDeletedFlag = false;
     vector<vector<Territory*>> defenceLists = {};
     vector<vector<string>> attackLists = {};
 
