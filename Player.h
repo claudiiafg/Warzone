@@ -3,6 +3,10 @@
 #include <vector>
 #include <map>
 #include "GameObservers.h"
+#include "PlayerStrategies.h"
+#include "Orders.h"
+#include "Map.h"
+#include "Cards.h"
 
 class Territory;
 class OrderList;
@@ -19,7 +23,10 @@ public:
 	int phase;
 	int deployCounter = 1;
 	int cardFlag = false;
+
+
     //Required data members
+	PlayerStrategy* strategy;
     vector<Player*> allies;
     vector<Territory *> playerTerritories;
 	vector<int> defPriority = { 0 };
@@ -29,7 +36,7 @@ public:
 
 	//Constructors
 	Player();
-	Player(int name, int armies, vector<Territory*> playerTerritories, Hand* playerHand, OrderList* playerOrders, vector<Player*> allies);
+	Player(int name, int armies, vector<Territory*> playerTerritories, Hand* playerHand, OrderList* playerOrders, vector<Player*> allies, PlayerStrategy* strategy);
 	Player(const Player& otherPlayer);
 
 	//Destructor
@@ -54,11 +61,18 @@ public:
 	void setPhase(int phase);
 	void addAlly(Player* player);
 	void setCardFlag(bool flag);
+	void setStrategy(PlayerStrategy* newStrategy);
+
+
+	//Old methods
+	//vector<Territory*> toDefend(Map* map);
+	//vector<string> toAttack(Map* map);
+	//int issueOrder(Map* map, vector<string> toAttack, vector<Territory*> toDefend, Player* nextPlayer);
 
 	//Methods
-	vector<Territory*> toDefend(Map* map);
-	vector<string> toAttack(Map* map);
-	int issueOrder(Map* map, vector<string> toAttack, vector<Territory*> toDefend, Player* nextPlayer);
+	vector<Territory*> toDefend();
+	vector<Territory*> toAttack();
+	void issueOrder();
 	vector<Territory*> adjacentEnemies(string terrID, Map* map);
 	bool checkForAllies(int playerName);
 	bool hasTerritory(string terrId);

@@ -89,7 +89,7 @@ void GameEngine::createPlayers(int amount) {
         OrderList* playerOrders = new OrderList();
 
         //create player
-        players.push_back(new Player(PLAYER_ID, initialArmies, playerTerr, playerHand, playerOrders, {}));
+        players.push_back(new Player(PLAYER_ID, initialArmies, playerTerr, playerHand, playerOrders, {}, new NeutralPlayerStrategy));
         //Attach observer
         players.back()->Attach(new PhaseObserver (players.back()));
     }
@@ -392,8 +392,8 @@ void GameEngine::issueOrdersPhase() {
         player->allies.clear();
         player->cardFlag = false;
 
-        defenceLists.push_back(player->toDefend(map));
-        attackLists.push_back(player->toAttack(map));
+//        defenceLists.push_back(player->toDefend(map));
+//        attackLists.push_back(player->toAttack(map));
     }
 
     int counter = 0;
@@ -402,8 +402,8 @@ void GameEngine::issueOrdersPhase() {
         for (int i = 0; i < players.size(); i++) {
             int j = 0;
             if (i == 0) j = 1;
-            int issueResult = players[i]->issueOrder(map, attackLists.at(counter), defenceLists.at(counter), players[j]);
-            if (issueResult == 1) issuingFlag--;
+//            int issueResult = players[i]->issueOrder(map, attackLists.at(counter), defenceLists.at(counter), players[j]);
+ //           if (issueResult == 1) issuingFlag--;
             counter++;
         }
     }

@@ -13,7 +13,7 @@ int main(){
     Hand* playerHand = new Hand();
     OrderList* playerOrders = new OrderList();
     vector<Player*> allies;
-    Player* testPlayer = new Player(0, 5, playerTerritories, playerHand, playerOrders, allies);
+    Player* testPlayer = new Player(0, 5, playerTerritories, playerHand, playerOrders, allies, new NeutralPlayerStrategy);
     MapLoader loader;
     loader.loadMaps();
     vector<MapFile*> rawMaps = loader.getMaps();

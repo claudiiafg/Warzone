@@ -1,17 +1,13 @@
 #include "Player.h"
-#include "Orders.h"
-#include "Map.h"
-#include "Cards.h"
 
-using namespace std;
 
 //Default constructor
 Player::Player() : name(rand()%10), armies(0), reinforcements(0), phase(1), cardFlag(false), allies(), playerTerritories(), playerHand(nullptr), playerOrders(nullptr) {
 }
 
 //Parametrized constructor
-Player::Player(int name, int armies, vector<Territory*> playerTerritories, Hand* playerHand, OrderList* playerOrders, vector<Player*> allies) :
-        name(name), armies(armies), playerTerritories(playerTerritories), playerHand(playerHand), playerOrders(playerOrders), reinforcements(0), phase(1), cardFlag(false), allies(allies) {
+Player::Player(int name, int armies, vector<Territory*> playerTerritories, Hand* playerHand, OrderList* playerOrders, vector<Player*> allies, PlayerStrategy* strategy) :
+        name(name), armies(armies), playerTerritories(playerTerritories), playerHand(playerHand), playerOrders(playerOrders), reinforcements(0), phase(1), cardFlag(false), allies(allies), strategy(strategy) {
 }
 
 //Copy constructor
@@ -26,11 +22,12 @@ Player::Player(const Player &otherPlayer) {
 
     playerHand = *new Hand * (otherPlayer.playerHand);
     playerOrders = *new OrderList * (otherPlayer.playerOrders);
-    armies = 0;
-    reinforcements = 0;
-    phase = 1;
-    name = otherPlayer.name + 1;
+    armies = otherPlayer.armies;
+    reinforcements = otherPlayer.reinforcements;
+    phase = otherPlayer.phase;
+    name = otherPlayer.name;
     cardFlag = otherPlayer.cardFlag;
+    strategy=otherPlayer.strategy;
 
   }
 
@@ -52,6 +49,13 @@ Player& Player::operator= (const Player& otherPlayer) { //Delete any values alre
         delete playerOrders;
     }
     playerOrders= *new OrderList*(otherPlayer.playerOrders);
+
+    armies = otherPlayer.armies;
+    reinforcements = otherPlayer.reinforcements;
+    phase = otherPlayer.phase;
+    name = otherPlayer.name;
+    cardFlag = otherPlayer.cardFlag;
+    strategy = otherPlayer.strategy;
 
     return *this;
 }
@@ -91,6 +95,10 @@ void Player::setCardFlag(bool flag) {
     this->cardFlag = false;
 }
 
+void Player::setStrategy(PlayerStrategy* newStrategy) {
+    this->strategy = newStrategy;
+}
+
 void Player::addAlly(Player* player) {
     this->allies.push_back(player);
 }
@@ -122,7 +130,47 @@ vector<Territory*> Player::adjacentEnemies(string terrID, Map* map) {
     return adjacentEnemies;
 }
 
+//Stream operator overload
+ostream& operator<<(ostream &out, const Player &p) {
+    out << "Player id: " << p.name << endl;
+    out << "Armies in reinforcement pool: " << p.armies << endl;
+    out << "Territories: ";
+    for (int i = 0; i < p.playerTerritories.size(); i++) {
+        out << p.playerTerritories.at(i)->name << ' ';
+    }
+    out << endl;
+    out << "Orders: ";
+    list <Order*> ::iterator it;
+    for (it = p.playerOrders->orders.begin(); it != p.playerOrders->orders.end(); ++it) {
+        out << (*it) << " || ";
+    }
+    out << endl;
+    out << "Hand: " << *p.playerHand << endl;
+    return out;
+}
 
+bool Player::hasTerritory(string terrId) {
+    for(auto terr: playerTerritories) {
+        if(terr->name == terrId) return true;
+    }
+    return false;
+}
+
+
+vector<Territory*> Player::toDefend() {
+    return this->strategy->toDefend();
+}
+
+vector<Territory*> Player::toAttack() {
+    return this->strategy->toAttack();
+}
+
+void Player::issueOrder() {
+    this->strategy->issueOrder();
+}
+
+//Old Methods
+/*
 vector<Territory*> Player::toDefend(Map* map) {
     defPriority.clear();
     vector<Territory*> defend;
@@ -295,30 +343,4 @@ int Player::issueOrder(Map* map, vector<string> toAttack, vector<Territory*> toD
         return 1;
     }
 }
-
-//Stream operator overload
-ostream& operator<<(ostream &out, const Player &p) {
-    out << "Player id: " << p.name << endl;
-    out << "Armies in reinforcement pool: " << p.armies << endl;
-    out << "Territories: ";
-    for (int i = 0; i < p.playerTerritories.size(); i++) {
-        out << p.playerTerritories.at(i)->name << ' ';
-    }
-    out << endl;
-    out << "Orders: ";
-    list <Order*> ::iterator it;
-    for (it = p.playerOrders->orders.begin(); it != p.playerOrders->orders.end(); ++it) {
-        out << (*it) << " || ";
-    }
-    out << endl;
-    out << "Hand: " << *p.playerHand << endl;
-    return out;
-}
-
-bool Player::hasTerritory(string terrId) {
-    for(auto terr: playerTerritories) {
-        if(terr->name == terrId) return true;
-    }
-    return false;
-}
-
+*/
