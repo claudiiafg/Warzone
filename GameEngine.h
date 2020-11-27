@@ -19,7 +19,7 @@ class Player;
 class Territory;
 
 using namespace std;
-
+ 
 class GameEngine{
 public:
     // constructor
@@ -37,7 +37,7 @@ public:
     int executeFlag=0;
     bool playerDeletedFlag = false;
     vector<vector<Territory*>> defenceLists = {};
-    vector<vector<string>> attackLists = {};
+    vector<vector<Territory*>> attackLists = {};
 
     // startup functions
     void startupPhase();

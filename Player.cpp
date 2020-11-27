@@ -1,8 +1,9 @@
 #include "Player.h"
 
+//**REQUIRED METHODS**
 
 //Default constructor
-Player::Player() : name(rand()%10), armies(0), reinforcements(0), phase(1), cardFlag(false), allies(), playerTerritories(), playerHand(nullptr), playerOrders(nullptr) {
+Player::Player() : name(rand()%10), armies(0), reinforcements(0), phase(1), cardFlag(false), allies(), playerTerritories(), playerHand(nullptr), playerOrders(nullptr), strategy() {
 }
 
 //Parametrized constructor
@@ -11,7 +12,9 @@ Player::Player(int name, int armies, vector<Territory*> playerTerritories, Hand*
 }
 
 //Copy constructor
-Player::Player(const Player &otherPlayer) {
+Player::Player(const Player &otherPlayer) :
+        name(otherPlayer.name), armies(otherPlayer.armies), playerHand(*new Hand *(otherPlayer.playerHand)), playerOrders(*new OrderList* (otherPlayer.playerOrders)), 
+        reinforcements(otherPlayer.reinforcements), phase(otherPlayer.phase), cardFlag(otherPlayer.cardFlag), strategy(otherPlayer.strategy) {
     for (int i = 0; i < (int)otherPlayer.playerTerritories.size(); i++) {
         playerTerritories.at(i) = *new Territory * (otherPlayer.playerTerritories.at(i));
     }
@@ -19,57 +22,44 @@ Player::Player(const Player &otherPlayer) {
     for (int i = 0; i < (int)otherPlayer.allies.size(); i++) {
         allies.at(i) = *new Player * (otherPlayer.allies.at(i));
     }
-
-    playerHand = *new Hand * (otherPlayer.playerHand);
-    playerOrders = *new OrderList * (otherPlayer.playerOrders);
-    armies = otherPlayer.armies;
-    reinforcements = otherPlayer.reinforcements;
-    phase = otherPlayer.phase;
-    name = otherPlayer.name;
-    cardFlag = otherPlayer.cardFlag;
-    strategy=otherPlayer.strategy;
-
   }
-
-//= operator overload
-Player& Player::operator= (const Player& otherPlayer) { //Delete any values already present and assign new ones
-    for (int i = 0; i < (int)otherPlayer.playerTerritories.size(); i++) {
-        if (playerTerritories.at(i) != NULL) {
-            delete playerTerritories.at(i);
-        }
-        playerTerritories.at(i) = *new Territory*(otherPlayer.playerTerritories.at(i));
-    }
-
-    if (playerHand != NULL) {
-        delete playerHand;
-    }
-    playerHand = *new Hand*(otherPlayer.playerHand);
-
-    if (playerOrders != NULL) {
-        delete playerOrders;
-    }
-    playerOrders= *new OrderList*(otherPlayer.playerOrders);
-
-    armies = otherPlayer.armies;
-    reinforcements = otherPlayer.reinforcements;
-    phase = otherPlayer.phase;
-    name = otherPlayer.name;
-    cardFlag = otherPlayer.cardFlag;
-    strategy = otherPlayer.strategy;
-
-    return *this;
-}
 
 //Destructor
 Player::~Player() {
     for (int i = 0; i < (int)playerTerritories.size(); i++) {
         delete playerTerritories.at(i);
     }
+
+    for (int i = 0; i < (int)allies.size(); i++) {
+        delete allies.at(i);
+    }
     delete playerHand;
     playerHand = nullptr;
     delete playerOrders;
     playerOrders = nullptr;
 }
+
+//Stream operator overload
+ostream& operator<<(ostream& out, const Player& p) {
+    out << "Player id: " << p.name << endl;
+    out << "Armies in reinforcement pool: " << p.armies << endl;
+    out << "Territories: ";
+    for (int i = 0; i < p.playerTerritories.size(); i++) {
+        out << p.playerTerritories.at(i)->name << ' ';
+    }
+    out << endl;
+    out << "Orders: ";
+    list <Order*> ::iterator it;
+    for (it = p.playerOrders->orders.begin(); it != p.playerOrders->orders.end(); ++it) {
+        out << (*it) << " || ";
+    }
+    out << endl;
+    out << "Hand: " << *p.playerHand << endl;
+    return out;
+}
+
+
+//**MUTATORS**
 
 void Player::setTerritories(vector<Territory*> playerTerritories) {
     this->playerTerritories = playerTerritories;
@@ -103,6 +93,44 @@ void Player::addAlly(Player* player) {
     this->allies.push_back(player);
 }
 
+
+//**STRATEGY METHODS**
+
+//Return list of territories to defend
+vector<Territory*> Player::toDefend() {
+    return this->strategy->toDefend();
+}
+
+//Return list of territories to attack
+vector<Territory*> Player::toAttack() {
+    return this->strategy->toAttack();
+}
+
+//Create order and add to orderList
+int Player::issueOrder() {
+    return this->strategy->issueOrder();
+}
+
+
+//**ORDER METHODS**
+
+void Player::deploy(vector<Territory*> toDefend, int units) {
+    cout << "Reinforcements remaining: " << reinforcements << "\n";
+
+    auto it = toDefend.begin();
+    if (deployCounter == toDefend.size()) --deployCounter;
+    advance(it, deployCounter);
+    Territory* currTerr = *it;
+    playerOrders->addOrder(new Deploy(this, currTerr, units)); //Add order to orderList
+
+    reinforcements -= units; //Update reinforcements pool
+    deployCounter++;
+}
+
+
+//**OTHER HELPER METHODS**
+
+//Check if the player is negotiating with any other players
 bool Player::checkForAllies(int playerName) {
     for (auto& i : allies) {
         if (i->name == playerName) {
@@ -112,6 +140,7 @@ bool Player::checkForAllies(int playerName) {
     return false;
 }
 
+//Returns list of territories owned by the enemy and adjacent to the player
 vector<Territory*> Player::adjacentEnemies(string terrID, Map* map) {
     vector<Territory*> adjacentEnemies;
 
@@ -130,43 +159,12 @@ vector<Territory*> Player::adjacentEnemies(string terrID, Map* map) {
     return adjacentEnemies;
 }
 
-//Stream operator overload
-ostream& operator<<(ostream &out, const Player &p) {
-    out << "Player id: " << p.name << endl;
-    out << "Armies in reinforcement pool: " << p.armies << endl;
-    out << "Territories: ";
-    for (int i = 0; i < p.playerTerritories.size(); i++) {
-        out << p.playerTerritories.at(i)->name << ' ';
-    }
-    out << endl;
-    out << "Orders: ";
-    list <Order*> ::iterator it;
-    for (it = p.playerOrders->orders.begin(); it != p.playerOrders->orders.end(); ++it) {
-        out << (*it) << " || ";
-    }
-    out << endl;
-    out << "Hand: " << *p.playerHand << endl;
-    return out;
-}
-
+//Check if player owns given territory
 bool Player::hasTerritory(string terrId) {
     for(auto terr: playerTerritories) {
         if(terr->name == terrId) return true;
     }
     return false;
-}
-
-
-vector<Territory*> Player::toDefend() {
-    return this->strategy->toDefend();
-}
-
-vector<Territory*> Player::toAttack() {
-    return this->strategy->toAttack();
-}
-
-void Player::issueOrder() {
-    this->strategy->issueOrder();
 }
 
 //Old Methods
@@ -343,4 +341,35 @@ int Player::issueOrder(Map* map, vector<string> toAttack, vector<Territory*> toD
         return 1;
     }
 }
+
+
+//= operator overload
+Player& Player::operator= (const Player& otherPlayer) { //Delete any values already present and assign new ones
+    for (int i = 0; i < (int)otherPlayer.playerTerritories.size(); i++) {
+        if (playerTerritories.at(i) != NULL) {
+            delete playerTerritories.at(i);
+        }
+        playerTerritories.at(i) = *new Territory*(otherPlayer.playerTerritories.at(i));
+    }
+
+    if (playerHand != NULL) {
+        delete playerHand;
+    }
+    playerHand = *new Hand*(otherPlayer.playerHand);
+
+    if (playerOrders != NULL) {
+        delete playerOrders;
+    }
+    playerOrders= *new OrderList*(otherPlayer.playerOrders);
+
+    armies = otherPlayer.armies;
+    reinforcements = otherPlayer.reinforcements;
+    phase = otherPlayer.phase;
+    name = otherPlayer.name;
+    cardFlag = otherPlayer.cardFlag;
+    strategy = otherPlayer.strategy;
+
+    return *this;
+}
+
 */

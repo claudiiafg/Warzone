@@ -17,15 +17,14 @@ using namespace std;
 class Player: public Observable {
 
 public:
+
+	//Data members
     int name;
     int armies;
 	int reinforcements;
-	int phase;
-	int deployCounter = 1;
-	int cardFlag = false;
-
-
-    //Required data members
+	int phase; //Keeps track of player phase: 1-
+	int deployCounter = 1; //Keeps track of current territory to deploy to within toDefend list
+	int cardFlag = false; //Keeps track of whether player has received a card this turn
 	PlayerStrategy* strategy;
     vector<Player*> allies;
     vector<Territory *> playerTerritories;
@@ -41,9 +40,6 @@ public:
 
 	//Destructor
 	~Player();
-
-	//Assignment operator overload
-	Player& operator= (const Player& p);
 
 	//Accessors
 	vector<Territory *> getMyTerritories() { return playerTerritories; }
@@ -63,23 +59,22 @@ public:
 	void setCardFlag(bool flag);
 	void setStrategy(PlayerStrategy* newStrategy);
 
-
-	//Old methods
-	//vector<Territory*> toDefend(Map* map);
-	//vector<string> toAttack(Map* map);
-	//int issueOrder(Map* map, vector<string> toAttack, vector<Territory*> toDefend, Player* nextPlayer);
-
 	//Methods
 	vector<Territory*> toDefend();
 	vector<Territory*> toAttack();
-	void issueOrder();
+	int issueOrder();
 	vector<Territory*> adjacentEnemies(string terrID, Map* map);
 	bool checkForAllies(int playerName);
 	bool hasTerritory(string terrId);
+	void deploy(vector<Territory*> toDefend, int units);
 
 	//Stream operator overload
 	 friend ostream& operator << (ostream& out, const Player& p);
 
 
+	//Old methods
+	//vector<Territory*> toDefend(Map* map);
+	//vector<string> toAttack(Map* map);
+	//int issueOrder(Map* map, vector<string> toAttack, vector<Territory*> toDefend, Player* nextPlayer);
 };
 

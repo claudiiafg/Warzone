@@ -384,25 +384,26 @@ void GameEngine::reinforcementPhase() {
 void GameEngine::issueOrdersPhase() {
     cout << "\nIssue Orders Phase\n";
 
+    //Clear lists and reset counters/flags
     defenceLists.clear();
     attackLists.clear();
-
     for (auto player : players) {
         player->deployCounter = 1;
         player->allies.clear();
         player->cardFlag = false;
 
-//        defenceLists.push_back(player->toDefend(map));
-//        attackLists.push_back(player->toAttack(map));
+        defenceLists.push_back(player->toDefend());
+        attackLists.push_back(player->toAttack());
     }
 
     int counter = 0;
+
     while (issuingFlag > 0) {
         counter = 0;
         for (int i = 0; i < players.size(); i++) {
             int j = 0;
             if (i == 0) j = 1;
-//            int issueResult = players[i]->issueOrder(map, attackLists.at(counter), defenceLists.at(counter), players[j]);
+ //           int issueResult = players[i]->issueOrder(map, attackLists.at(counter), defenceLists.at(counter), players[j]);
  //           if (issueResult == 1) issuingFlag--;
             counter++;
         }
