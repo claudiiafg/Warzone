@@ -118,10 +118,8 @@ void Player::deploy(vector<Territory*> toDefend, int units) {
     cout << "Reinforcements remaining: " << reinforcements << "\n";
 
     auto it = toDefend.begin();
-    if (deployCounter == toDefend.size()) --deployCounter;
-    advance(it, deployCounter);
-    Territory* currTerr = *it;
-    playerOrders->addOrder(new Deploy(this, currTerr, units)); //Add order to orderList
+    advance(it, deployCounter); //Move iterator to current territory to be deployed to
+    playerOrders->addOrder(new Deploy(this, *it, units)); //Add order to orderList
 
     reinforcements -= units; //Update reinforcements pool
     deployCounter++;
@@ -166,6 +164,10 @@ bool Player::hasTerritory(string terrId) {
     }
     return false;
 }
+
+
+
+
 
 //Old Methods
 /*

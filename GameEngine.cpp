@@ -341,7 +341,7 @@ void GameEngine::updateMapTerritories() {
         playerDeletedFlag = false;
 
         if ((*player)->getMyTerritories().empty()) {
-            (*player)->phase++; //Send player to phase 5 (conquered)
+            (*player)->phase=5; //Send player to phase 5 (conquered)
             (*player)->Notify();
             players.erase(player); //Remove player from player list
             if (players.size() == 1) return;
@@ -354,7 +354,7 @@ void GameEngine::reinforcementPhase() {
     map->Notify();
 
     for (auto player : players) {
-        player->phase++;
+        player->phase=2;
         player->playerHand->add(new Card());
 
         player->Notify();
@@ -376,7 +376,7 @@ void GameEngine::reinforcementPhase() {
         }
         
         player->reinforcements = reinforcements+bonus;
-        player->phase++;
+        player->phase=3;
         player->Notify();
     }
 }
@@ -385,32 +385,25 @@ void GameEngine::issueOrdersPhase() {
     cout << "\nIssue Orders Phase\n";
 
     //Clear lists and reset counters/flags
-    defenceLists.clear();
-    attackLists.clear();
     for (auto player : players) {
-        player->deployCounter = 1;
+        player->deployCounter = 0;
         player->allies.clear();
         player->cardFlag = false;
 
-        defenceLists.push_back(player->toDefend());
-        attackLists.push_back(player->toAttack());
+        defenceLists.push_back(player->toDefend()); //Create new defence list for each player
+        attackLists.push_back(player->toAttack()); //Create new attack list for each player
     }
 
-    int counter = 0;
-
     while (issuingFlag > 0) {
-        counter = 0;
-        for (int i = 0; i < players.size(); i++) {
-            int j = 0;
-            if (i == 0) j = 1;
- //           int issueResult = players[i]->issueOrder(map, attackLists.at(counter), defenceLists.at(counter), players[j]);
- //           if (issueResult == 1) issuingFlag--;
-            counter++;
+        for (auto player:players) {
+            if (player->phase == 4) continue; //If player is done issuing, skip
+            int issueResult = player->issueOrder();
+            if (issueResult == 1) issuingFlag--; //If issueOrder returned 1 that player has no more orders to issue
         }
     }
 }
 
-void GameEngine::updateTerritoryOwner(int ownerID, string territoryID) {
+void GameEngine::updateTerritoryOwner(int ownerID, string territoryID) { 
     map->getTerritoryById(territoryID)->setOwner(ownerID);
     players[ownerID]->setTerritories(map->getTerritoriesByOwnerID(ownerID));
 }
