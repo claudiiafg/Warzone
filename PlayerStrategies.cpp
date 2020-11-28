@@ -1,4 +1,7 @@
 #include "PlayerStrategies.h"
+#include "Map.h"
+#include <iostream>
+using namespace std;
 
 //PLAYER STRATEGY
 
@@ -7,15 +10,15 @@ int PlayerStrategy::issueOrder() {
 }
 
 vector<Territory*> PlayerStrategy::toAttack() {
-	new vector<Territory*> toAttack = {};
+	vector<Territory*> *toAttack = new vector<Territory*>{};
 
-	return toAttack;
+	return *toAttack;
 }
 
 vector<Territory*> PlayerStrategy::toDefend() {
-	new vector<Territory*> toDefend = {};
+	vector<Territory*> *toDefend = new vector<Territory*>{};
 
-	return toDefend;
+	return *toDefend;
 }
 
 
@@ -26,15 +29,18 @@ int HumanPlayerStrategy::issueOrder() {
 }
 
 vector<Territory*> HumanPlayerStrategy::toAttack() {
-	new vector<Territory*> toAttack = {};
-
-	return toAttack;
+    vector<Territory*> *toAttack = new vector<Territory*>{};
+    cout<< "Choose a territory to attack: \n\n";
+    string target;
+    cin >> target;
+   // toAttack->back(Map.getTerritoryByID(target));
+    return *toAttack;
 }
 
 vector<Territory*> HumanPlayerStrategy::toDefend() {
-	new vector<Territory*> toDefend = {};
+    vector<Territory*> *toDefend = new vector<Territory*>{};
 
-	return toDefend;
+    return *toDefend;
 }
 
 
@@ -45,15 +51,15 @@ int AggressivePlayerStrategy::issueOrder() {
 }
 
 vector<Territory*> AggressivePlayerStrategy::toAttack() {
-	new vector<Territory*> toAttack = {};
+    vector<Territory*> *toAttack = new vector<Territory*>{};
 
-	return toAttack;
+    return *toAttack;
 }
 
 vector<Territory*> AggressivePlayerStrategy::toDefend() {
-	new vector<Territory*> toDefend = {};
+    vector<Territory*> *toDefend = new vector<Territory*>{};
 
-	return toDefend;
+    return *toDefend;
 }
 
 
@@ -64,15 +70,15 @@ int BenevolentPlayerStrategy::issueOrder() {
 }
 
 vector<Territory*> BenevolentPlayerStrategy::toAttack() {
-	new vector<Territory*> toAttack = {};
+    vector<Territory*> *toAttack = new vector<Territory*>{};
 
-	return toAttack;
+    return *toAttack;
 }
 
 vector<Territory*> BenevolentPlayerStrategy::toDefend() {
-	new vector<Territory*> toDefend = {};
+    vector<Territory*> *toDefend = new vector<Territory*>{};
 
-	return toDefend;
+    return *toDefend;
 }
 
 
@@ -83,13 +89,13 @@ int NeutralPlayerStrategy::issueOrder() {
 }
 
 vector<Territory*> NeutralPlayerStrategy::toAttack() {
-	new vector<Territory*> toAttack = {};
+    vector<Territory*> *toAttack = new vector<Territory*>{};
 
-	return toAttack;
+    return *toAttack;
 }
 
 vector<Territory*> NeutralPlayerStrategy::toDefend() {
-	new vector<Territory*> toDefend = {};
+    vector<Territory*> *toDefend = new vector<Territory*>{};
 
-	return toDefend;
+    return *toDefend;
 }
