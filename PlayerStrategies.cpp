@@ -1,5 +1,7 @@
 #include "PlayerStrategies.h"
 #include "Map.h"
+#include <list>
+#include <iterator>
 #include <iostream>
 using namespace std;
 
@@ -26,10 +28,26 @@ void PlayerStrategy::setMap(Map *m){
     map = m;
 }
 
+void PlayerStrategy::setOrderList(OrderList *oList) {
+    list <Order*> ::iterator it;
+    list <Order*> ::iterator it2;
+    it2 = ol->orders.begin();
+    for (it = oList->orders.begin(); it != oList->orders.end(); ++it) {
+        it2 = it;
+        it2++;
+    }
+}
+
 //HUMAN PLAYER STRATEGY
 
 int HumanPlayerStrategy::issueOrder() {
-
+    cout<<"Choose an order: \n\n";
+    /**
+    string order;
+    Order *newOrder = &order;
+    cin >> order;
+    ol->orders.push_back(newOrder);
+    */
 }
 
 vector<Territory*> HumanPlayerStrategy::toAttack() {
@@ -43,7 +61,10 @@ vector<Territory*> HumanPlayerStrategy::toAttack() {
 
 vector<Territory*> HumanPlayerStrategy::toDefend() {
     vector<Territory*> *toDefend = new vector<Territory*>{};
-
+    cout<< "Choose a territory to defend: \n\n";
+    string target;
+    cin >> target;
+    toDefend->push_back(map->getTerritoryById(target));
     return *toDefend;
 }
 
@@ -51,6 +72,7 @@ vector<Territory*> HumanPlayerStrategy::toDefend() {
 //AGGRESSIVE PLAYER STRATEGY
 
 int AggressivePlayerStrategy::issueOrder() {
+
 
 }
 
