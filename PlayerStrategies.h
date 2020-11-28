@@ -8,10 +8,13 @@ using namespace std;
 
 class PlayerStrategy
 {
+protected:
+    static Map *map;
 public:
 	virtual int issueOrder();
 	virtual vector<Territory*> toAttack();
 	virtual vector<Territory*> toDefend();
+	static void setMap(Map *m);
 };
 
 class HumanPlayerStrategy : public PlayerStrategy {

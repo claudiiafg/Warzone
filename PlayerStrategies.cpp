@@ -3,6 +3,7 @@
 #include <iostream>
 using namespace std;
 
+class Map;
 //PLAYER STRATEGY
 
 int PlayerStrategy::issueOrder() {
@@ -21,6 +22,9 @@ vector<Territory*> PlayerStrategy::toDefend() {
 	return *toDefend;
 }
 
+void PlayerStrategy::setMap(Map *m){
+    map = m;
+}
 
 //HUMAN PLAYER STRATEGY
 
@@ -33,7 +37,7 @@ vector<Territory*> HumanPlayerStrategy::toAttack() {
     cout<< "Choose a territory to attack: \n\n";
     string target;
     cin >> target;
-   // toAttack->back(Map.getTerritoryByID(target));
+    toAttack->push_back(map->getTerritoryById(target));
     return *toAttack;
 }
 
