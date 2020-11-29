@@ -451,3 +451,8 @@ Territory& Territory::operator = (const Territory& _file) {
     return *this;
 }
 
+//comparison operator
+bool Territory::operator< (const Territory& otherTerritory) const {
+    return armiesNumber < otherTerritory.armiesNumber;
+}
+

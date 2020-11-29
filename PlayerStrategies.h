@@ -10,19 +10,20 @@
 using namespace std;
 
 class GameEngine;
-
-class OrderList; //This shouldn't have to be here if Orders.h is included, not sure what's going on
+class OrderList;
 
 class PlayerStrategy
 {
 public:
 	Map* map;
     OrderList* ol;
+	Player* player;
 	virtual int issueOrder();
 	virtual vector<Territory*> toAttack();
 	virtual vector<Territory*> toDefend();
 	void setMap(Map *m);
 	void setOrderList(OrderList *oList);
+	void setPlayer(Player* player);
 };
 
 class HumanPlayerStrategy : public PlayerStrategy {

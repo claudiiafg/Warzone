@@ -34,6 +34,10 @@ void PlayerStrategy::setOrderList(OrderList *oList) {
     }
 }
 
+void PlayerStrategy::setPlayer(Player* p) {
+    player = p;
+}
+
 //HUMAN PLAYER STRATEGY
 
 int HumanPlayerStrategy::issueOrder() {
@@ -79,42 +83,40 @@ vector<Territory*> HumanPlayerStrategy::toDefend() {
 }
 
 
-//AGGRESSIVE PLAYER STRATEGY
+//AGGRESSIVE PLAYER STRATEGY: focuses on attack (deploys or advances armies on its strongest country, then always advances to enemy territories until it cannot do so anymore)
 
 int AggressivePlayerStrategy::issueOrder() {
     return 1;
-
 }
 
-vector<Territory*> AggressivePlayerStrategy::toAttack() {
-    vector<Territory*> *toAttack = new vector<Territory*>{};
-
-    return *toAttack;
+vector<Territory*> AggressivePlayerStrategy::toAttack() { //Every adjacent enemy is on the toAttack list
+    vector<Territory*> toAttack = player->adjacentEnemies(map);
+    return toAttack;
 }
 
-vector<Territory*> AggressivePlayerStrategy::toDefend() {
-    vector<Territory*> *toDefend = new vector<Territory*>{};
-
-    return *toDefend;
+vector<Territory*> AggressivePlayerStrategy::toDefend() { //Protects its strongest countries first
+    vector<Territory*> toDefend = player->getMyTerritories();
+    sort(*toDefend.begin(), *toDefend.end()); //Sorts from weakest to strongest territory
+    reverse(*toDefend.begin(), *toDefend.end()); //Reverses vector so strongest is first
+    return toDefend;
 }
 
 
-//BENEVOLENT PLAYER STRATEGY
+//BENEVOLENT PLAYER STRATEGY: focuses on protecting its weak countries(deploys or advances armies on its weakest countries, never advances to enemy territories)
 
 int BenevolentPlayerStrategy::issueOrder() {
     return 1;
 }
 
-vector<Territory*> BenevolentPlayerStrategy::toAttack() {
-    vector<Territory*> *toAttack = new vector<Territory*>{};
-
+vector<Territory*> BenevolentPlayerStrategy::toAttack() { //Benevolent player never attacks
+    vector<Territory*>* toAttack = new vector<Territory*>{};
     return *toAttack;
 }
 
-vector<Territory*> BenevolentPlayerStrategy::toDefend() {
-    vector<Territory*> *toDefend = new vector<Territory*>{};
-
-    return *toDefend;
+vector<Territory*> BenevolentPlayerStrategy::toDefend() { //Benevolent player protects its weakest countries first
+    vector<Territory*> toDefend = player->getMyTerritories();
+    sort(*toDefend.begin(), *toDefend.end());
+    return toDefend;
 }
 
 

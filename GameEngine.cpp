@@ -216,7 +216,7 @@ void GameEngine::selectStrategy() {
         int strategyInt;
         PlayerStrategy* strategy = new NeutralPlayerStrategy();
         cout << "\nSelect strategy for player " << player->name << ":";
-        cout << "\n1: Neutral Player\n2:Human Player\n3:Aggressive Player\n4:Benevolent Player\n";
+        cout << "\n1: Neutral Player\n2: Human Player\n3: Aggressive Player\n4: Benevolent Player\n";
         cin >> strategyInt;
 
         switch (strategyInt) {
@@ -233,6 +233,8 @@ void GameEngine::selectStrategy() {
 
         player->setStrategy(strategy);
         strategy->setMap(map);
+        strategy->setOrderList(player->getMyOrders()); //Will be unnecessary if setPlayer is accepted by Joey
+        strategy->setPlayer(player);
     }
 }
 

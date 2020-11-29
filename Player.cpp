@@ -139,7 +139,7 @@ bool Player::checkForAllies(int playerName) {
 }
 
 //Returns list of territories owned by the enemy and adjacent to the player
-vector<Territory*> Player::adjacentEnemies(string terrID, Map* map) {
+vector<Territory*> Player::adjacentEnemies(Map* map) {
     vector<Territory*> adjacentEnemies;
 
     for (auto& terr : getMyTerritories()) {
@@ -148,7 +148,7 @@ vector<Territory*> Player::adjacentEnemies(string terrID, Map* map) {
                 for (auto& within : getMyTerritories()) {
                     if (within->id != adj) {
                         Territory* toAdd = map->getTerritoryById(adj);
-                        adjacentEnemies.push_back(toAdd);
+                        if (find(adjacentEnemies.begin(), adjacentEnemies.end(), toAdd) == adjacentEnemies.end()) adjacentEnemies.push_back(toAdd); //Check if list already contains territory
                     }
                 }
             }

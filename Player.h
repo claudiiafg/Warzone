@@ -64,7 +64,7 @@ public:
 	vector<Territory*> toDefend();
 	vector<Territory*> toAttack();
 	int issueOrder();
-	vector<Territory*> adjacentEnemies(string terrID, Map* map);
+	vector<Territory*> adjacentEnemies(Map* map);
 	bool checkForAllies(int playerName);
 	bool hasTerritory(string terrId);
 	void deploy(vector<Territory*> toDefend, int units);
