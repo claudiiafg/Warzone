@@ -1,16 +1,12 @@
 #include "PlayerStrategies.h"
-#include "Map.h"
-#include "Orders.h"
-#include <list>
-#include <iterator>
-#include <iostream>
+
 using namespace std;
 
 //PLAYER STRATEGY
 
 int PlayerStrategy::issueOrder() {
-
-}
+    return 1;
+} 
 
 vector<Territory*> PlayerStrategy::toAttack() {
 	vector<Territory*> *toAttack = new vector<Territory*>{};
@@ -60,6 +56,8 @@ int HumanPlayerStrategy::issueOrder() {
 
     ol->orders.push_back(newOrder);
      */
+
+    return 1;
 }
 
 vector<Territory*> HumanPlayerStrategy::toAttack() {
@@ -84,7 +82,7 @@ vector<Territory*> HumanPlayerStrategy::toDefend() {
 //AGGRESSIVE PLAYER STRATEGY
 
 int AggressivePlayerStrategy::issueOrder() {
-
+    return 1;
 
 }
 
@@ -104,7 +102,7 @@ vector<Territory*> AggressivePlayerStrategy::toDefend() {
 //BENEVOLENT PLAYER STRATEGY
 
 int BenevolentPlayerStrategy::issueOrder() {
-
+    return 1;
 }
 
 vector<Territory*> BenevolentPlayerStrategy::toAttack() {
@@ -123,7 +121,7 @@ vector<Territory*> BenevolentPlayerStrategy::toDefend() {
 //NEUTRAL PLAYER STRATEGY
 
 int NeutralPlayerStrategy::issueOrder() {
-
+    return 1;
 }
 
 vector<Territory*> NeutralPlayerStrategy::toAttack() {

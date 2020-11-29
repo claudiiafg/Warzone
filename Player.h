@@ -11,6 +11,7 @@
 class Territory;
 class OrderList;
 class Hand;
+class PlayerStrategy;
 
 using namespace std;
 
