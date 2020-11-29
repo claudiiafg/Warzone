@@ -1,5 +1,9 @@
 #include "PlayerStrategies.h"
-
+#include "Map.h"
+#include "Orders.h"
+#include <list>
+#include <iterator>
+#include <iostream>
 using namespace std;
 
 //PLAYER STRATEGY
@@ -37,13 +41,25 @@ void PlayerStrategy::setOrderList(OrderList *oList) {
 //HUMAN PLAYER STRATEGY
 
 int HumanPlayerStrategy::issueOrder() {
-    cout<<"Choose an order: \n\n";
+    cout<<"Choose an order: \n\n 1. Deploy \n 2. Advance \n 3. Bomb \n 4. Blockade 5. Airlift \n 6. Negotiate \n\n";
+    int orderChoice;
+    cin >> orderChoice;
     /**
-    string order;
-    Order *newOrder = &order;
-    cin >> order;
+    switch(orderChoice){
+        case 1:
+            ol->orders.push_back(new Deploy());
+            break;
+        case 2:
+            ol->orders.push_back(new Advance());
+            break;
+        case 3:
+            ol->orders.push_back(new Bomb());
+            break;
+
+    }
+
     ol->orders.push_back(newOrder);
-    */
+     */
 }
 
 vector<Territory*> HumanPlayerStrategy::toAttack() {
