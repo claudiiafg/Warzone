@@ -114,15 +114,12 @@ int Player::issueOrder() {
 
 //**ORDER METHODS**
 
-void Player::deploy(vector<Territory*> toDefend, int units) {
-    cout << "Reinforcements remaining: " << reinforcements << "\n";
+void Player::deploy(Territory* terr, int units) {
+    if (units > reinforcements) units = reinforcements;
 
-    auto it = toDefend.begin();
-    advance(it, deployCounter); //Move iterator to current territory to be deployed to
-    playerOrders->addOrder(new Deploy(this, *it, units)); //Add order to orderList
+    playerOrders->addOrder(new Deploy(this, terr, units)); //Add order to orderList
 
     reinforcements -= units; //Update reinforcements pool
-    deployCounter++;
 }
 
 
