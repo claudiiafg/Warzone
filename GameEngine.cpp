@@ -56,6 +56,7 @@ void GameEngine::startupPhase() {
     try{
         selectMap();
         selectPlayers();
+        selectStrategy();
         activateObservers();
     } catch(int e) {
         throw e;
@@ -207,6 +208,32 @@ void GameEngine::selectPlayers() {
         }
     }
     cout << endl;
+}
+
+//Select player strategy from 4 options
+void GameEngine::selectStrategy() {
+    for (auto player : players) {
+        int strategyInt;
+        PlayerStrategy* strategy = new NeutralPlayerStrategy();
+        cout << "\nSelect strategy for player " << player->name << ":";
+        cout << "\n1: Neutral Player\n2:Human Player\n3:Aggressive Player\n4:Benevolent Player\n";
+        cin >> strategyInt;
+
+        switch (strategyInt) {
+            case 2:
+            strategy = new HumanPlayerStrategy();
+            break;
+            case 3:
+            strategy = new AggressivePlayerStrategy();
+            break;
+            case 4:
+            strategy = new BenevolentPlayerStrategy();
+            break;
+        }
+
+        player->setStrategy(strategy);
+        strategy->setMap(map);
+    }
 }
 
 void GameEngine::activateObservers() {

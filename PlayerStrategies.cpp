@@ -1,11 +1,7 @@
 #include "PlayerStrategies.h"
-#include "Map.h"
-#include <list>
-#include <iterator>
-#include <iostream>
+
 using namespace std;
 
-class Map;
 //PLAYER STRATEGY
 
 int PlayerStrategy::issueOrder() {

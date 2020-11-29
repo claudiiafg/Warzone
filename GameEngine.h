@@ -42,6 +42,7 @@ public:
     // startup functions
     void startupPhase();
     void selectMap();
+    void selectStrategy();
     void selectPlayers();
     void activateObservers();
     void setMap(Map* mapToSet);

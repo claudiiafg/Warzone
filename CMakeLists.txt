@@ -8,4 +8,3 @@ add_executable(Warzone_Order OrdersDriver.cpp Orders.cpp GameObservers.cpp Playe
 add_executable(Warzone_Card CardDriver.cpp Cards.cpp GameObservers.cpp)
 add_executable(Warzone_GameEngine GameEngine.cpp MapLoader.cpp Map.cpp Player.cpp Orders.cpp Cards.cpp GameObservers.cpp)
 add_executable(Warzone_GameObservers GameObserverDriver.cpp GameObservers.cpp MapLoader.cpp Map.cpp Player.cpp Orders.cpp Cards.cpp)
-add_executable(Warzone_PlayerStrategies.cpp Player.cpp Map.cpp Orders.cpp MapLoader.cpp Cards.cpp)
