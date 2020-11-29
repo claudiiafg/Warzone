@@ -26,6 +26,7 @@ public:
 	int phase; //Keeps track of player phase: 1-
 	int deployCounter = 0; //Keeps track of current territory to deploy to within toDefend list
 	int cardFlag = false; //Keeps track of whether player has received a card this turn
+	int orderPhase = 0; //Keeps track of current order phase: Deploy=1, Airlift=2, Blockade=3, Others=4, Complete=5
 	PlayerStrategy* strategy;
     vector<Player*> allies;
     vector<Territory *> playerTerritories;
