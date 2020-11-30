@@ -23,9 +23,9 @@ public:
     int name;
     int armies;
 	int reinforcements;
-	int phase; //Keeps track of player phase: 1-
-	int deployCounter = 0; //Keeps track of current territory to deploy to within toDefend list
+	int phase; //Keeps track of player phase || Startup=1, Reinforcement=2, Issuing=3, Execute=4, Conquered=5
 	int cardFlag = false; //Keeps track of whether player has received a card this turn
+	int orderPhase = 0; //Keeps track of current order phase || Issuing: 1=Deploy, 2=Others, 3=Complete || Execution: Deploy=1, Airlift=2, Blockade=3, Others=4, Complete=5
 	PlayerStrategy* strategy;
     vector<Player*> allies;
     vector<Territory *> playerTerritories;
@@ -67,7 +67,7 @@ public:
 	vector<Territory*> adjacentEnemies(Map* map);
 	bool checkForAllies(int playerName);
 	bool hasTerritory(string terrId);
-	void deploy(vector<Territory*> toDefend, int units);
+	void deploy(Territory* terr, int units);
 
 	//Stream operator overload
 	 friend ostream& operator << (ostream& out, const Player& p);

@@ -8,6 +8,10 @@
 #include "Player.h"
 #include "Orders.h"
 
+
+
+//**BASE METHODS**
+
 // default constructor
 GameEngine::GameEngine() = default;
 
@@ -50,6 +54,10 @@ GameEngine &GameEngine::operator=(const GameEngine &_game) {
     players = _game.players;
     return *this;
 }
+
+
+
+//**STARTUP METHODS**
 
 // set map to play
 void GameEngine::startupPhase() {
@@ -318,6 +326,10 @@ void GameEngine::activateObservers() {
     cout << endl;
 }
 
+
+
+//**GAMEPLAY METHODS**
+
 void GameEngine::mainGameLoop() {
     int roundCounter = 1;
     int counter = 0;
@@ -330,10 +342,6 @@ void GameEngine::mainGameLoop() {
             cout << "There was a problem with the game. Goodbye.";
             //return;
         }
-
-        deployFlag = players.size();
-        issuingFlag = players.size();
-        executeFlag = players.size();
 
         updateMapTerritories();
         if(players.size() == 1) {
@@ -349,34 +357,6 @@ void GameEngine::mainGameLoop() {
 
     Player* last = players.front();
     cout << "\nOnly " << last->name << " remains - Congratulations you are the winner!" << endl;
-}
-
-void GameEngine::updateMapTerritories() {
-    for (auto player : players) {
-        vector<Territory *> newList = {};
-        for (auto terr : map->territories) {
-            if (terr->getOwnerID() == player->name) {
-                newList.push_back(terr);
-            }
-        }
-        player->setTerritories(newList);
-    }
-
-    for(auto player = players.begin(); player != players.end(); ++player) {
-        if (playerDeletedFlag) {
-            player--; //Wind iterator back to account for left shift from deletion
-        }
-
-        playerDeletedFlag = false;
-
-        if ((*player)->getMyTerritories().empty()) {
-            (*player)->phase=5; //Send player to phase 5 (conquered)
-            (*player)->Notify();
-            players.erase(player); //Remove player from player list
-            if (players.size() == 1) return;
-            playerDeletedFlag = true;
-        }
-    }
 }
 
 void GameEngine::reinforcementPhase() {
@@ -418,35 +398,30 @@ void GameEngine::issueOrdersPhase() {
         player->deployCounter = 0;
         player->allies.clear();
         player->cardFlag = false;
-
-        defenceLists.push_back(player->toDefend()); //Create new defence list for each player
-        attackLists.push_back(player->toAttack()); //Create new attack list for each player
+        player->orderPhase = 1;
     }
 
-    while (issuingFlag > 0) {
+    while (orderPhase < 3) { //Issue orders until all players are done
         for (auto player:players) {
-            if (player->phase == 4) continue; //If player is done issuing, skip
-            int issueResult = player->issueOrder();
-            if (issueResult == 1) issuingFlag--; //If issueOrder returned 1 that player has no more orders to issue
+            if (player->orderPhase == orderPhase) { //Only issue orders if player is still in the current order phase
+                player->issueOrder();
+            }
         }
+        updateOrderPhase();
     }
-}
-
-void GameEngine::updateTerritoryOwner(int ownerID, string territoryID) { 
-    map->getTerritoryById(territoryID)->setOwner(ownerID);
-    players[ownerID]->setTerritories(map->getTerritoriesByOwnerID(ownerID));
 }
 
 void GameEngine::executeOrdersPhase() {
     map->Notify();
 
-    while (executeFlag > 0) {
-        if (players.size() <= 1) break;
+    while (orderPhase < 5) { //Execute orders until all players are done
+        if (players.size() <= 1) break; //If at any point only one player remains, exit loop
 
         for(auto player = players.begin(); player != players.end(); ++player) {
 
             //If player has no remaining territories, remove from game
             vector<Territory*> playerTerritories = (*player)->getMyTerritories();
+
             if (playerTerritories.empty()) {
                 (*player)->phase++; //Send player to phase 5 (conquered)
                 (*player)->Notify();
@@ -457,26 +432,77 @@ void GameEngine::executeOrdersPhase() {
 
             //If player has no more orders, move to next player
             if ((*player)->playerOrders->isEmpty()) {
-                executeFlag--;
-                break;
+                (*player)->orderPhase=5;
+                continue;
             }
 
-            //Only execute orders if still in deploy phase or if all players are done deploying
-            if (deployFlag < 1 || (deployFlag != 0 && (*player)->playerOrders->containsDeployOrders())) {
+            //Only execute orders if player is still in the current order phase
+            if ((*player)->orderPhase==orderPhase) {
 
                 //Move highest priority orders to front of list
                 (*player)->playerOrders->sortOrderList();
                 Order* toExecute = (*player)->playerOrders->front();
+                if (toExecute->priority = !orderPhase) {
+                    (*player)->orderPhase++;
+                    continue; //If first order is no longer within current priority, increment player order phase and skip
+                }
 
                 //Execute highest priority order
-                if (toExecute && toExecute->priority == 0) toExecute->execute();
+                toExecute->execute();
                 (*player)->playerOrders->removeOrder(toExecute);
-                if (!((*player)->playerOrders->containsDeployOrders())) deployFlag--;
-                if ((*player)->playerOrders->isEmpty()) executeFlag--;
+                if ((*player)->playerOrders->isEmpty()) (*player)->orderPhase=5; //If no more orders to execute, player is marked as complete
             }
+        }
+        updateOrderPhase();
+    }
+}
+
+
+
+//**UPDATE METHODS**
+
+void GameEngine::updateTerritoryOwner(int ownerID, string territoryID) {
+    map->getTerritoryById(territoryID)->setOwner(ownerID);
+    players[ownerID]->setTerritories(map->getTerritoriesByOwnerID(ownerID));
+}
+
+void GameEngine::updateOrderPhase() {
+    for (auto player : players) {
+        orderPhase += player->orderPhase;
+    }
+    orderPhase = orderPhase / players.size();
+}
+
+void GameEngine::updateMapTerritories() {
+    for (auto player : players) {
+        vector<Territory*> newList = {};
+        for (auto terr : map->territories) {
+            if (terr->getOwnerID() == player->name) {
+                newList.push_back(terr);
+            }
+        }
+        player->setTerritories(newList);
+    }
+
+    for (auto player = players.begin(); player != players.end(); ++player) {
+        if (playerDeletedFlag) {
+            player--; //Wind iterator back to account for left shift from deletion
+        }
+
+        playerDeletedFlag = false;
+
+        if ((*player)->getMyTerritories().empty()) {
+            (*player)->phase = 5; //Send player to phase 5 (conquered)
+            (*player)->Notify();
+            players.erase(player); //Remove player from player list
+            if (players.size() == 1) return;
+            playerDeletedFlag = true;
         }
     }
 }
+
+
+//**DRIVER**
 
 int main() {
     try{
