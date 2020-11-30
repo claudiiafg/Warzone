@@ -155,7 +155,7 @@ int HumanPlayerStrategy::issueOrder() {
              cout << "Enter the ID of the player you want to negotiate with: ";
              int negotiateID;
              cin >> negotiateID;
-             ol->orders.push_back(new Negotiate(player, players->getPlayerByID(negotiateID)));
+             ol->orders.push_back(new Negotiate(player, negotiateID));
          }
      }
     return 1;
