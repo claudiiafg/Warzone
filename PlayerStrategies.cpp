@@ -56,7 +56,7 @@ int HumanPlayerStrategy::issueOrder() {
          cin>> unitNum;
          ol->orders.push_back(new Deploy(player, terrChoice, unitNum));
      }
-    else if(player->phase = 2) {
+    else if(player->phase == 2) {
          cout
                  << "Choose an order by number: \n\n 1. Advance \n 2. Bomb \n 3. Blockade \n 4. Airlift \n 5. Negotiate \n\n";
 
@@ -199,7 +199,7 @@ int BenevolentPlayerStrategy::issueOrder() {
 }
 
 vector<Territory*> BenevolentPlayerStrategy::toAttack() { //Benevolent player never attacks
-    vector<Territory*>* toAttack = new vector<Territory*>{};
+    static vector<Territory*>* toAttack = new vector<Territory*>{};
     return *toAttack;
 }
 

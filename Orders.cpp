@@ -632,7 +632,7 @@ void Negotiate::execute() {
 
     if (validate()) {
 
-        allies.insert(playerID, otherPlayerID);
+        allies.insert({ playerID, otherPlayerID });
 
         cout << "Player " << playerID << " and Player " << otherPlayerID << " are now negotiating" << ".\n";
     }
