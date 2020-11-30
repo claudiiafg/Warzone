@@ -36,7 +36,7 @@ public:
 
 	//Constructors
 	Player();
-	Player(int name, int armies, vector<Territory*> playerTerritories, Hand* playerHand, OrderList* playerOrders, vector<Player*> allies, PlayerStrategy* strategy);
+	Player(int name, int armies, vector<Territory*> playerTerritories, Hand* playerHand, OrderList* playerOrders, PlayerStrategy* strategy);
 	Player(const Player& otherPlayer);
 
 	//Destructor
@@ -56,7 +56,6 @@ public:
 	void setOrders(OrderList* playerOrders);
 	void setReinforcements(int reinforcements);
 	void setPhase(int phase);
-	void addAlly(Player* player);
 	void setCardFlag(bool flag);
 	void setStrategy(PlayerStrategy* newStrategy);
 
@@ -65,7 +64,6 @@ public:
 	vector<Territory*> toAttack();
 	int issueOrder();
 	vector<Territory*> adjacentEnemies(Map* map);
-	bool checkForAllies(int playerName);
 	bool hasTerritory(string terrId);
 	void deploy(Territory* terr, int units);
 

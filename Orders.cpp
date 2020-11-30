@@ -27,6 +27,13 @@ int Order::getPriority() {
     return priority;
 }
 
+//Check if players are negotiating
+bool Order::checkForAllies(int player1, int player2) {
+    if (allies.count(player1) > 0) return (allies.at(player1) == player2);
+    else if (allies.count(player2) > 0) return (allies.at(player2) == player1);
+    else return false;
+}
+
 //Less than operator for priority comparison
 bool Order::operator <(const Order& playerObj) const {
     return priority < playerObj.priority;
@@ -40,6 +47,7 @@ bool Order::validate() {
 //Executes an order
 void Order::execute() {
 }
+
 
 
 ostream &Order::operator<<(ostream &out) const {
@@ -191,7 +199,7 @@ bool Advance::validate() {
         validMove = true;
     }
     //check if negotiating
-    if (!(player->checkForAllies(attTerritory->getOwnerID()))) {
+    if (!(checkForAllies(playerID,attTerritory->getOwnerID()))) {
         validOpponent = true;
     }
 
@@ -493,7 +501,7 @@ bool Airlift::validate() {
         validUnitsToMoveOrAtt = true;
     }
     //check if negotiating
-    if (!player->checkForAllies(attTerritory->getOwnerID())) {
+    if (!checkForAllies(playerID,attTerritory->getOwnerID())) {
         validOpponent = true;
     }
 
@@ -576,11 +584,10 @@ ostream& operator<<(std::ostream& out, const Airlift& b)
 /////////////////////////////////////////////////////////////////////////////
 
 //Overloaded constructor
-Negotiate::Negotiate(Player* pl, Player* otherPl) {
+Negotiate::Negotiate(Player* pl, int otherpID) {
     playerID = pl->name;
-    otherPlayerID = otherPl->name;
+    otherPlayerID = otherpID;
     player = pl;
-    otherPlayer = otherPl;
 }
 
 //Copy constructor
@@ -588,7 +595,6 @@ Negotiate::Negotiate(const Negotiate& b) {
     playerID = b.playerID;
     otherPlayerID = b.otherPlayerID;
     player = b.player;
-    otherPlayer = b.otherPlayer;
 }
 
 //Assignment operator
@@ -596,7 +602,6 @@ Negotiate& Negotiate::operator = (const Negotiate& b) {
     playerID = b.playerID;
     otherPlayerID = b.otherPlayerID;
     player = b.player;
-    otherPlayer = b.otherPlayer;
     return *this;
 }
 
@@ -627,8 +632,7 @@ void Negotiate::execute() {
 
     if (validate()) {
 
-        player->addAlly(otherPlayer);
-        otherPlayer->addAlly(player);
+        allies.insert(playerID, otherPlayerID);
 
         cout << "Player " << playerID << " and Player " << otherPlayerID << " are now negotiating" << ".\n";
     }

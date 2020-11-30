@@ -98,7 +98,7 @@ void GameEngine::createPlayers(int amount) {
         OrderList* playerOrders = new OrderList();
 
         //create player
-        players.push_back(new Player(PLAYER_ID, initialArmies, playerTerr, playerHand, playerOrders, {}, new NeutralPlayerStrategy));
+        players.push_back(new Player(PLAYER_ID, initialArmies, playerTerr, playerHand, playerOrders, new NeutralPlayerStrategy));
         //Attach observer
         players.back()->Attach(new PhaseObserver (players.back()));
     }
@@ -395,7 +395,6 @@ void GameEngine::issueOrdersPhase() {
 
     //Clear lists and reset counters/flags
     for (auto player : players) {
-        player->deployCounter = 0;
         player->allies.clear();
         player->cardFlag = false;
         player->orderPhase = 1;

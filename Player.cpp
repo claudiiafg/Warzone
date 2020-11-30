@@ -3,12 +3,12 @@
 //**REQUIRED METHODS**
 
 //Default constructor
-Player::Player() : name(rand()%10), armies(0), reinforcements(0), phase(1), cardFlag(false), allies(), playerTerritories(), playerHand(nullptr), playerOrders(nullptr), strategy() {
+Player::Player() : name(rand()%10), armies(0), reinforcements(0), phase(1), cardFlag(false),  playerTerritories(), playerHand(nullptr), playerOrders(nullptr), strategy() {
 }
 
 //Parametrized constructor
-Player::Player(int name, int armies, vector<Territory*> playerTerritories, Hand* playerHand, OrderList* playerOrders, vector<Player*> allies, PlayerStrategy* strategy) :
-        name(name), armies(armies), playerTerritories(playerTerritories), playerHand(playerHand), playerOrders(playerOrders), reinforcements(0), phase(1), cardFlag(false), allies(allies), strategy(strategy) {
+Player::Player(int name, int armies, vector<Territory*> playerTerritories, Hand* playerHand, OrderList* playerOrders, PlayerStrategy* strat) :
+        name(name), armies(armies), playerTerritories(playerTerritories), playerHand(playerHand), playerOrders(playerOrders), reinforcements(0), phase(1), cardFlag(false), strategy(strat) {
 }
 
 //Copy constructor
@@ -18,20 +18,12 @@ Player::Player(const Player &otherPlayer) :
     for (int i = 0; i < (int)otherPlayer.playerTerritories.size(); i++) {
         playerTerritories.at(i) = *new Territory * (otherPlayer.playerTerritories.at(i));
     }
-
-    for (int i = 0; i < (int)otherPlayer.allies.size(); i++) {
-        allies.at(i) = *new Player * (otherPlayer.allies.at(i));
-    }
   }
 
 //Destructor
 Player::~Player() {
     for (int i = 0; i < (int)playerTerritories.size(); i++) {
         delete playerTerritories.at(i);
-    }
-
-    for (int i = 0; i < (int)allies.size(); i++) {
-        delete allies.at(i);
     }
     delete playerHand;
     playerHand = nullptr;
@@ -89,10 +81,6 @@ void Player::setStrategy(PlayerStrategy* newStrategy) {
     this->strategy = newStrategy;
 }
 
-void Player::addAlly(Player* player) {
-    this->allies.push_back(player);
-}
-
 
 //**STRATEGY METHODS**
 
@@ -120,19 +108,6 @@ void Player::deploy(Territory* terr, int units) {
     playerOrders->addOrder(new Deploy(this, terr, units)); //Add order to orderList
 
     reinforcements -= units; //Update reinforcements pool
-}
-
-
-//**OTHER HELPER METHODS**
-
-//Check if the player is negotiating with any other players
-bool Player::checkForAllies(int playerName) {
-    for (auto& i : allies) {
-        if (i->name == playerName) {
-            return true;
-        }
-    }
-    return false;
 }
 
 //Returns list of territories owned by the enemy and adjacent to the player
