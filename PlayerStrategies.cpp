@@ -41,14 +41,7 @@ void PlayerStrategy::setPlayer(Player* p) {
 //HUMAN PLAYER STRATEGY
 
 int HumanPlayerStrategy::issueOrder() {
-    /**
-     * Deploy(Player* pl, Territory* terr, int theUnits)
-     * Advance(Player* pl, Territory* terr, Territory* attTerr, int unitsAttackingWith)
-     * Bomb(Player* pl, Territory* terr, Territory* attTerr)
-     * Blockade(Player* pl, Territory* terr)
-     * Airlift(Player* pl, Territory* terr, Territory* attTerr, int unitsAttackingWith)
-     * Negotiate(Player* pl, Player* otherPl)
-     */
+
      if(player->phase = 1) {
          cout << "Enter the ID of the territory you want to deploy your units to: ";
          for(int i = 0; i < player->playerTerritories.size(); i++){
@@ -155,7 +148,7 @@ int HumanPlayerStrategy::issueOrder() {
              cout << "Enter the ID of the player you want to negotiate with: ";
              int negotiateID;
              cin >> negotiateID;
-             ol->orders.push_back(new Negotiate(player, players->getPlayerByID(negotiateID)));
+             //ol->orders.push_back(new Negotiate(player, ));
          }
      }
     return 1;

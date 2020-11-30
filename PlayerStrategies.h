@@ -11,14 +11,12 @@ using namespace std;
 
 class GameEngine;
 class OrderList;
-class Players;
 
 class PlayerStrategy
 {
 protected:
     static Map* map;
     static OrderList* ol;
-    static Players* players;
 public:
 	Player* player;
 	virtual int issueOrder();
