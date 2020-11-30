@@ -41,26 +41,50 @@ void PlayerStrategy::setPlayer(Player* p) {
 //HUMAN PLAYER STRATEGY
 
 int HumanPlayerStrategy::issueOrder() {
-    cout<<"Choose an order: \n\n 1. Deploy \n 2. Advance \n 3. Bomb \n 4. Blockade 5. Airlift \n 6. Negotiate \n\n";
-    int orderChoice;
-    cin >> orderChoice;
     /**
-    switch(orderChoice){
-        case 1:
-            ol->orders.push_back(new Deploy());
-            break;
-        case 2:
-            ol->orders.push_back(new Advance());
-            break;
-        case 3:
-            ol->orders.push_back(new Bomb());
-            break;
-
-    }
-
-    ol->orders.push_back(newOrder);
+     * Deploy(Player* pl, Territory* terr, int theUnits)
+     * Advance(Player* pl, Territory* terr, Territory* attTerr, int unitsAttackingWith)
+     * Bomb(Player* pl, Territory* terr, Territory* attTerr)
+     * Blockade(Player* pl, Territory* terr)
+     * Airlift(Player* pl, Territory* terr, Territory* attTerr, int unitsAttackingWith)
+     * Negotiate(Player* pl, Player* otherPl)
      */
+     if(player->phase = 1) {
+         cout << "Enter the ID of the territory you want to deploy your units to: ";
+         for(int i = 0; i < player->playerTerritories.size(); i++){
+             cout << player->playerTerritories.at(i)->id << ": " << player->playerTerritories.at(i)->name ;
+         }
+         string terrID;
+         cin >> terrID;
+         Territory *terrChoice = map->getTerritoryById(terrID);
+         cout << "Enter the number of units you want to deploy: ";
 
+         int unitNum;
+         cin>> unitNum;
+         ol->orders.push_back(new Deploy(player, terrChoice, unitNum));
+     }
+    else if(player->phase = 2) {
+         cout
+                 << "Choose an order by number: \n\n 1. Advance \n 2. Bomb \n 3. Blockade 4. \n Airlift \n 5. Negotiate \n\n";
+
+         int menuChoice;
+         cin >> menuChoice;
+         //Advance(Player* pl, Territory* terr, Territory* attTerr, int unitsAttackingWith)
+         if(menuChoice == 1){
+             cout << "Choose a territory to attack from by ID: ";
+             for(int i = 0; i < player->playerTerritories.size(); i++){
+                 cout << player->playerTerritories.at(i)->id << ": " << player->playerTerritories.at(i)->name ;
+             }
+             
+             string terrID;
+             cin >> terrID;
+             Territory *terrChoice = map->getTerritoryById(terrID);
+
+         }
+
+
+
+     }
     return 1;
 }
 
