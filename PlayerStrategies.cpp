@@ -65,25 +65,98 @@ int HumanPlayerStrategy::issueOrder() {
      }
     else if(player->phase = 2) {
          cout
-                 << "Choose an order by number: \n\n 1. Advance \n 2. Bomb \n 3. Blockade 4. \n Airlift \n 5. Negotiate \n\n";
+                 << "Choose an order by number: \n\n 1. Advance \n 2. Bomb \n 3. Blockade \n 4. Airlift \n 5. Negotiate \n\n";
 
          int menuChoice;
          cin >> menuChoice;
-         //Advance(Player* pl, Territory* terr, Territory* attTerr, int unitsAttackingWith)
          if(menuChoice == 1){
              cout << "Choose a territory to attack from by ID: ";
              for(int i = 0; i < player->playerTerritories.size(); i++){
                  cout << player->playerTerritories.at(i)->id << ": " << player->playerTerritories.at(i)->name ;
              }
              
-             string terrID;
-             cin >> terrID;
-             Territory *terrChoice = map->getTerritoryById(terrID);
+             string attackFromID;
+             cin >> attackFromID;
+             Territory *terrChoice = map->getTerritoryById(attackFromID);
 
+             cout << "Choose a territory to attack by ID: ";
+             for(int i = 0; i < map->getAdjacentTerritories(terrChoice->id).size(); i++){
+                 cout << map->getAdjacentTerritories(terrChoice->id).at(i)->id << " " << map->getAdjacentTerritories(terrChoice->id).at(i)->name;
+             }
+             string attackID;
+             cin >> attackID;
+             Territory *attackChoice = map->getTerritoryById(attackID);
+
+             cout << "Enter the number of units you want to deploy: ";
+             int unitNum;
+             cin>> unitNum;
+             ol->orders.push_back(new Advance(player, terrChoice, attackChoice, unitNum));
          }
 
+         if(menuChoice == 2){
+             //Bomb(Player* pl, Territory* terr, Territory* attTerr)
+             cout << "Choose a territory to bomb from by ID: ";
+             for(int i = 0; i < player->playerTerritories.size(); i++){
+                 cout << player->playerTerritories.at(i)->id << ": " << player->playerTerritories.at(i)->name ;
+             }
 
+             string attackFromID;
+             cin >> attackFromID;
+             Territory *terrChoice = map->getTerritoryById(attackFromID);
 
+             cout << "Choose a territory to bomb by ID: ";
+             for(int i = 0; i < map->getTerritories().size(); i++){
+                 cout << map->getTerritories().at(i)->id << " " << map->getTerritories().at(i)->name;
+             }
+             string attackID;
+             cin >> attackID;
+             Territory *attackChoice = map->getTerritoryById(attackID);
+             ol->orders.push_back(new Bomb(player, terrChoice, attackChoice));
+         }
+
+         if(menuChoice == 3){
+             cout << "Choose a territory to blockade by ID: ";
+             for(int i = 0; i < player->playerTerritories.size(); i++){
+                 cout << player->playerTerritories.at(i)->id << ": " << player->playerTerritories.at(i)->name ;
+             }
+
+             string blockadeID;
+             cin >> blockadeID;
+             Territory *terrChoice = map->getTerritoryById(blockadeID);
+             ol->orders.push_back(new Blockade(player, terrChoice));
+         }
+
+         if(menuChoice == 4){
+             //Airlift(Player* pl, Territory* terr, Territory* attTerr, int unitsAttackingWith)
+             cout << "Choose a territory to airlift from by ID: ";
+             for(int i = 0; i < player->playerTerritories.size(); i++){
+                 cout << player->playerTerritories.at(i)->id << ": " << player->playerTerritories.at(i)->name ;
+             }
+
+             string attackFromID;
+             cin >> attackFromID;
+             Territory *terrChoice = map->getTerritoryById(attackFromID);
+
+             cout << "Choose a territory to airlift to by ID: ";
+             for(int i = 0; i < map->getTerritories().size(); i++){
+                 cout << map->getTerritories().at(i)->id << " " << map->getTerritories().at(i)->name;
+             }
+             string attackID;
+             cin >> attackID;
+             Territory *attackChoice = map->getTerritoryById(attackID);
+
+             cout << "Enter the number of units you want to airlift: ";
+             int unitNum;
+             cin>> unitNum;
+             ol->orders.push_back(new Airlift(player, terrChoice, attackChoice, unitNum));
+         }
+
+         if(menuChoice == 5){
+             cout << "Enter the ID of the player you want to negotiate with: ";
+             int negotiateID;
+             cin >> negotiateID;
+             ol->orders.push_back(new Negotiate(player, players->getPlayerByID(negotiateID)));
+         }
      }
     return 1;
 }

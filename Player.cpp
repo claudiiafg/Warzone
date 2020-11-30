@@ -163,8 +163,30 @@ bool Player::hasTerritory(string terrId) {
 }
 
 
+/**
+ * public:
+        Players();
+        void add(Player *p);
+        Player getPlayerByID(string id);
+        Player removeByID(string ID);
+    private:
+        vector<Player*> playerHolder;
+ */
 
+    Players::Players(){
 
+    }
+
+    void Players::add(Player *p){
+        playerHolder.push_back(p);
+    }
+
+    Player* Players::getPlayerByID(int id){
+        for(int i = 0; i < playerHolder.size(); i++){
+            if(playerHolder.at(i)->name == id)
+                return playerHolder.at(i);
+        }
+    }
 
 //Old Methods
 /*

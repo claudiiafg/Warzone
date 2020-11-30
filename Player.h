@@ -79,3 +79,12 @@ public:
 	//int issueOrder(Map* map, vector<string> toAttack, vector<Territory*> toDefend, Player* nextPlayer);
 };
 
+class Players{
+    public:
+        Players();
+        void add(Player *p);
+        Player* getPlayerByID(int id);
+    private:
+        vector<Player*> playerHolder;
+};
+
