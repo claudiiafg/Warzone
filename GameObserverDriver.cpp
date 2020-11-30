@@ -8,7 +8,7 @@
 using namespace std;
 int main(){
 
-    //Demonstrating the phase observer
+   /* //Demonstrating the phase observer
     Hand *h1 = new Hand();
     OrderList *ol1 = new OrderList;
     vector<Territory*> vt1;
@@ -80,5 +80,5 @@ int main(){
     }
     m->Notify();
 
-    return 0;
+    return 0;*/
 }
