@@ -2,13 +2,14 @@
 // Created by Claudia on 2020-10-05.
 //
 
-#pragma once
 
+#pragma once
+#define _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING
 #include <fstream>
 #include <vector>
 #include <string>
 #include <iostream>
-#include <filesystem>
+#include <experimental/filesystem>
 
 using namespace std;
 

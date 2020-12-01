@@ -19,7 +19,7 @@ class Player;
 class Territory;
 
 using namespace std;
-
+ 
 class GameEngine{
 public:
     // constructor
@@ -32,23 +32,22 @@ public:
     //attributes
     Map* map;
     vector<Player*> players;
-    int deployFlag=0;
-    int issuingFlag=0;
-    int executeFlag=0;
+    int orderPhase = 1; //Keeps track of current order phase || Issuing: 1=Deploy, 2=Others, 3=Complete || Execution: Deploy=1, Airlift=2, Blockade=3, Others=4, Complete=5
     bool playerDeletedFlag = false;
-    vector<vector<Territory*>> defenceLists = {};
-    vector<vector<string>> attackLists = {};
 
     // startup functions
     void startupPhase();
     void selectMap();
+    void selectStrategy();
     void selectPlayers();
     void activateObservers();
     void setMap(Map* mapToSet);
     void createPlayers(int amount);
 
+    //update functions
     void updateTerritoryOwner(int ownerID, string territoryID);
     void updateMapTerritories();
+    void updateOrderPhase();
 
     //main game functions
     void mainGameLoop();

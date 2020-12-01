@@ -5,18 +5,20 @@
 #include <istream>
 #include <string>
 #include <iostream>
+#include <map>
 
-#include "Player.h"
 #include "Cards.h"
-#include "Player.h"
 #include "Map.h"
-using namespace std;
 
+class Player;
+using namespace std;
 
 class Order {
 
 public:
 	int priority;
+	map<int, int> allies{};
+
 	//Default Constructor
 	Order();
 
@@ -40,6 +42,8 @@ public:
 
     virtual ostream& operator<< (ostream& out) const;
 
+	//Check if players are negotiating
+	bool checkForAllies(int player1, int player2);
 };
 
 class Deploy : public Order {
@@ -228,7 +232,7 @@ class Negotiate : public Order {
 
 public:
 	//Overloaded constructor
-	Negotiate(Player* player, Player* otherPlayer);
+	Negotiate(Player* pl, int otherpID);
 
 	//Copy constructor
 	Negotiate(const Negotiate& b);
