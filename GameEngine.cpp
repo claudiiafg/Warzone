@@ -241,7 +241,6 @@ void GameEngine::selectStrategy() {
 
         player->setStrategy(strategy);
         strategy->setMap(map);
-        strategy->setOrderList(player->getMyOrders()); //Will be unnecessary if setPlayer is accepted by Joey
         strategy->setPlayer(player);
     }
 }
@@ -338,11 +337,6 @@ void GameEngine::mainGameLoop() {
     while (players.size() > 1) {
         cout << "\n\n==================================\nROUND " << roundCounter << "\n==================================\n\n";
 
-        if(roundCounter > 7) {
-            cout << "There was a problem with the game. Goodbye.";
-            //return;
-        }
-
         updateMapTerritories();
         if(players.size() == 1) {
             break;
@@ -413,6 +407,13 @@ void GameEngine::issueOrdersPhase() {
 void GameEngine::executeOrdersPhase() {
     map->Notify();
 
+    //Reset order phase
+    for (auto player : players) {
+        player->orderPhase = 1;
+    }
+    
+    updateOrderPhase();
+
     while (orderPhase < 5) { //Execute orders until all players are done
         if (players.size() <= 1) break; //If at any point only one player remains, exit loop
 
@@ -466,6 +467,8 @@ void GameEngine::updateTerritoryOwner(int ownerID, string territoryID) {
 }
 
 void GameEngine::updateOrderPhase() {
+    orderPhase = 0;
+
     for (auto player : players) {
         orderPhase += player->orderPhase;
     }

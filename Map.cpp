@@ -230,6 +230,21 @@ vector<Territory*> Map::getAdjacentTerritories(string territoryID) {
     return tempList;
 }
 
+// get all enemy Territories adjacent to a specific territory
+vector<Territory*> Map::getAdjacentEnemyTerritories(string territoryID, Player* p) {
+    vector<Territory*> enemyList;
+    for (auto& territorie : territories) {
+        if (territorie->id == territoryID) {
+            vector<string> nodesStrings = territorie->getAdjacentNodes();
+            for (auto& nodesString : nodesStrings) {
+                Territory* t = getTerritoryById(reinterpret_cast<basic_string<char>&&>(nodesString));
+                if (t->getOwnerID()!=p->name) enemyList.push_back(t);
+            }
+        }
+    }
+    return enemyList;
+}
+
 // stream insertion operator
 ostream &operator<<(ostream &os, const Map &n) {
     os << "Map " << n.name ;

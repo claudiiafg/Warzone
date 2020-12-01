@@ -4,4 +4,5 @@ project(Warzone)
 set(CMAKE_CXX_STANDARD 14)
 
 add_executable(Warzone_MapLoader MapLoaderDriver.cpp MapLoader.cpp Map.cpp GameObservers.cpp Player.cpp Orders.cpp Cards.cpp)
+add_executable(Warzone_GameEngine GameEngine.cpp PlayerStrategies.cpp MapLoader.cpp Map.cpp GameObservers.cpp Player.cpp Orders.cpp Cards.cpp)
 

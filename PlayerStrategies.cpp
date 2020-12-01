@@ -5,27 +5,26 @@ using namespace std;
 
 //PLAYER STRATEGY
 
-int PlayerStrategy::issueOrder() {
-    return 1;
+void PlayerStrategy::issueOrder() {
 } 
 
-vector<Territory*> PlayerStrategy::toAttack() {
+Territory* PlayerStrategy::toAttack() {
 	vector<Territory*> *toAttack = new vector<Territory*>{};
 
-	return *toAttack;
+	return (*toAttack).front();
 }
 
-vector<Territory*> PlayerStrategy::toDefend() {
+Territory* PlayerStrategy::toDefend() {
 	vector<Territory*> *toDefend = new vector<Territory*>{};
 
-	return *toDefend;
+	return (*toDefend).front();
 }
 
 void PlayerStrategy::setMap(Map *m){
     stratMap = m;
 }
 
-void PlayerStrategy::setOrderList(OrderList *oList) {
+/*void PlayerStrategy::setOrderList(OrderList *oList) {
     list <Order*> ::iterator it;
     list <Order*> ::iterator it2;
     it2 = ol->orders.begin();
@@ -33,7 +32,7 @@ void PlayerStrategy::setOrderList(OrderList *oList) {
         it2 = it;
         it2++;
     }
-}
+}*/
 
 void PlayerStrategy::setPlayer(Player* p) {
     player = p;
@@ -41,9 +40,9 @@ void PlayerStrategy::setPlayer(Player* p) {
 
 //HUMAN PLAYER STRATEGY
 
-int HumanPlayerStrategy::issueOrder() {
+void HumanPlayerStrategy::issueOrder() {
 
-     if(player->phase = 1) {
+     if(player->phase == 1) {
          cout << "Enter the ID of the territory you want to deploy your units to: ";
          for(int i = 0; i < player->playerTerritories.size(); i++){
              cout << player->playerTerritories.at(i)->id << ": " << player->playerTerritories.at(i)->name ;
@@ -55,7 +54,7 @@ int HumanPlayerStrategy::issueOrder() {
 
          int unitNum;
          cin>> unitNum;
-         ol->orders.push_back(new Deploy(player, terrChoice, unitNum));
+         player->getMyOrders()->addOrder(new Deploy(player, terrChoice, unitNum));
      }
     else if(player->phase == 2) {
          cout
@@ -84,7 +83,7 @@ int HumanPlayerStrategy::issueOrder() {
              cout << "Enter the number of units you want to deploy: ";
              int unitNum;
              cin>> unitNum;
-             ol->orders.push_back(new Advance(player, terrChoice, attackChoice, unitNum));
+             player->getMyOrders()->addOrder(new Advance(player, terrChoice, attackChoice, unitNum));
          }
 
          if(menuChoice == 2){
@@ -105,7 +104,7 @@ int HumanPlayerStrategy::issueOrder() {
              string attackID;
              cin >> attackID;
              Territory *attackChoice = stratMap->getTerritoryById(attackID);
-             ol->orders.push_back(new Bomb(player, terrChoice, attackChoice));
+             player->getMyOrders()->addOrder(new Bomb(player, terrChoice, attackChoice));
          }
 
          if(menuChoice == 3){
@@ -117,7 +116,7 @@ int HumanPlayerStrategy::issueOrder() {
              string blockadeID;
              cin >> blockadeID;
              Territory *terrChoice = stratMap->getTerritoryById(blockadeID);
-             ol->orders.push_back(new Blockade(player, terrChoice));
+             player->getMyOrders()->addOrder(new Blockade(player, terrChoice));
          }
 
          if(menuChoice == 4){
@@ -142,20 +141,19 @@ int HumanPlayerStrategy::issueOrder() {
              cout << "Enter the number of units you want to airlift: ";
              int unitNum;
              cin>> unitNum;
-             ol->orders.push_back(new Airlift(player, terrChoice, attackChoice, unitNum));
+             player->getMyOrders()->addOrder(new Airlift(player, terrChoice, attackChoice, unitNum));
          }
 
          if(menuChoice == 5){
              cout << "Enter the ID of the player you want to negotiate with: ";
              int negotiateID;
              cin >> negotiateID;
-             ol->orders.push_back(new Negotiate(player, negotiateID));
+             player->getMyOrders()->addOrder(new Negotiate(player, negotiateID));
          }
      }
-    return 1;
 }
 
-vector<Territory*> HumanPlayerStrategy::toAttack() {
+Territory* HumanPlayerStrategy::toAttack() {
     vector<Territory*> *toAttack = new vector<Territory*>{};
     cout << "Choose a territory to attack: \n\n";
     string target;
@@ -163,70 +161,153 @@ vector<Territory*> HumanPlayerStrategy::toAttack() {
     cout<<"It worked!";
     cout << "You attacked " << stratMap->getTerritoryById(target)->name << "!";
     toAttack->push_back(stratMap->getTerritoryById(target));
-    return *toAttack;
+    return (*toAttack).front();
 }
 
-vector<Territory*> HumanPlayerStrategy::toDefend() {
+Territory* HumanPlayerStrategy::toDefend() {
     vector<Territory*> *toDefend = new vector<Territory*>{};
     cout<< "Choose a territory to defend: \n\n";
     string target;
     cin >> target;
     toDefend->push_back(stratMap->getTerritoryById(target));
-    return *toDefend;
+    return (*toDefend).front();
 }
 
 
 //AGGRESSIVE PLAYER STRATEGY: focuses on attack (deploys or advances armies on its strongest country, then always advances to enemy territories until it cannot do so anymore)
+void AggressivePlayerStrategy::issueOrder() {
+    strongest = toDefend(); //Find strongest territory
 
-int AggressivePlayerStrategy::issueOrder() {
-    return 1;
+    //DEPLOY PHASE
+    if (player->reinforcements > 0) { //Deploy all reinforcements to strongest territory
+        player->deploy(strongest, player->reinforcements);
+        player->orderPhase++; //Increment player phase (from deploy phase to other orders phase)
+        return;
+    }
+
+    //OTHER ORDERS PHASE
+
+    //Advance all armies from adjacent friendly territories to strongest territory
+    static vector<Territory*> adj = stratMap->getAdjacentTerritories(strongest->id);
+    vector<Territory*>::iterator it = adj.begin();
+    while (it != adj.end()) { 
+        if ((*it)->getOwnerID() == player->name) {
+            player->playerOrders->addOrder(new Advance(player, (*it), strongest, (*it)->armiesNumber));
+            it=adj.erase(it);
+            return;
+        }
+        it=adj.erase(it);
+    }
+  
+    //If airlift available, airlift armies from territory with most armies to current strongest
+    if (player->getMyHand()->getAirCount() > 0) {
+        if (getBiggest()->armiesNumber > strongest->armiesNumber) {
+            player->getMyHand()->play("airlift");
+            player->playerOrders->addOrder(new Airlift(player, getBiggest(), strongest, getBiggest()->armiesNumber));
+            return;
+        }
+    }
+
+    //Use bomb on strongest enemy territory adjacent to strongest whenever available
+    if (player->getMyHand()->getBombCount() > 0) {
+        player->getMyHand()->play("bomb");
+        player->playerOrders->addOrder(new Bomb(player,strongest, getStrongestEnemy()));
+        return;
+    }
+
+    //Advance all armies from strongest territory to weakest adjacent enemy territory
+    player->playerOrders->addOrder(new Advance(player, strongest, getWeakestEnemy(), strongest->armiesNumber));
+    
+    player->orderPhase++; //Increment player phase from Other Orders Phase to Issuing Complete
 }
 
-vector<Territory*> AggressivePlayerStrategy::toAttack() { //Every adjacent enemy is on the toAttack list
+Territory* AggressivePlayerStrategy::toAttack() { //Every adjacent enemy is on the toAttack list
     vector<Territory*> toAttack = player->adjacentEnemies(stratMap);
-    return toAttack;
+    return toAttack.front();
 }
 
-vector<Territory*> AggressivePlayerStrategy::toDefend() { //Protects its strongest countries first
-    vector<Territory*> toDefend = player->getMyTerritories();
-    sort(*toDefend.begin(), *toDefend.end()); //Sorts from weakest to strongest territory
-    reverse(*toDefend.begin(), *toDefend.end()); //Reverses vector so strongest is first
-    return toDefend;
+Territory* AggressivePlayerStrategy::toDefend() { //Protects its strongest countries first
+
+    static vector<Territory*> toDefend = player->getMyTerritories();
+    sort(toDefend.begin(), toDefend.end()); //Sorts from weakest to strongest territory
+    reverse(toDefend.begin(), toDefend.end()); //Reverses vector so strongest is first
+
+    Territory* strong = toDefend.front();
+
+    while ((*stratMap).getAdjacentEnemyTerritories(strong->id, player).empty()) { //Iterate down the list until one with adjacent enemies is found
+        toDefend.erase(toDefend.begin());
+        strong = toDefend.front();
+    };
+
+    return strong;
 }
 
+//Returns the player territory with the most armies
+Territory* AggressivePlayerStrategy::getBiggest() {
+    vector<Territory*> territories = player->getMyTerritories();
+    Territory* biggest = territories.front();
+
+    for (auto terr : player->getMyTerritories()) {
+        if (terr->armiesNumber > biggest->armiesNumber) biggest = terr;
+    }
+
+    return biggest;
+}
+
+//Returns the enemy territory with the least armies adjacent to strongest friendly territory - used for advance
+Territory* AggressivePlayerStrategy::getWeakestEnemy() {
+    vector<Territory*> adj = (*stratMap).getAdjacentEnemyTerritories(strongest->id, player);
+    Territory* weakestenemy = adj.front();
+
+    for (auto terr : adj) {
+        if (terr->armiesNumber < weakestenemy->armiesNumber) weakestenemy = terr;
+    }
+
+    return weakestenemy;
+}
+
+//Returns the enemy territory with the most armies adjacent to strongest friendly territory - used for bomb
+Territory* AggressivePlayerStrategy::getStrongestEnemy() {
+    vector<Territory*> adj = (*stratMap).getAdjacentEnemyTerritories(strongest->id, player);
+    Territory* strongestenemy = adj.front();
+
+    for (auto terr : adj) {
+        if (terr->armiesNumber > strongestenemy->armiesNumber) strongestenemy = terr;
+    }
+
+    return strongestenemy;
+}
 
 //BENEVOLENT PLAYER STRATEGY: focuses on protecting its weak countries(deploys or advances armies on its weakest countries, never advances to enemy territories)
 
-int BenevolentPlayerStrategy::issueOrder() {
-    return 1;
+void BenevolentPlayerStrategy::issueOrder() {
 }
 
-vector<Territory*> BenevolentPlayerStrategy::toAttack() { //Benevolent player never attacks
+Territory* BenevolentPlayerStrategy::toAttack() { //Benevolent player never attacks
     static vector<Territory*>* toAttack = new vector<Territory*>{};
-    return *toAttack;
+    return (*toAttack).front();
 }
 
-vector<Territory*> BenevolentPlayerStrategy::toDefend() { //Benevolent player protects its weakest countries first
+Territory* BenevolentPlayerStrategy::toDefend() { //Benevolent player protects its weakest countries first
     vector<Territory*> toDefend = player->getMyTerritories();
     sort(*toDefend.begin(), *toDefend.end());
-    return toDefend;
+    return toDefend.front();
 }
 
 
 //NEUTRAL PLAYER STRATEGY
 
-int NeutralPlayerStrategy::issueOrder() {
-    return 1;
+void NeutralPlayerStrategy::issueOrder() {
 }
 
-vector<Territory*> NeutralPlayerStrategy::toAttack() {
+Territory* NeutralPlayerStrategy::toAttack() {
     vector<Territory*> *toAttack = new vector<Territory*>{};
 
-    return *toAttack;
+    return (*toAttack).front();
 }
 
-vector<Territory*> NeutralPlayerStrategy::toDefend() {
+Territory* NeutralPlayerStrategy::toDefend() {
     vector<Territory*> *toDefend = new vector<Territory*>{};
 
-    return *toDefend;
+    return (*toDefend).front();
 }
