@@ -1,18 +1,15 @@
 #pragma once
 
-#include "Orders.h"
-#include "Map.h"
-#include "Cards.h"
 #include <list>
 #include <iterator>
 #include <iostream>
 
 using namespace std;
 
-static Map* stratMap = new Map();
-
 class OrderList;
 class Player;
+class Map;
+class Territory;
 
 class PlayerStrategy
 {
@@ -20,6 +17,7 @@ protected:
     OrderList* ol;
 public:
 	Player* player;
+    Map* stratMap;
 	virtual int issueOrder();
 	virtual vector<Territory*> toAttack();
 	virtual vector<Territory*> toDefend();
