@@ -37,6 +37,7 @@ class MapLoader{
 
 public:
     MapLoader();
+    string mainPath;
 
     void loadMaps();    // starts loading process
     vector<MapFile*> getMaps();  // gets files from directory, checks validity and sets each map as MapFile
@@ -50,4 +51,42 @@ private:
     // operator
     friend ostream& operator<<(ostream &os, const  MapLoader& l);
     MapLoader& operator = (const MapLoader& loader);
+};
+
+class ConquestFileReader{
+public:
+    MapFile* map{};
+
+    //constructor
+    ConquestFileReader();
+    ConquestFileReader(const ConquestFileReader& _file);
+
+    // destructor
+    ~ConquestFileReader();
+    explicit ConquestFileReader(MapFile* otherMap);
+    static vector<string> getContent(const string& path);   // get files content
+
+    // operator
+    friend ostream& operator<<(ostream &os, const  ConquestFileReader& l);
+    ConquestFileReader& operator = (const ConquestFileReader& mapToAssign);
+
+};
+
+class ConquestFileReaderAdapter : public MapLoader{
+public:
+    ConquestFileReader* conquestFileReader;
+
+    //constructor
+    ConquestFileReaderAdapter();
+    explicit ConquestFileReaderAdapter(ConquestFileReader* toAdapt);
+    ConquestFileReaderAdapter(const ConquestFileReaderAdapter& _file);
+
+    // destructor
+    ~ConquestFileReaderAdapter();
+
+    vector<string> getContent(const string& path);   // call adaptee to get files content
+
+    // operator
+    friend ostream& operator<<(ostream &os, const  ConquestFileReaderAdapter& l);
+    ConquestFileReaderAdapter& operator = (const ConquestFileReaderAdapter& adapter);
 };

@@ -7,12 +7,16 @@
 #include <errno.h>
 using namespace std;
 
+/////////////////////////////////////////////////////////////////////////////
+///   MAPLOADER					   	                                      ///
+/////////////////////////////////////////////////////////////////////////////
+
 MapLoader::MapLoader()= default;
 
 //load all files in testing directory
 void MapLoader::loadMaps() {
     string name = "";
-    string mainPath = "";
+    mainPath = "";
 
     cout << "In order to search for the Maps in your computer, please enter your first name" << endl;
     cin >> name;
@@ -49,6 +53,10 @@ void MapLoader::loadMaps() {
             "europe.map",
             "europe.gif",
             "europe.gif",
+            "Andorra.map",
+            "Andorra.bmp",
+            "Atlantis.map",
+            "Atlantis.bmp"
     };
 
     for(auto &fileName : fileNames) {
@@ -124,6 +132,10 @@ MapLoader& MapLoader::operator = (const MapLoader& loader){
     return *this;
 }
 
+/////////////////////////////////////////////////////////////////////////////
+///   MAPFILE					   	                                      ///
+/////////////////////////////////////////////////////////////////////////////
+
 // MapFile constructor -> creates valid map files to be turned into Graphs
 MapFile::MapFile(string _name, vector<string> fullContent) {
     name = _name;
@@ -151,4 +163,89 @@ MapFile& MapFile::operator = (const MapFile& _file) {
 // destructor
 MapFile::~MapFile() = default;
 
+
+/////////////////////////////////////////////////////////////////////////////
+///   CONQUEST-FILE-READER					   	                          ///
+/////////////////////////////////////////////////////////////////////////////
+
+ConquestFileReader::ConquestFileReader() = default;
+
+ConquestFileReader::ConquestFileReader(const ConquestFileReader &_file) {
+    map = _file.map;
+}
+
+ConquestFileReader::~ConquestFileReader() {
+    delete map;
+    map = nullptr;
+}
+
+ConquestFileReader::ConquestFileReader(MapFile *otherMap) {
+    map = otherMap;
+}
+
+vector<string> ConquestFileReader::getContent(const string &path) {
+    cout << "WAS CALLED" << endl;
+    cout << "JUST ADAPTING THE CONTENT LEFT" << endl;
+//    ifstream myFile (path);
+//
+//    string lineContent;
+    vector<string> vecOfStr;
+//
+//    // push each line of file into vector of strings (easier to find / parse information)
+//    while ( getline(myFile, lineContent)) {
+//        vecOfStr.push_back(lineContent);
+//    }
+//
+//    // Close the file
+//    myFile.close();
+
+    return vecOfStr;
+}
+
+ostream &operator<<(ostream &os, const ConquestFileReader &l) {
+    return os << l.map << endl;
+}
+
+ConquestFileReader &ConquestFileReader::operator=(const ConquestFileReader &mapToAssign) {
+    map = mapToAssign.map;
+    return *this;
+}
+
+
+/////////////////////////////////////////////////////////////////////////////
+///   CONQUEST-FILE-READER-ADAPTER					   	                  ///
+/////////////////////////////////////////////////////////////////////////////
+
+
+ConquestFileReaderAdapter::ConquestFileReaderAdapter() = default;
+
+ConquestFileReaderAdapter::ConquestFileReaderAdapter(ConquestFileReader *toAdapt) {
+    conquestFileReader = toAdapt;
+}
+
+ConquestFileReaderAdapter::ConquestFileReaderAdapter(const ConquestFileReaderAdapter &_file) {
+    conquestFileReader = _file.conquestFileReader;
+}
+
+ConquestFileReaderAdapter::~ConquestFileReaderAdapter() {
+    delete conquestFileReader;
+    conquestFileReader = nullptr;
+}
+
+vector<string> ConquestFileReaderAdapter::getContent(const string& path) {
+    string fileName = conquestFileReader->map->name;
+    string parendFolder = fileName.substr(0,fileName.find_last_of('.'));
+    string path_name = path + parendFolder + "/" + fileName;
+
+    return conquestFileReader->getContent(path_name);
+}
+
+ostream &operator<<(ostream &os, const ConquestFileReaderAdapter &l) {
+    return os << l.conquestFileReader << endl;
+}
+
+ConquestFileReaderAdapter &ConquestFileReaderAdapter::operator=(const ConquestFileReaderAdapter &adapter) {
+    conquestFileReader = adapter.conquestFileReader;
+    return *this;
+}
 
