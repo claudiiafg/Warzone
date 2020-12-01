@@ -1,5 +1,24 @@
+cmake_minimum_required(VERSION 3.17)
 project(Warzone)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 14)
 
-add_executable(Warzone_GameEngine GameEngine.cpp MapLoader.cpp Map.cpp Player.cpp Orders.cpp Cards.cpp GameObservers.cpp PlayerStrategies.cpp)
+include_directories(.)
+
+add_executable(Warzone
+        Cards.cpp
+        Cards.h
+        GameEngine.h
+        GameObservers.cpp
+        GameObservers.h
+        Map.cpp
+        Map.h
+        MapLoader.cpp
+        MapLoader.h
+        Orders.cpp
+        Orders.h
+        Player.cpp
+        Player.h
+        PlayerStrategies.cpp
+        PlayerStrategies.h
+        PlayerStrategiesDriver.cpp)

@@ -27,7 +27,7 @@ void MapLoader::loadMaps() {
         mainPath = "C:/Users/gini/source/repos/claudiiafg/Warzone/testing/";
 
     } else if (name == "ian") {
-        mainPath = "/home/ian/CLion-workspace/Warzone/testing/";
+        mainPath = "/home/ian/Warzone/Warzone/testing/";
 
     } else if (name == "ta") {
         mainPath = "../testing/";

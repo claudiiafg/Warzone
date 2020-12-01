@@ -1,5 +1,6 @@
 #include "PlayerStrategies.h"
 #include "MapLoader.h"
+#include "Player.h"
 #include <iostream>
 using namespace std;
 
@@ -8,15 +9,17 @@ using namespace std;
  -At each step, display the countries that are being attacked/reinforced/defended and the number of units on each country
  */
 
+
+
 int main(){
 //Player(int name, int armies, vector<Territory*> playerTerritories, Hand* playerHand, OrderList* playerOrders, vector<Player*> allies, PlayerStrategy* strategy)
     Hand *h1 = new Hand();
     OrderList *ol1 = new OrderList;
     vector<Territory*> vt1;
     vector<Player*> allies1;
-    AggressivePlayerStrategy *aggressive = new AggressivePlayerStrategy();
+    HumanPlayerStrategy *aggressive = new HumanPlayerStrategy();
 
-    Player *p1 = new Player(1, 500, vt1, h1, ol1, allies1, aggressive);
+    Player *p1 = new Player(1, 500, vt1, h1, ol1, aggressive);
     PhaseObserver *po1 = new PhaseObserver(p1);
     p1->Notify();
 
@@ -27,7 +30,7 @@ int main(){
     BenevolentPlayerStrategy *benevolent = new BenevolentPlayerStrategy();
 
 
-    Player *p2 = new Player(2, 500, vt2, h2, ol2, allies2, benevolent);
+    Player *p2 = new Player(2, 500, vt2, h2, ol2, benevolent);
     PhaseObserver *po2 = new PhaseObserver(p2);
     p2->Notify();
 
@@ -35,12 +38,13 @@ int main(){
     ml->loadMaps();
     vector<MapFile*> rawMaps = ml->getMaps();
     Map* m = new Map(rawMaps[0]->name, rawMaps[0]->content);
+    cout << rawMaps[0]->name << "\n";
     GameStatObserver *mo = new GameStatObserver(m);
 
     for(int i = 0; i < 5; i++){
         m->territories.at(i)->setOwner(1);
     }
-
+    stratMap = m;
     m->Notify();
 
     for(int i = 5; i < 10; i++){
@@ -50,6 +54,7 @@ int main(){
 
     p1->toAttack();
     p1->toDefend();
+    p1->issueOrder();
     p2->toAttack();
     p2->toDefend();
 
@@ -110,28 +115,6 @@ h2 = NULL;
     ol1 = NULL;
     delete h1;
     h1 = NULL;
-
-    /*
-
-
-
-
-     *     PhaseObserver *po1 = new PhaseObserver(p1);
-
-     *     Player *p1 = new Player(1, 500, vt1, h1, ol1, allies1, aggressive);
-
-     *     AggressivePlayerStrategy *aggressive = new AggressivePlayerStrategy();
-
-     *     vector<Player*> allies1;
-
-     *     vector<Territory*> vt1;
-
-     *     OrderList *ol1 = new OrderList;
-     *
-     * Hand *h1 = new Hand();
-
-     */
-
 
     return 0;
 }

@@ -7,9 +7,10 @@
 #include <iostream>
 #include <map>
 
-#include "Player.h"
 #include "Cards.h"
 #include "Map.h"
+
+class Player;
 using namespace std;
 
 class Order {
@@ -231,7 +232,7 @@ class Negotiate : public Order {
 
 public:
 	//Overloaded constructor
-	Negotiate::Negotiate(Player* pl, int otherpID);
+	Negotiate(Player* pl, int otherpID);
 
 	//Copy constructor
 	Negotiate(const Negotiate& b);

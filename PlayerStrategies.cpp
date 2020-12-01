@@ -1,5 +1,6 @@
 #include "PlayerStrategies.h"
-
+#include "Player.h"
+#include <iostream>
 using namespace std;
 
 //PLAYER STRATEGY
@@ -21,7 +22,7 @@ vector<Territory*> PlayerStrategy::toDefend() {
 }
 
 void PlayerStrategy::setMap(Map *m){
-    map = m;
+    stratMap = m;
 }
 
 void PlayerStrategy::setOrderList(OrderList *oList) {
@@ -49,7 +50,7 @@ int HumanPlayerStrategy::issueOrder() {
          }
          string terrID;
          cin >> terrID;
-         Territory *terrChoice = map->getTerritoryById(terrID);
+         Territory *terrChoice = stratMap->getTerritoryById(terrID);
          cout << "Enter the number of units you want to deploy: ";
 
          int unitNum;
@@ -70,15 +71,15 @@ int HumanPlayerStrategy::issueOrder() {
              
              string attackFromID;
              cin >> attackFromID;
-             Territory *terrChoice = map->getTerritoryById(attackFromID);
+             Territory *terrChoice = stratMap->getTerritoryById(attackFromID);
 
              cout << "Choose a territory to attack by ID: ";
-             for(int i = 0; i < map->getAdjacentTerritories(terrChoice->id).size(); i++){
-                 cout << map->getAdjacentTerritories(terrChoice->id).at(i)->id << " " << map->getAdjacentTerritories(terrChoice->id).at(i)->name;
+             for(int i = 0; i < stratMap->getAdjacentTerritories(terrChoice->id).size(); i++){
+                 cout << stratMap->getAdjacentTerritories(terrChoice->id).at(i)->id << " " << stratMap->getAdjacentTerritories(terrChoice->id).at(i)->name;
              }
              string attackID;
              cin >> attackID;
-             Territory *attackChoice = map->getTerritoryById(attackID);
+             Territory *attackChoice = stratMap->getTerritoryById(attackID);
 
              cout << "Enter the number of units you want to deploy: ";
              int unitNum;
@@ -95,15 +96,15 @@ int HumanPlayerStrategy::issueOrder() {
 
              string attackFromID;
              cin >> attackFromID;
-             Territory *terrChoice = map->getTerritoryById(attackFromID);
+             Territory *terrChoice = stratMap->getTerritoryById(attackFromID);
 
              cout << "Choose a territory to bomb by ID: ";
-             for(int i = 0; i < map->getTerritories().size(); i++){
-                 cout << map->getTerritories().at(i)->id << " " << map->getTerritories().at(i)->name;
+             for(int i = 0; i < stratMap->getTerritories().size(); i++){
+                 cout << stratMap->getTerritories().at(i)->id << " " << stratMap->getTerritories().at(i)->name;
              }
              string attackID;
              cin >> attackID;
-             Territory *attackChoice = map->getTerritoryById(attackID);
+             Territory *attackChoice = stratMap->getTerritoryById(attackID);
              ol->orders.push_back(new Bomb(player, terrChoice, attackChoice));
          }
 
@@ -115,7 +116,7 @@ int HumanPlayerStrategy::issueOrder() {
 
              string blockadeID;
              cin >> blockadeID;
-             Territory *terrChoice = map->getTerritoryById(blockadeID);
+             Territory *terrChoice = stratMap->getTerritoryById(blockadeID);
              ol->orders.push_back(new Blockade(player, terrChoice));
          }
 
@@ -128,15 +129,15 @@ int HumanPlayerStrategy::issueOrder() {
 
              string attackFromID;
              cin >> attackFromID;
-             Territory *terrChoice = map->getTerritoryById(attackFromID);
+             Territory *terrChoice = stratMap->getTerritoryById(attackFromID);
 
              cout << "Choose a territory to airlift to by ID: ";
-             for(int i = 0; i < map->getTerritories().size(); i++){
-                 cout << map->getTerritories().at(i)->id << " " << map->getTerritories().at(i)->name;
+             for(int i = 0; i < stratMap->getTerritories().size(); i++){
+                 cout << stratMap->getTerritories().at(i)->id << " " << stratMap->getTerritories().at(i)->name;
              }
              string attackID;
              cin >> attackID;
-             Territory *attackChoice = map->getTerritoryById(attackID);
+             Territory *attackChoice = stratMap->getTerritoryById(attackID);
 
              cout << "Enter the number of units you want to airlift: ";
              int unitNum;
@@ -156,10 +157,12 @@ int HumanPlayerStrategy::issueOrder() {
 
 vector<Territory*> HumanPlayerStrategy::toAttack() {
     vector<Territory*> *toAttack = new vector<Territory*>{};
-    cout<< "Choose a territory to attack: \n\n";
+    cout << "Choose a territory to attack: \n\n";
     string target;
     cin >> target;
-    toAttack->push_back(map->getTerritoryById(target));
+    cout<<"It worked!";
+    cout << "You attacked " << stratMap->getTerritoryById(target)->name << "!";
+    toAttack->push_back(stratMap->getTerritoryById(target));
     return *toAttack;
 }
 
@@ -168,7 +171,7 @@ vector<Territory*> HumanPlayerStrategy::toDefend() {
     cout<< "Choose a territory to defend: \n\n";
     string target;
     cin >> target;
-    toDefend->push_back(map->getTerritoryById(target));
+    toDefend->push_back(stratMap->getTerritoryById(target));
     return *toDefend;
 }
 
@@ -180,7 +183,7 @@ int AggressivePlayerStrategy::issueOrder() {
 }
 
 vector<Territory*> AggressivePlayerStrategy::toAttack() { //Every adjacent enemy is on the toAttack list
-    vector<Territory*> toAttack = player->adjacentEnemies(map);
+    vector<Territory*> toAttack = player->adjacentEnemies(stratMap);
     return toAttack;
 }
 

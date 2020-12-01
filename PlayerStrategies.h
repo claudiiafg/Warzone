@@ -9,14 +9,15 @@
 
 using namespace std;
 
-class GameEngine;
+static Map* stratMap = new Map();
+
 class OrderList;
+class Player;
 
 class PlayerStrategy
 {
 protected:
-    static Map* map;
-    static OrderList* ol;
+    OrderList* ol;
 public:
 	Player* player;
 	virtual int issueOrder();
