@@ -42,11 +42,11 @@ Pas de la Casa,265,161,Encamp,Pessons,Port Envalira,Terreny Concordia,Soldeu
 Pessons,222,190,Encamp,Pas de la Casa,Port Envalira,Alt del Griu,Terreny Concordia
 Terreny Concordia,213,150,Encamp,Pessons,Pas de la Casa,Soldeu,Ransol,Canillo,Meritxell,Alt del Griu
 
-Canillo,170,126,Canillo,Meritxell,Terreny Concordia,Ransol,Pic Estanyó,Port,Ordino
+Canillo,170,126,Canillo,Meritxell,Terreny Concordia,Ransol,Pic Estanyï¿½,Port,Ordino
 Meritxell,154,146,Canillo,Ordino,Encamp,Alt del Griu,Terreny Concordia,Canillo
-Port,148,105,Canillo,Pic Estanyó,Casamanya,La Cortinada,Ordino,Canillo
-Pic Estanyó,167,85,Canillo,Canillo,Port,Casamanya,Ransol
-Ransol,199,82,Canillo,Canillo,Pic Estanyó,Casamanya,Terreny Concordia,Soldeu,Vall d'Incles,Estanys Juclar
+Port,148,105,Canillo,Pic Estanyï¿½,Casamanya,La Cortinada,Ordino,Canillo
+Pic Estanyï¿½,167,85,Canillo,Canillo,Port,Casamanya,Ransol
+Ransol,199,82,Canillo,Canillo,Pic Estanyï¿½,Casamanya,Terreny Concordia,Soldeu,Vall d'Incles,Estanys Juclar
 Vall d'Incles,225,99,Canillo,Estanys Juclar,Soldeu,Ransol
 Estanys Juclar,255,79,Canillo,Ransol,Vall d'Incles,Soldeu
 Soldeu,241,119,Canillo,Solana,Pas de la Casa,Terreny Concordia,Ransol,Vall d'Incles,Estanys Juclar
@@ -67,4 +67,4 @@ Arcalis,84,72,Ordino,Comapedrosa,Llorts,El Serrat,Tristaina
 El Serrat,115,64,Ordino,Arcalis,Port Siguer,Casamanya
 Tristaina,78,41,Ordino,Port Siguer,Arcalis
 Port Siguer,120,33,Ordino,Casamanya,El Serrat,Tristaina
-Casamanya,136,75,Ordino,El Serrat,Port Siguer,Ransol,Pic Estanyó,Port,La Cortinada,Llorts
+Casamanya,136,75,Ordino,El Serrat,Port Siguer,Ransol,Pic Estanyï¿½,Port,La Cortinada,Llorts

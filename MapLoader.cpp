@@ -186,20 +186,97 @@ ConquestFileReader::ConquestFileReader(MapFile *otherMap) {
 vector<string> ConquestFileReader::getContent(const string &path) {
     cout << "WAS CALLED" << endl;
     cout << "JUST ADAPTING THE CONTENT LEFT" << endl;
-//    ifstream myFile (path);
-//
-//    string lineContent;
-    vector<string> vecOfStr;
-//
-//    // push each line of file into vector of strings (easier to find / parse information)
-//    while ( getline(myFile, lineContent)) {
-//        vecOfStr.push_back(lineContent);
-//    }
-//
-//    // Close the file
-//    myFile.close();
+    cout << path << endl;
+    ifstream myFile (path);
 
-    return vecOfStr;
+    string lineContent;
+    vector<string> vecOfStr;
+
+    // push each line of file into vector of strings (easier to find / parse information)
+    while ( getline(myFile, lineContent)) {
+        vecOfStr.push_back(lineContent);
+    }
+
+    // Close the file
+    myFile.close();
+
+    // conquest identifiers
+    const string CONT_ID_CQ = "Continents";
+    const string TERR_ID_CQ = "Territories";
+
+    // indexes
+    int contI = 0;
+    int terrI = 0;
+
+    for (size_t i = 0; i < vecOfStr.size(); ++i){
+        if(vecOfStr[i].find(CONT_ID_CQ) < vecOfStr.size() && vecOfStr[i].find(CONT_ID_CQ) > 0) {
+            contI = i;
+        } else if(vecOfStr[i].find(TERR_ID_CQ) < vecOfStr.size() && vecOfStr[i].find(TERR_ID_CQ) > 0) {
+            terrI = i;
+        }
+    }
+
+    // get all continent strings from map data
+    vector<string> tempContinents;
+    for (int i = (contI + 1); i < (terrI); ++i){
+        tempContinents.push_back(vecOfStr[i]);
+    }
+
+    // get all territories strings from map data
+    vector<string> tempTerritories;
+    for (int i = (terrI + 1); i < (vecOfStr.size()); ++i){
+        tempTerritories.push_back(vecOfStr[i]);
+    }
+
+    vector<string> finalContinents = adaptContinents(tempContinents);
+    vector<string> finalTerritories = adaptTerritories(tempTerritories);
+    vector<string> finalBorders = adaptBorders(tempTerritories, finalTerritories);
+
+    vector<string> finalVecStr;
+    finalContinents.push_back("\n");
+    finalTerritories.push_back("\n");
+    finalBorders.push_back("\n");
+
+    finalVecStr.insert( finalVecStr.end(), finalContinents.begin(), finalContinents.end());
+    finalVecStr.insert( finalVecStr.end(), finalTerritories.begin(), finalTerritories.end() );
+    finalVecStr.insert( finalVecStr.end(), finalBorders.begin(), finalBorders.end() );
+
+    for(auto & content: finalVecStr) {
+        cout << content << endl;
+    }
+
+    return finalVecStr;
+}
+
+string ConquestFileReader::findIdOfTerritory(string terrName, const vector<string> finalTerritories) {
+    string name = terrName.substr(0, terrName.length() - 2);
+    for_each(name.begin(), name.end(), [name](char & c) {
+        c = ::tolower(c);
+    });
+
+    for(auto & line: finalTerritories) {
+        string tempTime = line;
+        for_each(tempTime.begin(), tempTime.end(), [tempTime](char & c) {
+            c = ::tolower(c);
+        });
+        if (tempTime.find(name) != std::string::npos) {
+            return to_string(line[0]);
+        }
+    }
+    return "not found";
+}
+
+int ConquestFileReader::nthOccurrence(const string &str, const string &findMe, int nth) {
+    size_t pos = 0;
+    int counter = 0;
+
+    while(counter != nth) {
+        pos += 1;
+        pos = str.find(findMe, pos);
+        if (pos == string::npos) return -1;
+        counter++;
+    }
+    return pos;
 }
 
 ostream &operator<<(ostream &os, const ConquestFileReader &l) {
@@ -209,6 +286,129 @@ ostream &operator<<(ostream &os, const ConquestFileReader &l) {
 ConquestFileReader &ConquestFileReader::operator=(const ConquestFileReader &mapToAssign) {
     map = mapToAssign.map;
     return *this;
+}
+
+vector<string> ConquestFileReader::adaptTerritories(const vector<string> tempTerritories) {
+    //flags
+    int continentCounter = 1;
+    int territoryCounter = 0;
+    bool previousWasEmpty = false;
+
+    //constants
+    const string COMMA = ",";
+    const string TERR_ID_WZ = "[countries]";
+
+    //vars
+    string terrName;
+    size_t pos;
+    vector<string> finalTerritories;
+
+    finalTerritories.push_back(TERR_ID_WZ);
+    for(auto & terr: tempTerritories) {
+        // two consecutive new lines means nothing more to search through
+        if(previousWasEmpty && terr.size() == 1) {
+            break;
+        }
+
+        // if current new line next territories are from another continent
+        if(terr.size() == 1) {
+            continentCounter += 1;
+            previousWasEmpty = true;
+
+        // if territory data push to vector in right format
+        } else {
+            territoryCounter += 1;
+            pos = terr.find(COMMA);
+            terrName = terr.substr (0, pos);
+            finalTerritories.push_back(to_string(territoryCounter) + " " + terrName + " " + to_string(continentCounter));
+            previousWasEmpty = false;
+        }
+    }
+
+    return finalTerritories;
+}
+
+vector<string> ConquestFileReader::adaptBorders(const vector<string> tempTerritories, const vector<string> finalTerritories) {
+    // flags
+    bool previousWasEmpty = false;
+    int territoryCounter = 0;
+    // constacts
+    const string COMMA = ",";
+    const string ADJ_ID_WZ = "[borders]";
+
+    // vars
+    size_t initIndex;
+    vector<string> finalAdjacents;
+
+    finalAdjacents.push_back(ADJ_ID_WZ);
+    for(auto & terr: tempTerritories) {
+        // two consecutive new lines means nothing more to search through
+        if (previousWasEmpty && terr.size() == 1) {
+            break;
+        }
+
+        if (terr.size() == 1) {
+            previousWasEmpty = true;
+
+        } else {
+            previousWasEmpty = false;
+            territoryCounter += 1;
+
+            // start at 3rd comma
+            initIndex = nthOccurrence(terr, COMMA, 3);
+            string adjacentList = terr.substr (initIndex);
+            stringstream ss(adjacentList);
+            vector<string> adjacentVector;
+
+            // start territory adjacent's line with territory node id
+            string finalAdjLine = to_string(territoryCounter);
+
+            // split line by commas
+            while(ss.good()) {
+                string substr;
+                getline( ss, substr, ',');
+
+                // push only unique adjacent territories
+                if (find(adjacentVector.begin(), adjacentVector.end(), substr) == adjacentVector.end()) {
+                    adjacentVector.push_back(substr);
+                }
+            }
+
+            // loop through adjacent territories and find their id -> push to territory adjacent's line
+            for (int i = 1; i < adjacentVector.size(); i++) {
+                string nodeId = findIdOfTerritory(adjacentVector[i], finalTerritories);
+
+                if(nodeId != "not found" && (finalAdjLine.find(nodeId) == std::string::npos)) {
+                    finalAdjLine += " " + findIdOfTerritory(adjacentVector[i], finalTerritories);
+                }
+            }
+
+            // push to territory adjacent's line'' vector
+            finalAdjacents.push_back(finalAdjLine);
+
+        }
+    }
+    return finalAdjacents;
+}
+
+vector<string> ConquestFileReader::adaptContinents(const vector<string> tempContinents) {
+    const string CONT_ID_WZ = "[continents]";
+    const string EQUAL = "=";
+
+    vector<string> finalContinents;
+    size_t pos;
+    string continentName;
+    string continentBonus;
+
+    finalContinents.push_back(CONT_ID_WZ);
+    for(auto & continent: tempContinents) {
+        pos = continent.find(EQUAL);
+        continentName = continent.substr (0, pos);
+        continentBonus = continent.substr (pos + 1);
+        finalContinents.push_back(continentName + " " + continentBonus);
+    }
+
+    return finalContinents;
 }
 
 
