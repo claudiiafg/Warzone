@@ -45,7 +45,7 @@ int main(){
     for(int i = 0; i < 5; i++){
         m->territories.at(i)->setOwner(1);
     }
-    strategy->stratMap = m;
+    strategy->setMap(m);
     m->Notify();
 
     for(int i = 5; i < 10; i++){

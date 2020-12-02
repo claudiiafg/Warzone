@@ -4,9 +4,12 @@
 #include "Map.h"
 #include "Cards.h"
 #include <iostream>
+
 using namespace std;
 
-//PLAYER STRATEGY
+//////////////////////////////////////////////////////////////
+////                  PLAYER STRATEGY                     ////
+//////////////////////////////////////////////////////////////
 
 void PlayerStrategy::issueOrder(Player* player) {
 } 
@@ -37,7 +40,12 @@ void PlayerStrategy::setMap(Map *m){
     }
 }*/
 
-//HUMAN PLAYER STRATEGY
+
+//////////////////////////////////////////////////////////////
+////               HUMAN PLAYER STRATEGY                  ////
+//////////////////////////////////////////////////////////////
+
+
 
 void HumanPlayerStrategy::issueOrder(Player* player) {
 
@@ -173,7 +181,11 @@ Territory* HumanPlayerStrategy::toDefend(Player* player) {
 }
 
 
-//AGGRESSIVE PLAYER STRATEGY: focuses on attack (deploys or advances armies on its strongest country, then always advances to enemy territories until it cannot do so anymore)
+//////////////////////////////////////////////////////////////
+////             AGGRESSIVE PLAYER STRATEGY               ////
+//////////////////////////////////////////////////////////////
+
+
 void AggressivePlayerStrategy::issueOrder(Player* player) {
     Territory* strongest = toDefend(player); //Find strongest territory
 
@@ -280,14 +292,24 @@ Territory* AggressivePlayerStrategy::getStrongestEnemy(Territory* strongest, Pla
     return strongestenemy;
 }
 
-//BENEVOLENT PLAYER STRATEGY: focuses on protecting its weak countries(deploys or advances armies on its weakest countries, never advances to enemy territories)
+
+//////////////////////////////////////////////////////////////
+////             BENEVOLENT PLAYER STRATEGY               ////
+//////////////////////////////////////////////////////////////
+
+
 
 void BenevolentPlayerStrategy::issueOrder(Player* player) {
+    //Divide reinforcements between territories on defence list
+    //Relocate any armies from territorities with above average units to those adjacent with below average
+    //Use airlift from strongest to weakest territory
+    //Use negotiate anytime available
+    //Use blockade on weakest territory anytime available
+    //Never use bomb
 }
 
 Territory* BenevolentPlayerStrategy::toAttack(Player* player) { //Benevolent player never attacks
-    static vector<Territory*>* toAttack = new vector<Territory*>{};
-    return (*toAttack).front();
+    return nullptr;
 }
 
 Territory* BenevolentPlayerStrategy::toDefend(Player* player) { //Benevolent player protects its weakest countries first
@@ -297,7 +319,12 @@ Territory* BenevolentPlayerStrategy::toDefend(Player* player) { //Benevolent pla
 }
 
 
-//NEUTRAL PLAYER STRATEGY
+
+//////////////////////////////////////////////////////////////
+////               NEUTRAL PLAYER STRATEGY                ////
+//////////////////////////////////////////////////////////////
+
+
 
 void NeutralPlayerStrategy::issueOrder(Player* player) {
 }
