@@ -198,16 +198,16 @@ void AggressivePlayerStrategy::issueOrder(Player* player) {
 
     //OTHER ORDERS PHASE
 
-    //Advance all armies from adjacent friendly territories to strongest territory
+    //Advance all armies but one from adjacent friendly territories to strongest territory
     vector<Territory*> adj = stratMap->getAdjacentTerritories(strongest->id);
     vector<Territory*>::iterator it = adj.begin();
     while (it != adj.end()) { 
-        if ((*it)->getOwnerID() == player->name && (*it)->armiesNumber>0) {
+        if ((*it)->getOwnerID() == player->name && (*it)->armiesNumber>1) {
             if (count(player->advanceList.begin(), player->advanceList.end(), (*it)) > 0) { //Check if country has already advanced their armies
                 it = adj.erase(it);
                 continue;
             }
-            player->playerOrders->addOrder(new Advance(player, (*it), strongest, (*it)->armiesNumber));
+            player->playerOrders->addOrder(new Advance(player, (*it), strongest, (*it)->armiesNumber-1));
             player->advanceList.push_back(*it);
             return;
         }
@@ -231,7 +231,7 @@ void AggressivePlayerStrategy::issueOrder(Player* player) {
     }
 
     //Advance all armies from strongest territory to weakest adjacent enemy territory
-    player->playerOrders->addOrder(new Advance(player, strongest, getWeakestEnemy(strongest, player), strongest->armiesNumber));
+    player->playerOrders->addOrder(new Advance(player, strongest, getWeakestEnemy(strongest, player), (strongest->armiesNumber)/2));
     player->orderPhase++; //Increment player phase from Other Orders Phase to Issuing Complete
 }
 
