@@ -64,12 +64,12 @@ void MapLoader::loadMaps() {
         string path_name = mainPath + parendFolder + "/" + fileName;
         // check for file with map data and create MapFiles
         if(isMapType(path_name)) {
-            cout << "->VALID Map: " << fileName << endl;
+            cout << "->VALID File: " << fileName << endl;
             vector<string> content = getContent(path_name);
             string name = fileName;
             maps.push_back(new MapFile(name, content));
         } else {
-            cout << "->Invalid: " << fileName << endl;
+            cout << "Invalid: " << fileName << endl;
         }
     }
 }
@@ -183,7 +183,6 @@ ConquestFileReader::ConquestFileReader(MapFile *otherMap) {
 }
 
 vector<string> ConquestFileReader::getContent(const string &path) {
-    cout << path << endl;
     ifstream myFile (path);
 
     string lineContent;
@@ -201,10 +200,9 @@ vector<string> ConquestFileReader::getContent(const string &path) {
     const string CONT_ID_CQ = "Continents";
     const string TERR_ID_CQ = "Territories";
 
-    // indexes
+    // get indexes of each section
     int contI = 0;
     int terrI = 0;
-
     for (size_t i = 0; i < vecOfStr.size(); ++i){
         if(vecOfStr[i].find(CONT_ID_CQ) < vecOfStr.size() && vecOfStr[i].find(CONT_ID_CQ) > 0) {
             contI = i;
@@ -225,22 +223,21 @@ vector<string> ConquestFileReader::getContent(const string &path) {
         tempTerritories.push_back(vecOfStr[i]);
     }
 
+    // get each sections of map adapted
     vector<string> finalContinents = adaptContinents(tempContinents);
     vector<string> finalTerritories = adaptTerritories(tempTerritories);
     vector<string> finalBorders = adaptBorders(tempTerritories, finalTerritories);
 
+    // add empty lines between sections
     vector<string> finalVecStr;
-    finalContinents.push_back("\n");
-    finalTerritories.push_back("\n");
-    finalBorders.push_back("\n");
+    finalContinents.emplace_back("\n");
+    finalTerritories.emplace_back("\n");
+    finalBorders.emplace_back("\n");
 
+    // merge all sections together
     finalVecStr.insert( finalVecStr.end(), finalContinents.begin(), finalContinents.end());
     finalVecStr.insert( finalVecStr.end(), finalTerritories.begin(), finalTerritories.end() );
     finalVecStr.insert( finalVecStr.end(), finalBorders.begin(), finalBorders.end() );
-
-    for(auto & content: finalVecStr) {
-        cout << content << endl;
-    }
 
     return finalVecStr;
 }
@@ -374,13 +371,14 @@ vector<string> ConquestFileReader::adaptBorders(const vector<string> tempTerrito
             territoryCounter += 1;
 
             // start at 3rd comma
-            initIndex = nthOccurrence(terr, COMMA, 3);
+            initIndex = nthOccurrence(terr, COMMA, 4);
             string adjacentList = terr.substr (initIndex);
             stringstream ss(adjacentList);
             vector<string> adjacentVector;
 
             // start territory adjacent's line with territory node id
             string finalAdjLine = to_string(territoryCounter);
+            vector<string> tempFinal;
 
             // split line by commas
             while(ss.good()) {
@@ -392,12 +390,12 @@ vector<string> ConquestFileReader::adaptBorders(const vector<string> tempTerrito
                     adjacentVector.push_back(substr);
                 }
             }
-
             // loop through adjacent territories and find their id -> push to territory adjacent's line
             for (int i = 1; i < adjacentVector.size(); i++) {
                 string nodeId = findIdOfTerritory(adjacentVector[i], finalTerritories);
-                if(nodeId != "not found" && (finalAdjLine.find(nodeId) == std::string::npos)) {
+                if(nodeId != "not found" && (!(std::find(tempFinal.begin(), tempFinal.end(), nodeId) != tempFinal.end()))) {
                     finalAdjLine += " " + nodeId;
+                    tempFinal.push_back(nodeId);
                 }
             }
 

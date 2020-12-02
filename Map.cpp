@@ -81,9 +81,9 @@ bool Map::validate() {
         sequence.push_back(initialAdjacent);
     }
      // attention! t starts at 1 -> territory[0] is node with id 1
-    for (int i = 0; i < sequence.size(); i++) {
+    for (int i = 0; i < territories.size(); i++) {
         // turn string to int
-        stringstream geek(sequence[i]);
+        stringstream geek(territories[i]->id);
         geek >> idInt;
 
         // check if enough
@@ -99,8 +99,8 @@ bool Map::validate() {
 
             // look territory id inside it's adjacent node's adjacentList (must have each other)
             if (!(std::count(tempAdjacent.begin(), tempAdjacent.end(), territories[idInt - 1]->id))) {
-                isInvalid = true;
-                break;
+                cout << "Invalid Map: " << name << endl;
+                return false;
             }
 
             // check ft enough
@@ -114,18 +114,14 @@ bool Map::validate() {
             }
         }
 
-
         if(sequence.size() == territories.size()){
-            cout << name << " is a valid Map!" << endl;
+            cout << "->VALID Map: " << name << endl;
             return true;
         }
-
     }
 
-    if( isInvalid) {
-        cout << name << " is an invalid Map!" << endl;
-        return false;
-    }
+    cout << "Invalid Map: " << name << endl;
+    return false;
 }
 
 // get territories
