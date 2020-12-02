@@ -85,12 +85,12 @@ void Player::setStrategy(PlayerStrategy* newStrategy) {
 //**STRATEGY METHODS**
 
 //Return list of territories to defend
-Territory* Player::toDefend() {
+vector<Territory*> Player::toDefend() {
     return this->strategy->toDefend(this);
 }
 
 //Return list of territories to attack
-Territory* Player::toAttack() {
+vector<Territory*> Player::toAttack() {
     return this->strategy->toAttack(this);
 }
 

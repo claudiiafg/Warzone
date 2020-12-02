@@ -20,23 +20,24 @@ class PlayerStrategy
     //OrderList* ol;
 public:
 	virtual void issueOrder(Player* player);
-	virtual Territory* toAttack(Player* player);
-	virtual Territory* toDefend(Player* player);
+	virtual vector<Territory*> toAttack(Player* player);
+	virtual vector<Territory*> toDefend(Player* player);
+
 	void setMap(Map *m);
 };
 
 class HumanPlayerStrategy : public PlayerStrategy {
 public:
 	virtual void issueOrder(Player* player);
-	virtual Territory* toAttack(Player* player);
-	virtual Territory* toDefend(Player* player);
+	virtual vector<Territory*> toAttack(Player* player);
+	virtual vector<Territory*> toDefend(Player* player);
 };
 
 class AggressivePlayerStrategy : public PlayerStrategy {
 public:
 	virtual void issueOrder(Player* player);
-	virtual Territory* toAttack(Player* player);
-	virtual Territory* toDefend(Player* player);
+	virtual vector<Territory*> toAttack(Player* player);
+	virtual vector<Territory*> toDefend(Player* player);
 
 	Territory* getBiggest(Player* player);
 	Territory* getWeakestEnemy(Territory* strongest, Player* player);
@@ -46,13 +47,15 @@ public:
 class BenevolentPlayerStrategy : public PlayerStrategy {
 public:
 	virtual void issueOrder(Player* player);
-	virtual Territory* toAttack(Player* player);
-	virtual Territory* toDefend(Player* player);
+	virtual vector<Territory*> toAttack(Player* player);
+	virtual vector<Territory*> toDefend(Player* player);
+
+	Territory* getBiggest(Player* player);
 };
 
 class NeutralPlayerStrategy : public PlayerStrategy {
 public:
 	virtual void issueOrder(Player* player);
-	virtual Territory* toAttack(Player* player);
-	virtual Territory* toDefend(Player* player);
+	virtual vector<Territory*> toAttack(Player* player);
+	virtual vector<Territory*> toDefend(Player* player);
 };
