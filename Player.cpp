@@ -86,17 +86,17 @@ void Player::setStrategy(PlayerStrategy* newStrategy) {
 
 //Return list of territories to defend
 Territory* Player::toDefend() {
-    return this->strategy->toDefend();
+    return this->strategy->toDefend(this);
 }
 
 //Return list of territories to attack
 Territory* Player::toAttack() {
-    return this->strategy->toAttack();
+    return this->strategy->toAttack(this);
 }
 
 //Create order and add to orderList
 void Player::issueOrder() {
-    return this->strategy->issueOrder();
+    return this->strategy->issueOrder(this);
 }
 
 

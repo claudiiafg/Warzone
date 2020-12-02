@@ -241,7 +241,6 @@ void GameEngine::selectStrategy() {
 
         player->setStrategy(strategy);
         strategy->setMap(map);
-        strategy->setPlayer(player);
     }
 }
 
@@ -348,7 +347,7 @@ void GameEngine::mainGameLoop() {
         roundCounter++;
         counter++;
     }
-
+    
     Player* last = players.front();
     cout << "\nOnly " << last->name << " remains - Congratulations you are the winner!" << endl;
 }
@@ -392,7 +391,9 @@ void GameEngine::issueOrdersPhase() {
         player->allies.clear();
         player->cardFlag = false;
         player->orderPhase = 1;
+        player->advanceList.clear();
     }
+    updateOrderPhase();
 
     while (orderPhase < 3) { //Issue orders until all players are done
         for (auto player:players) {
@@ -411,7 +412,6 @@ void GameEngine::executeOrdersPhase() {
     for (auto player : players) {
         player->orderPhase = 1;
     }
-    
     updateOrderPhase();
 
     while (orderPhase < 5) { //Execute orders until all players are done
@@ -442,7 +442,7 @@ void GameEngine::executeOrdersPhase() {
                 //Move highest priority orders to front of list
                 (*player)->playerOrders->sortOrderList();
                 Order* toExecute = (*player)->playerOrders->front();
-                if (toExecute->priority = !orderPhase) {
+                if (toExecute->getPriority() != orderPhase) {
                     (*player)->orderPhase++;
                     continue; //If first order is no longer within current priority, increment player order phase and skip
                 }

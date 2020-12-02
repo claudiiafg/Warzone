@@ -26,6 +26,7 @@ public:
 	int phase; //Keeps track of player phase || Startup=1, Reinforcement=2, Issuing=3, Execute=4, Conquered=5
 	int cardFlag = false; //Keeps track of whether player has received a card this turn
 	int orderPhase = 0; //Keeps track of current order phase || Issuing: 1=Deploy, 2=Others, 3=Complete || Execution: Deploy=1, Airlift=2, Blockade=3, Others=4, Complete=5
+	vector<Territory*> advanceList{};
 	PlayerStrategy* strategy;
     vector<Player*> allies;
     vector<Territory *> playerTerritories;
