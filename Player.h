@@ -61,8 +61,8 @@ public:
 	void setStrategy(PlayerStrategy* newStrategy);
 
 	//Methods
-	Territory* toDefend();
-	Territory* toAttack();
+	virtual vector<Territory*> toAttack();
+	virtual vector<Territory*> toDefend();
 	void issueOrder();
 	vector<Territory*> adjacentEnemies(Map* map);
 	bool hasTerritory(string terrId);

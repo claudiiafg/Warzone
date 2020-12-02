@@ -9,6 +9,8 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include <sstream>
+#include <algorithm>
 #include <experimental/filesystem>
 
 using namespace std;
@@ -64,7 +66,13 @@ public:
     // destructor
     ~ConquestFileReader();
     explicit ConquestFileReader(MapFile* otherMap);
-    static vector<string> getContent(const string& path);   // get files content
+    vector<string> getContent(const string& path);   // get files content
+    static vector<string> adaptContinents(vector<string> tempContinents);
+    static vector<string> adaptTerritories(vector<string> tempTerritories);
+    vector<string> adaptBorders(vector<string> tempTerritories, vector<string> finalTerritories);
+    static int nthOccurrence(const string& str, const string& findMe, int nth);
+    static string findIdOfTerritory(string terrName, vector<string> finalTerritories);
+    static int count(string str );
 
     // operator
     friend ostream& operator<<(ostream &os, const  ConquestFileReader& l);

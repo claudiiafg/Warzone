@@ -1,6 +1,7 @@
 #include "PlayerStrategies.h"
 #include "MapLoader.h"
 #include "Player.h"
+#include "Map.h"
 #include <iostream>
 using namespace std;
 
@@ -10,11 +11,11 @@ using namespace std;
  */
 
 
-
 int main(){
 //Player(int name, int armies, vector<Territory*> playerTerritories, Hand* playerHand, OrderList* playerOrders, vector<Player*> allies, PlayerStrategy* strategy)
     Hand *h1 = new Hand();
     OrderList *ol1 = new OrderList;
+    PlayerStrategy *strategy = new PlayerStrategy();
     vector<Territory*> vt1;
     vector<Player*> allies1;
     AggressivePlayerStrategy *aggressive = new AggressivePlayerStrategy();
@@ -48,7 +49,7 @@ int main(){
         m->territories.at(i)->setOwner(1);
         p1->playerTerritories.push_back(m->territories.at(i));
     }
-    stratMap = m;
+    strategy->setMap(m);
     m->Notify();
 
     for(int i = 5; i < 10; i++){
@@ -82,32 +83,32 @@ int main(){
     //p2->toDefend();
 
 
-delete neutral;
-neutral = NULL;
-delete human;
-human = NULL;
-delete m;
-m = NULL;
-delete ml;
-ml = NULL;
-delete po2;
-po2 = NULL;
-delete p2;
-p2 = NULL;
-delete benevolent;
-benevolent = NULL;
-for(int i = 0; i < allies2.size(); i++){
-    delete allies2.at(i);
-    allies2.at(i) = NULL;
-}
-for(int i = 0; i < vt2.size(); i++) {
-    delete vt2.at(i);
-    vt2.at(i) = NULL;
-}
-delete ol2;
-ol2 = NULL;
-delete h2;
-h2 = NULL;
+    delete neutral;
+    neutral = NULL;
+    delete human;
+    human = NULL;
+    delete m;
+    m = NULL;
+    delete ml;
+    ml = NULL;
+    delete po2;
+    po2 = NULL;
+    delete p2;
+    p2 = NULL;
+    delete benevolent;
+    benevolent = NULL;
+    for(int i = 0; i < allies2.size(); i++){
+        delete allies2.at(i);
+        allies2.at(i) = NULL;
+    }
+    for(int i = 0; i < vt2.size(); i++) {
+        delete vt2.at(i);
+        vt2.at(i) = NULL;
+    }
+    delete ol2;
+    ol2 = NULL;
+    delete h2;
+    h2 = NULL;
 
     delete po1;
     po1 = NULL;
