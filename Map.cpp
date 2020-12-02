@@ -81,9 +81,9 @@ bool Map::validate() {
         sequence.push_back(initialAdjacent);
     }
      // attention! t starts at 1 -> territory[0] is node with id 1
-    for (int i = 0; i < sequence.size(); i++) {
+    for (int i = 0; i < territories.size(); i++) {
         // turn string to int
-        stringstream geek(sequence[i]);
+        stringstream geek(territories[i]->id);
         geek >> idInt;
 
         // check if enough
@@ -93,44 +93,35 @@ bool Map::validate() {
 
         // check each adjacent of current node in the sequence
         for (auto & node : territories[idInt - 1]->getAdjacentNodes()) {
-
             stringstream geek(node);
             geek >> nodeInt;
-
             vector<string> tempAdjacent = territories[nodeInt - 1]->getAdjacentNodes();
 
             // look territory id inside it's adjacent node's adjacentList (must have each other)
-            if(!(std::count(tempAdjacent.begin(), tempAdjacent.end(), territories[idInt - 1]->id)))
-            {
-                isInvalid = true;
-                break;
-            } else {
+            if (!(std::count(tempAdjacent.begin(), tempAdjacent.end(), territories[idInt - 1]->id))) {
+                cout << "Invalid Map: " << name << endl;
+                return false;
             }
 
             // check ft enough
-            if(sequence.size() == territories.size()){
+            if (sequence.size() == territories.size()) {
                 break;
             }
 
             // if not in the sequence yet add it
-            if (!(std::find(sequence.begin(), sequence.end(), node) != sequence.end()))
-            {
+            if (!(std::find(sequence.begin(), sequence.end(), node) != sequence.end())) {
                 sequence.push_back(node);
             }
         }
 
-
         if(sequence.size() == territories.size()){
-            cout << "Map is valid!" << endl;
+            cout << "->VALID Map: " << name << endl;
             return true;
         }
-
     }
 
-    if( isInvalid) {
-        cout << "Invalid map!" << endl;
-        return false;
-    }
+    cout << "Invalid Map: " << name << endl;
+    return false;
 }
 
 // get territories
@@ -176,7 +167,6 @@ void Map::setContinents(vector<string> _continentsData) {
                 }
             }
         }
-        cout << endl;
 
         // set continent of adjacent territories of the continent's territories, as the continents adjacent territorries
         continent->adjacent = adjacentCont;
@@ -307,13 +297,19 @@ Continent::Continent(string pos, string continentsString) {
     id = pos;
 
     //seperate string by spaces
-    regex ws_re("\\s+");
+    regex ws_re("\\s{1}");
     vector<string> result{
             sregex_token_iterator(continentsString.begin(), continentsString.end(), ws_re, -1), {}
     };
 
     name = result[0];
-    bonus = stoi(result[1]);
+
+    try{
+        bonus = stoi(result[1]);
+
+    } catch(exception) {
+        bonus = 0;
+    }
 }
 
 // copy constructor
