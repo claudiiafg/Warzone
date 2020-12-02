@@ -72,6 +72,7 @@ public:
     vector<string> adaptBorders(vector<string> tempTerritories, vector<string> finalTerritories);
     static int nthOccurrence(const string& str, const string& findMe, int nth);
     static string findIdOfTerritory(string terrName, vector<string> finalTerritories);
+    static int count(string str );
 
     // operator
     friend ostream& operator<<(ostream &os, const  ConquestFileReader& l);

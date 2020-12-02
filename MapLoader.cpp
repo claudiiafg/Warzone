@@ -72,7 +72,6 @@ void MapLoader::loadMaps() {
             cout << "->Invalid: " << fileName << endl;
         }
     }
-    cout << endl << endl;
 }
 
 
@@ -184,8 +183,6 @@ ConquestFileReader::ConquestFileReader(MapFile *otherMap) {
 }
 
 vector<string> ConquestFileReader::getContent(const string &path) {
-    cout << "WAS CALLED" << endl;
-    cout << "JUST ADAPTING THE CONTENT LEFT" << endl;
     cout << path << endl;
     ifstream myFile (path);
 
@@ -249,21 +246,43 @@ vector<string> ConquestFileReader::getContent(const string &path) {
 }
 
 string ConquestFileReader::findIdOfTerritory(string terrName, const vector<string> finalTerritories) {
-    string name = terrName.substr(0, terrName.length() - 2);
+    string name = terrName.substr(0, terrName.length() - 1);
     for_each(name.begin(), name.end(), [name](char & c) {
         c = ::tolower(c);
     });
 
     for(auto & line: finalTerritories) {
-        string tempTime = line;
-        for_each(tempTime.begin(), tempTime.end(), [tempTime](char & c) {
-            c = ::tolower(c);
-        });
-        if (tempTime.find(name) != std::string::npos) {
-            return to_string(line[0]);
+        if(line != "[countries]") {
+            string tempLine = line;
+            for_each(tempLine.begin(), tempLine.end(), [tempLine](char & c) {
+                c = ::tolower(c);
+            });
+            if (tempLine.find(name) != std::string::npos && tempLine.find(name) < 4) {
+                string substr;
+                stringstream ss(line);
+                getline( ss, substr, ' ');
+                if(ss.good()) {
+                    int inputNum = count(name);
+                    int outputNum = count(tempLine);
+                    if(outputNum - inputNum <= 3) {
+                        return substr;
+                    }
+                }
+            }
         }
     }
     return "not found";
+}
+
+int ConquestFileReader::count( string str )
+{
+    int iSpaces = 0;
+
+    for(unsigned int iLoop = 0; iLoop < ( sizeof( str ) / sizeof( str [0] ) ); iLoop++ )
+        if(str [iLoop] == ' ' )
+            iSpaces++;
+
+    return iSpaces;
 }
 
 int ConquestFileReader::nthOccurrence(const string &str, const string &findMe, int nth) {
@@ -377,9 +396,8 @@ vector<string> ConquestFileReader::adaptBorders(const vector<string> tempTerrito
             // loop through adjacent territories and find their id -> push to territory adjacent's line
             for (int i = 1; i < adjacentVector.size(); i++) {
                 string nodeId = findIdOfTerritory(adjacentVector[i], finalTerritories);
-
                 if(nodeId != "not found" && (finalAdjLine.find(nodeId) == std::string::npos)) {
-                    finalAdjLine += " " + findIdOfTerritory(adjacentVector[i], finalTerritories);
+                    finalAdjLine += " " + nodeId;
                 }
             }
 

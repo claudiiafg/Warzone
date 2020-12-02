@@ -93,42 +93,37 @@ bool Map::validate() {
 
         // check each adjacent of current node in the sequence
         for (auto & node : territories[idInt - 1]->getAdjacentNodes()) {
-
             stringstream geek(node);
             geek >> nodeInt;
-
             vector<string> tempAdjacent = territories[nodeInt - 1]->getAdjacentNodes();
 
             // look territory id inside it's adjacent node's adjacentList (must have each other)
-            if(!(std::count(tempAdjacent.begin(), tempAdjacent.end(), territories[idInt - 1]->id)))
-            {
+            if (!(std::count(tempAdjacent.begin(), tempAdjacent.end(), territories[idInt - 1]->id))) {
                 isInvalid = true;
                 break;
-            } else {
             }
 
             // check ft enough
-            if(sequence.size() == territories.size()){
+            if (sequence.size() == territories.size()) {
                 break;
             }
 
             // if not in the sequence yet add it
-            if (!(std::find(sequence.begin(), sequence.end(), node) != sequence.end()))
-            {
+            if (!(std::find(sequence.begin(), sequence.end(), node) != sequence.end())) {
                 sequence.push_back(node);
             }
         }
 
 
         if(sequence.size() == territories.size()){
-            cout << "Map is valid!" << endl;
+            cout << name << " is a valid Map!" << endl;
             return true;
         }
 
     }
 
     if( isInvalid) {
-        cout << "Invalid map!" << endl;
+        cout << name << " is an invalid Map!" << endl;
         return false;
     }
 }
@@ -153,28 +148,22 @@ void Map::setTerritories(vector<string> _territoriesData, vector<string> _border
 
 // set continents
 void Map::setContinents(vector<string> _continentsData) {
-    cout << "a" << endl;
     // create continent objects from map data
     for (int i = 0; i < _continentsData.size(); i++) {
         Continent* tempCont = new Continent(to_string(i + 1), _continentsData[i]);
         continents.push_back(tempCont);
     }
 
-    cout << "b" << endl;
-
     for (auto & continent : continents) {
         vector<string> adjacentCont;
         // find each continent's territories
         vector<Territory*> terr = getTerritoriesByContinentId(continent->id);
-        cout << "1 ";
 
         for (auto & j : terr) {
             // find each territory adjacent nodes
             vector<Territory*> adjacentTerr = getAdjacentTerritories(j->id);
-            cout << "2 ";
 
             for (auto & k : adjacentTerr) {
-                cout << "3 ";
                 // push continent of adjacent territories of the continent's territories
                 if(!(std::find(adjacentCont.begin(), adjacentCont.end(), k->getContinentID()) != adjacentCont.end()) &&
                    k->getContinentID() != continent->id) {
@@ -182,12 +171,10 @@ void Map::setContinents(vector<string> _continentsData) {
                 }
             }
         }
-        cout << endl;
 
         // set continent of adjacent territories of the continent's territories, as the continents adjacent territorries
         continent->adjacent = adjacentCont;
     }
-    cout << "c" << endl;
 }
 
 

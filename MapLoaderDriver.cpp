@@ -29,7 +29,6 @@ int main(){
     }
 
     for (int i = 0; i < rawMaps.size(); i++) {
-        cout << rawMaps[i]->name << endl;
         Map* map = new Map(rawMaps[i]->name, rawMaps[i]->content);
         if(map->validate()) {
             maps.push_back(map);
