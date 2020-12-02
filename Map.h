@@ -96,7 +96,7 @@ public:
     Territory* getTerritoryById(string territoryID);
     Continent* getContinentById(string id);
     vector<Territory*> getAdjacentTerritories(string territoryID);
-    vector<Territory*> Map::getAdjacentEnemyTerritories(string territoryID, Player* p);
+    vector<Territory*> getAdjacentEnemyTerritories(string territoryID, Player* p);
     vector<Territory*> getTerritoriesByContinentId(string id);
     vector<Territory*> getTerritoriesByOwnerID(int ownerID);
 

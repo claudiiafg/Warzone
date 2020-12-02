@@ -17,7 +17,7 @@ int main(){
     OrderList *ol1 = new OrderList;
     vector<Territory*> vt1;
     vector<Player*> allies1;
-    HumanPlayerStrategy *aggressive = new HumanPlayerStrategy();
+    AggressivePlayerStrategy *aggressive = new AggressivePlayerStrategy();
 
     Player *p1 = new Player(1, 500, vt1, h1, ol1, aggressive);
     PhaseObserver *po1 = new PhaseObserver(p1);
@@ -38,37 +38,49 @@ int main(){
     ml->loadMaps();
     vector<MapFile*> rawMaps = ml->getMaps();
     Map* m = new Map(rawMaps[0]->name, rawMaps[0]->content);
-    cout << rawMaps[0]->name << "\n";
+    cout << m->name << "\n";
     GameStatObserver *mo = new GameStatObserver(m);
+
+    aggressive->setMap(m);
+    benevolent->setMap(m);
 
     for(int i = 0; i < 5; i++){
         m->territories.at(i)->setOwner(1);
+        p1->playerTerritories.push_back(m->territories.at(i));
     }
     stratMap = m;
     m->Notify();
 
     for(int i = 5; i < 10; i++){
         m->territories.at(i)->setOwner(2);
+        p2->playerTerritories.push_back(m->territories.at(i));
     }
-    m->Notify();
 
+    m->Notify();
+    p1->issueOrder();
     p1->toAttack();
     p1->toDefend();
-    p1->issueOrder();
-    p2->toAttack();
-    p2->toDefend();
+    //p2->issueOrder();
+    //p2->toAttack();
+    //p2->toDefend();
 
     HumanPlayerStrategy *human = new HumanPlayerStrategy;
     NeutralPlayerStrategy *neutral = new NeutralPlayerStrategy;
+    human->setMap(m);
+    neutral->setMap(m);
     p1->setStrategy(human);
     p2->setStrategy(neutral);
-
+    cout <<"Preparing to issue order... \n\n";
     p1->issueOrder();
+    p1->issueOrder();
+    p1->issueOrder();
+    cout << "Preparing to defend... \n\n";
     p1->toAttack();
     p1->toDefend();
-    p2->issueOrder();
-    p2->toAttack();
-    p2->toDefend();
+    //p2->issueOrder();
+    //p2->toAttack();
+    //p2->toDefend();
+
 
 delete neutral;
 neutral = NULL;
