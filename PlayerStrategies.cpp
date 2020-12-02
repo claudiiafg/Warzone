@@ -14,16 +14,16 @@ using namespace std;
 void PlayerStrategy::issueOrder(Player* player) {
 } 
 
-Territory* PlayerStrategy::toAttack(Player* player) {
+vector<Territory*> PlayerStrategy::toAttack(Player* player) {
 	vector<Territory*> *toAttack = new vector<Territory*>{};
 
-	return (*toAttack).front();
+	return (*toAttack);
 }
 
-Territory* PlayerStrategy::toDefend(Player* player) {
+vector<Territory*> PlayerStrategy::toDefend(Player* player) {
 	vector<Territory*> *toDefend = new vector<Territory*>{};
 
-	return (*toDefend).front();
+	return (*toDefend);
 }
 
 void PlayerStrategy::setMap(Map *m){
@@ -160,7 +160,7 @@ void HumanPlayerStrategy::issueOrder(Player* player) {
      }
 }
 
-Territory* HumanPlayerStrategy::toAttack(Player* player) {
+vector<Territory*> HumanPlayerStrategy::toAttack(Player* player) {
     vector<Territory*> *toAttack = new vector<Territory*>{};
     cout << "Choose a territory to attack: \n\n";
     string target;
@@ -168,16 +168,16 @@ Territory* HumanPlayerStrategy::toAttack(Player* player) {
     cout<<"It worked!";
     cout << "You attacked " << stratMap->getTerritoryById(target)->name << "!";
     toAttack->push_back(stratMap->getTerritoryById(target));
-    return (*toAttack).front();
+    return (*toAttack);
 }
 
-Territory* HumanPlayerStrategy::toDefend(Player* player) {
+vector<Territory*> HumanPlayerStrategy::toDefend(Player* player) {
     vector<Territory*> *toDefend = new vector<Territory*>{};
     cout<< "Choose a territory to defend: \n\n";
     string target;
     cin >> target;
     toDefend->push_back(stratMap->getTerritoryById(target));
-    return (*toDefend).front();
+    return (*toDefend);
 }
 
 
@@ -187,7 +187,7 @@ Territory* HumanPlayerStrategy::toDefend(Player* player) {
 
 
 void AggressivePlayerStrategy::issueOrder(Player* player) {
-    Territory* strongest = toDefend(player); //Find strongest territory
+    Territory* strongest = toDefend(player).front(); //Find strongest territory
 
     //DEPLOY PHASE
     if (player->reinforcements > 0) { //Deploy all reinforcements to strongest territory
@@ -198,16 +198,16 @@ void AggressivePlayerStrategy::issueOrder(Player* player) {
 
     //OTHER ORDERS PHASE
 
-    //Advance all armies from adjacent friendly territories to strongest territory
+    //Advance all armies but one from adjacent friendly territories to strongest territory
     vector<Territory*> adj = stratMap->getAdjacentTerritories(strongest->id);
     vector<Territory*>::iterator it = adj.begin();
     while (it != adj.end()) { 
-        if ((*it)->getOwnerID() == player->name && (*it)->armiesNumber>0) {
-            if (count(player->advanceList.begin(), player->advanceList.end(), (*it)) > 0) {
+        if ((*it)->getOwnerID() == player->name && (*it)->armiesNumber>1) {
+            if (count(player->advanceList.begin(), player->advanceList.end(), (*it)) > 0) { //Check if country has already advanced their armies
                 it = adj.erase(it);
                 continue;
             }
-            player->playerOrders->addOrder(new Advance(player, (*it), strongest, (*it)->armiesNumber));
+            player->playerOrders->addOrder(new Advance(player, (*it), strongest, (*it)->armiesNumber-1));
             player->advanceList.push_back(*it);
             return;
         }
@@ -231,16 +231,16 @@ void AggressivePlayerStrategy::issueOrder(Player* player) {
     }
 
     //Advance all armies from strongest territory to weakest adjacent enemy territory
-    player->playerOrders->addOrder(new Advance(player, strongest, getWeakestEnemy(strongest, player), strongest->armiesNumber));
+    player->playerOrders->addOrder(new Advance(player, strongest, getWeakestEnemy(strongest, player), (strongest->armiesNumber)/2));
     player->orderPhase++; //Increment player phase from Other Orders Phase to Issuing Complete
 }
 
-Territory* AggressivePlayerStrategy::toAttack(Player* player) { //Every adjacent enemy is on the toAttack list
+vector<Territory*> AggressivePlayerStrategy::toAttack(Player* player) { //Every adjacent enemy is on the toAttack list
     vector<Territory*> toAttack = player->adjacentEnemies(stratMap);
-    return toAttack.front();
+    return toAttack;
 }
 
-Territory* AggressivePlayerStrategy::toDefend(Player* player) { //Protects its strongest countries first
+vector<Territory*> AggressivePlayerStrategy::toDefend(Player* player) { //Protects its strongest countries first
 
     vector<Territory*> toDefend = player->getMyTerritories();
     sort(toDefend.begin(), toDefend.end()); //Sorts from weakest to strongest territory
@@ -248,12 +248,13 @@ Territory* AggressivePlayerStrategy::toDefend(Player* player) { //Protects its s
 
     Territory* strong = toDefend.front();
 
-    while ((*stratMap).getAdjacentEnemyTerritories(strong->id, player).empty()) { //Iterate down the list until one with adjacent enemies is found
+    //Iterate down the list until the strongest territory with adjacent enemies is found
+    while ((*stratMap).getAdjacentEnemyTerritories(strong->id, player).empty()) {
         toDefend.erase(toDefend.begin());
         strong = toDefend.front();
     };
 
-    return strong;
+    return toDefend;
 }
 
 //Returns the player territory with the most armies
@@ -300,25 +301,108 @@ Territory* AggressivePlayerStrategy::getStrongestEnemy(Territory* strongest, Pla
 
 
 void BenevolentPlayerStrategy::issueOrder(Player* player) {
-    //Divide reinforcements between territories on defence list
-    //Relocate any armies from territorities with above average units to those adjacent with below average
-    //Use airlift from strongest to weakest territory
-    //Use negotiate anytime available
-    //Use blockade on weakest territory anytime available
-    //Never use bomb
+
+    //DEPLOY PHASE
+    if (player->reinforcements > 0) { //Reinforce weakest country
+        Territory* weakest = toDefend(player).front();
+        player->deploy(weakest, player->reinforcements);
+        player->orderPhase++; //Increment player phase (from deploy phase to other orders phase)
+        player->advanceList.push_back(weakest);
+        return;
+    }
+
+    //OTHER ORDERS PHASE
+
+    //Advance - Relocate armies from biggest territory to weakest adjacent
+    Territory* biggest = getBiggest(player); //Find player's territory with most armies
+    int toSend = biggest->armiesNumber / 2; //Send half of the strongest territory's armies
+
+    for (auto terr : stratMap->getAdjacentTerritories(biggest->id)) {
+        if (terr->getOwnerID() == player->name) { //Must be friendly territory
+            if (count(player->advanceList.begin(), player->advanceList.end(), terr) > 0) { //Check if country has already been reinforced or advanced to
+                continue;
+            }
+            player->playerOrders->addOrder(new Advance(player, terr, biggest, toSend));
+            player->advanceList.push_back(terr); //Add territory to list that has been reinforce3d
+            return;
+        }
+    }
+
+
+    //Airlift - Use airlift from strongest to weakest territory
+    if (player->getMyHand()->getAirCount() > 0) {
+        Territory* biggest = getBiggest(player); //Find player's territory with most armies
+        int toSend = biggest->armiesNumber / 2; //Send half of the strongest territory's armies
+        Territory* weaker = toDefend(player).front();
+        for (auto terr: toDefend(player)) {
+            if (count(player->advanceList.begin(), player->advanceList.end(), terr) > 0) { //Check if country has already been reinforced or advanced to
+                    continue;
+                }
+            weaker = terr; //Otherwise, airlift to this territory
+            player->advanceList.push_back(weaker); //Add territory to list that has been reinforce3d
+            return;
+        }
+
+        player->getMyHand()->play("airlift");
+        player->playerOrders->addOrder(new Airlift(player, biggest, weaker, toSend));
+        return;
+    }
+
+
+    //Negotiate - Use anytime available on any player
+    int otherPlayer = player->name;
+
+    for (auto terr : player->getMyTerritories()) {
+        vector<Territory*> enemyTerrs = stratMap->getAdjacentEnemyTerritories(terr->id, player);
+        if (!(enemyTerrs.empty())) { //Take the first player territory that has adjacent enemies
+            otherPlayer = enemyTerrs.front()->getOwnerID(); //Take the enemy territory's owner id as a player to negotiate with
+        }
+    }
+   
+    if (player->getMyHand()->getDiplomCount() > 0) {
+        player->getMyHand()->play("diplomacy");
+        player->playerOrders->addOrder(new Negotiate(player, otherPlayer));
+        return;
+    }
+
+    //Blockade - Use weakest territory
+    if (player->getMyHand()->getBlockCount() > 0) {
+        for (auto terr : toDefend(player)) {
+            if (count(player->advanceList.begin(), player->advanceList.end(), terr) > 0) { //Check if country has already been reinforced or advanced to
+                continue;
+            }
+            player->getMyHand()->play("blockade");
+            player->playerOrders->addOrder(new Blockade(player, terr));
+            player->advanceList.push_back(terr); //Add territory to list that has been reinforce3d
+            return;
+        }
+    }
+
+    player->orderPhase++; //No more orders to issue, increment to completed phase
 }
 
-Territory* BenevolentPlayerStrategy::toAttack(Player* player) { //Benevolent player never attacks
-    return nullptr;
+vector<Territory*> BenevolentPlayerStrategy::toAttack(Player* player) { //Benevolent player never attacks
+    vector<Territory*> toAttack{};
+    return toAttack;
 }
 
-Territory* BenevolentPlayerStrategy::toDefend(Player* player) { //Benevolent player protects its weakest countries first
+vector<Territory*> BenevolentPlayerStrategy::toDefend(Player* player) { //Benevolent player protects its weakest countries first
     vector<Territory*> toDefend = player->getMyTerritories();
-    sort(*toDefend.begin(), *toDefend.end());
-    return toDefend.front();
+    sort(toDefend.begin(), toDefend.end());
+    return toDefend;
 }
 
+//Returns the player territory with the most armies
+Territory* BenevolentPlayerStrategy::getBiggest(Player* player) {
+    vector<Territory*> territories = player->getMyTerritories();
+    Territory* biggest = territories.front();
 
+    for (auto terr : player->getMyTerritories()) {
+        if (terr->armiesNumber > biggest->armiesNumber) biggest = terr;
+    }
+
+    return biggest;
+}
 
 //////////////////////////////////////////////////////////////
 ////               NEUTRAL PLAYER STRATEGY                ////
@@ -329,14 +413,14 @@ Territory* BenevolentPlayerStrategy::toDefend(Player* player) { //Benevolent pla
 void NeutralPlayerStrategy::issueOrder(Player* player) {
 }
 
-Territory* NeutralPlayerStrategy::toAttack(Player* player) {
+vector<Territory*> NeutralPlayerStrategy::toAttack(Player* player) {
     vector<Territory*> *toAttack = new vector<Territory*>{};
 
-    return (*toAttack).front();
+    return (*toAttack);
 }
 
-Territory* NeutralPlayerStrategy::toDefend(Player* player) {
+vector<Territory*> NeutralPlayerStrategy::toDefend(Player* player) {
     vector<Territory*> *toDefend = new vector<Territory*>{};
 
-    return (*toDefend).front();
+    return (*toDefend);
 }

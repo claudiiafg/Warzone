@@ -330,7 +330,6 @@ void GameEngine::activateObservers() {
 
 void GameEngine::mainGameLoop() {
     int roundCounter = 1;
-    int counter = 0;
 
     //Loop until only one player remains
     while (players.size() > 1) {
@@ -341,11 +340,15 @@ void GameEngine::mainGameLoop() {
             break;
         }
 
+        if (roundCounter > 1000) {
+            cout << "Players unable to find a solution - game is a draw.";
+            return;
+        }
+
         reinforcementPhase();
         issueOrdersPhase();
         executeOrdersPhase();
         roundCounter++;
-        counter++;
     }
     
     Player* last = players.front();
@@ -466,16 +469,17 @@ void GameEngine::updateTerritoryOwner(int ownerID, string territoryID) {
     players[ownerID]->setTerritories(map->getTerritoriesByOwnerID(ownerID));
 }
 
-void GameEngine::updateOrderPhase() {
-    orderPhase = 0;
+void GameEngine::updateOrderPhase() { //Set order phase to the lowest player's order phase
+    orderPhase = 6;
 
     for (auto player : players) {
-        orderPhase += player->orderPhase;
+        if (player->orderPhase < orderPhase) orderPhase = player->orderPhase;
     }
-    orderPhase = orderPhase / players.size();
 }
 
 void GameEngine::updateMapTerritories() {
+
+    //Update territory owners
     for (auto player : players) {
         vector<Territory*> newList = {};
         for (auto terr : map->territories) {
@@ -486,20 +490,16 @@ void GameEngine::updateMapTerritories() {
         player->setTerritories(newList);
     }
 
-    for (auto player = players.begin(); player != players.end(); ++player) {
-        if (playerDeletedFlag) {
-            player--; //Wind iterator back to account for left shift from deletion
-        }
-
-        playerDeletedFlag = false;
-
-        if ((*player)->getMyTerritories().empty()) {
-            (*player)->phase = 5; //Send player to phase 5 (conquered)
-            (*player)->Notify();
-            players.erase(player); //Remove player from player list
+    //Delete conquered players
+    vector<Player*>::iterator it = players.begin();
+    while (it != players.end()) {
+        if ((*it)->getMyTerritories().empty()) {
+            (*it)->phase = 5; //Send player to phase 5 (conquered)
+            (*it)->Notify();
+            it = players.erase(it); //Remove player from player list
             if (players.size() == 1) return;
-            playerDeletedFlag = true;
         }
+        else it++; //If no player was deleted, advance to next player (if player is deleted, iterator is already shifted)
     }
 }
 
