@@ -60,7 +60,7 @@ void HumanPlayerStrategy::issueOrder(Player* player) {
 
     //ADVANCE
 
-        cout << "Time to advance! Will you attack an enemy country or reinforce one of your own?\n\n1. Attack /n2.Defend";
+        cout << "Time to advance! Will you attack an enemy country or reinforce one of your own?\n\n1. Attack \n2. Defend";
         int advanceOption;
         cin >> advanceOption;
 
@@ -116,25 +116,6 @@ void HumanPlayerStrategy::issueOrder(Player* player) {
         cout << "You will deploy " << unitNum << "units\n\n";
         player->getMyOrders()->addOrder(new Advance(player, terrChoice, defendChoice, unitNum));
     }
-
-        /**
-         cout << "Enter the ID of the territory you want to deploy your units to: ";
-         for(int i = 0; i < player->playerTerritories.size(); i++){
-             cout << player->playerTerritories.at(i)->id << ": " << player->playerTerritories.at(i)->name << "\n";
-         }
-         string terrID;
-         cin >> terrID;
-         Territory *terrChoice = stratMap->getTerritoryById(terrID);
-         cout << "Units will be deployed to " << terrChoice->name << "\n\n";
-
-         cout << "Enter the number of units you want to deploy: \n\n";
-
-         int unitNum;
-         cin>> unitNum;
-         cout << unitNum << " Units will be deployed.\n\n";
-
-         player->getMyOrders()->addOrder(new Deploy(player, terrChoice, 500));
-         */
 
         //PLAYING CARDS
         cout << "Time to play your cards! Choose an order by number: \n\n 1. Bomb \n 2. Blockade \n 3. Airlift \n 4. Negotiate \n\n";
