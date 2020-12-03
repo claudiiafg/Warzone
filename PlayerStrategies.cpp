@@ -74,7 +74,7 @@ void HumanPlayerStrategy::issueOrder(Player* player) {
 
             cout << "You have chosen to advance on " << attackChoice->name << "!\n\n";
 
-            cout << "Choose a territory to advance on by ID: ";
+            cout << "Choose a territory to advance from by ID: ";
             for(int i = 0; i < attackChoice->getAdjacentNodes().size(); i++){
                 if(player->hasTerritory(attackChoice->getAdjacentNodes().at(i)))
                 cout << attackChoice->getAdjacentNodes().at(i) << ": " << stratMap->getTerritoryById(attackChoice->getAdjacentNodes().at(i))->name << "\n" ;
@@ -88,6 +88,10 @@ void HumanPlayerStrategy::issueOrder(Player* player) {
             cout << "Enter the number of units you want to deploy: \n\n";
             int unitNum;
             cin>> unitNum;
+            while(unitNum > terrChoice->armiesNumber){
+                cout << "Error: Your territory doesn't have that many armies!";
+                cin >> unitNum;
+            }
             cout << "You will deploy " << unitNum << "units\n\n";
             player->getMyOrders()->addOrder(new Advance(player, terrChoice, attackChoice, unitNum));
         }
@@ -113,6 +117,10 @@ void HumanPlayerStrategy::issueOrder(Player* player) {
         cout << "Enter the number of units you want to deploy: \n\n";
         int unitNum;
         cin>> unitNum;
+        while(unitNum > terrChoice->armiesNumber){
+            cout << "Error: Your territory doesn't have that many armies!";
+            cin >> unitNum;
+        }
         cout << "You will deploy " << unitNum << "units\n\n";
         player->getMyOrders()->addOrder(new Advance(player, terrChoice, defendChoice, unitNum));
     }
