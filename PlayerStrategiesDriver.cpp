@@ -10,6 +10,15 @@ using namespace std;
  -At each step, display the countries that are being attacked/reinforced/defended and the number of units on each country
  */
 
+void showMap(Map *m){
+    cout << "Current state of the world: \n\n";
+    for(int i = 0; i < m->getTerritories().size(); i++){
+        cout << "ID: " << m->getTerritories().at(i)->id << "   Name: " << m->getTerritories().at(i)->name
+             << "    Owner: " << m->getTerritories().at(i)->getOwnerID() << "      Units: " << m->getTerritories().at(i)->getArmies() << "\n";
+    }
+    cout<< "\n\n";
+}
+
 
 int main(){
 //Player(int name, int armies, vector<Territory*> playerTerritories, Hand* playerHand, OrderList* playerOrders, vector<Player*> allies, PlayerStrategy* strategy)
@@ -36,8 +45,6 @@ int main(){
     ml->loadMaps();
     vector<MapFile*> rawMaps = ml->getMaps();
     Map* m = new Map(rawMaps[0]->name, rawMaps[0]->content);
-    cout << m->name << "\n";
-    GameStatObserver *mo = new GameStatObserver(m);
 
     aggressive->setMap(m);
     benevolent->setMap(m);
@@ -45,20 +52,57 @@ int main(){
     for(int i = 0; i < 5; i++){
         m->territories.at(i)->setOwner(1);
         p1->playerTerritories.push_back(m->territories.at(i));
+        m->territories.at(i)->setArmiesNumber(10);
     }
     strategy->setMap(m);
 
     for(int i = 5; i < 10; i++){
         m->territories.at(i)->setOwner(2);
         p2->playerTerritories.push_back(m->territories.at(i));
+        m->territories.at(i)->setArmiesNumber(10);
+
     }
 
+    for(int i = 10; i < m->getTerritories().size(); i++){
+        m->territories.at(i)->setArmiesNumber(100);
+    }
+
+    showMap(m);
+
+
+    cout << "Enemies adjacent to player 1: \n";
+    for(int i = 0; i < p1->adjacentEnemies(m).size(); i++){
+        cout << p1->adjacentEnemies(m).at(i)->name << "\n";
+    }
+
+    cout << "Enemies on player 1's attack list: \n";
+    for(int i = 0; i < p1->toAttack().size(); i++){
+        cout << p1->toAttack().at(i)->name << "\n";
+    }
+
+    p1->setReinforcements(20);
+    p1->getMyTerritories().at(1)->setArmiesNumber(20);
+    cout << "Player 1 (aggressive) has 20 reinforcements and its strongest country is " << p1->getMyTerritories().at(1)->name << "\n\n";
+    cout << "Player 1 (aggressive) defends\n\n";
+    cout << "Player 1 chooses to defend " << p1->toDefend().back()->name << "\n\n";
+    cout << "Player 1 (aggressive) issues an order\n\n";
     p1->issueOrder();
-    p1->toAttack();
-    p1->toDefend();
-    //p2->issueOrder();
-    //p2->toAttack();
-    //p2->toDefend();
+
+    showMap(m);
+
+    cout << "Player 2 (benevolent) does not attack \n\n";
+    //Implementing this function creates an error, since the vector that's returned will be empty
+    //cout << "Player 2 chooses to attack" << p2->toAttack().front()->name << "\n\n";
+
+    p2->getMyTerritories().at(1)->setArmiesNumber(1);
+    cout<<"Player 2 (benevolent)'s weakest country is now " << p2->getMyTerritories().at(1)->name << "\n\n";
+
+    cout << "Player 2 (benevolent) defends\n\n";
+    cout << "Player 2 chooses to defend " << p2->toDefend().front()->name << "\n\n";
+    cout << "Player 2 (benevolent) issues an order\n\n";
+    p2->issueOrder();
+
+    showMap(m);
 
     HumanPlayerStrategy *human = new HumanPlayerStrategy;
     NeutralPlayerStrategy *neutral = new NeutralPlayerStrategy;
@@ -66,32 +110,26 @@ int main(){
     neutral->setMap(m);
     p1->setStrategy(human);
     p2->setStrategy(neutral);
-    cout <<"Preparing to issue order... \n\n";
-   // p1->issueOrder();
-    cout << "Preparing to defend... \n\n";
-   // p1->toAttack();
-    cout << "Preparing to defend... \n\n";
-   // p1->toDefend();
 
-    //p2->issueOrder();
-    //p2->toAttack();
-    //p2->toDefend();
+   p1->issueOrder();
+   p1->toAttack();
+   p1->toDefend();
+
+    p2->issueOrder();
+    p2->toAttack();
+    p2->toDefend();
 
 
     delete neutral;
     neutral = NULL;
-    cout << "Break point 1";
     delete human;
     human = NULL;
-    cout << "Break point 2";
 
     delete m;
     m = NULL;
-    cout << "Break point 3";
 
     delete ml;
     ml = NULL;
-    cout << "Break point 4";
 /**
     delete p2;
     p2 = NULL;
@@ -99,27 +137,22 @@ int main(){
 */
     delete benevolent;
     benevolent = NULL;
-    cout << "Break point 7";
 
     for(int i = 0; i < allies2.size(); i++){
         delete allies2.at(i);
         allies2.at(i) = NULL;
     }
-    cout << "Break point 8";
 
     for(int i = 0; i < vt2.size(); i++) {
         delete vt2.at(i);
         vt2.at(i) = NULL;
     }
-    cout << "Break point 9";
 
     delete ol2;
     ol2 = NULL;
-    cout << "Break point 10";
 
     delete h2;
     h2 = NULL;
-    cout << "Break point 11";
 
 /**
     delete p1;
@@ -128,23 +161,19 @@ int main(){
 */
     delete benevolent;
     benevolent = NULL;
-    cout << "Break point 14";
 
     for(int i = 0; i < allies1.size(); i++) {
         delete allies1.at(i);
         allies1.at(i) = NULL;
-        cout << "Break point 15";
-
     }
+
     for(int i = 0; i < vt1.size(); i++) {
         delete vt1.at(i);
         vt1.at(i) = NULL;
-        cout << "Break point 16";
-
     }
+
     delete ol1;
     ol1 = NULL;
-    cout << "Break point 17";
 
     delete h1;
     h1 = NULL;
