@@ -239,10 +239,6 @@ vector<string> ConquestFileReader::getContent(const string &path) {
     finalVecStr.insert( finalVecStr.end(), finalTerritories.begin(), finalTerritories.end() );
     finalVecStr.insert( finalVecStr.end(), finalBorders.begin(), finalBorders.end() );
 
-    for(auto & t: finalVecStr) {
-        cout << t << endl;
-    }
-
     return finalVecStr;
 }
 
@@ -316,12 +312,12 @@ vector<string> ConquestFileReader::adaptTerritories(const vector<string> tempTer
     finalTerritories.push_back(TERR_ID_WZ);
     for(auto & terr: tempTerritories) {
         // two consecutive new lines means nothing more to search through
-        if(previousWasEmpty && terr.size() == 1) {
+        if(previousWasEmpty && (terr.size() == 1 || terr.size() == 0)) {
             break;
         }
 
         // if current new line next territories are from another continent
-        if(terr.size() == 1) {
+        if(terr.size() == 1 || terr.size() == 0) {
             continentCounter += 1;
             previousWasEmpty = true;
 
@@ -354,11 +350,11 @@ vector<string> ConquestFileReader::adaptBorders(const vector<string> tempTerrito
     finalAdjacents.push_back(ADJ_ID_WZ);
     for(auto & terr: tempTerritories) {
         // two consecutive new lines means nothing more to search through
-        if (previousWasEmpty && terr.size() == 1) {
+        if (previousWasEmpty && (terr.size() == 1 || terr.size() == 0)) {
             break;
         }
 
-        if (terr.size() == 1) {
+        if (terr.size() == 1 || terr.size() == 0) {
             previousWasEmpty = true;
 
         } else {
@@ -415,7 +411,7 @@ vector<string> ConquestFileReader::adaptContinents(const vector<string> tempCont
     finalContinents.push_back(CONT_ID_WZ);
     for(auto & continent: tempContinents) {
         // if it is not newl line character
-        if(continent.size() != 1) {
+        if(continent.size() != 1 || continent.size() != 0) {
             pos = continent.find(EQUAL);
             continentName = continent.substr (0, pos);
             replace(continentName.begin(), continentName.end(), ' ', '-');

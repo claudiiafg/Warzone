@@ -41,7 +41,6 @@ int main(){
         if(map->validate()) {
             maps.push_back(map);
         } else {
-//            cout << *map << endl;
             delete map;
         }
     }
@@ -51,7 +50,7 @@ int main(){
 
     for (int i = 0; i < maps.size(); i++) {
         cout << *maps[i] << endl;
-//        delete maps[i];
+        delete maps[i];
         maps[i] = nullptr;
     }
 
