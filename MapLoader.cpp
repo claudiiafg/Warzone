@@ -247,6 +247,7 @@ string ConquestFileReader::findIdOfTerritory(string terrName, const vector<strin
     for_each(name.begin(), name.end(), [name](char & c) {
         c = ::tolower(c);
     });
+    replace(name.begin(), name.end(), ' ', '-');
 
     for(auto & line: finalTerritories) {
         if(line != "[countries]") {
@@ -254,32 +255,19 @@ string ConquestFileReader::findIdOfTerritory(string terrName, const vector<strin
             for_each(tempLine.begin(), tempLine.end(), [tempLine](char & c) {
                 c = ::tolower(c);
             });
-            if (tempLine.find(name) != std::string::npos && tempLine.find(name) < 4) {
+            replace(tempLine.begin(), tempLine.end(), ' ', '-');
+            if (tempLine.find(name) != std::string::npos) {
                 string substr;
-                stringstream ss(line);
-                getline( ss, substr, ' ');
+                stringstream ss(tempLine);
+                getline( ss, substr, '-');
                 if(ss.good()) {
-                    int inputNum = count(name);
-                    int outputNum = count(tempLine);
-                    if(outputNum - inputNum <= 3) {
-                        return substr;
-                    }
+//                    cout << name << " " << tempLine << ":::::" << endl;
+                    return substr;
                 }
             }
         }
     }
     return "not found";
-}
-
-int ConquestFileReader::count( string str )
-{
-    int iSpaces = 0;
-
-    for(unsigned int iLoop = 0; iLoop < ( sizeof( str ) / sizeof( str [0] ) ); iLoop++ )
-        if(str [iLoop] == ' ' )
-            iSpaces++;
-
-    return iSpaces;
 }
 
 int ConquestFileReader::nthOccurrence(const string &str, const string &findMe, int nth) {
@@ -336,6 +324,7 @@ vector<string> ConquestFileReader::adaptTerritories(const vector<string> tempTer
             territoryCounter += 1;
             pos = terr.find(COMMA);
             terrName = terr.substr (0, pos);
+            replace(terrName.begin(), terrName.end(), ' ', '-');
             finalTerritories.push_back(to_string(territoryCounter) + " " + terrName + " " + to_string(continentCounter));
             previousWasEmpty = false;
         }
@@ -387,6 +376,7 @@ vector<string> ConquestFileReader::adaptBorders(const vector<string> tempTerrito
 
                 // push only unique adjacent territories
                 if (find(adjacentVector.begin(), adjacentVector.end(), substr) == adjacentVector.end()) {
+                    replace(substr.begin(), substr.end(), ' ', '-');
                     adjacentVector.push_back(substr);
                 }
             }
@@ -420,6 +410,7 @@ vector<string> ConquestFileReader::adaptContinents(const vector<string> tempCont
     for(auto & continent: tempContinents) {
         pos = continent.find(EQUAL);
         continentName = continent.substr (0, pos);
+        replace(continentName.begin(), continentName.end(), ' ', '-');
         continentBonus = continent.substr (pos + 1);
         finalContinents.push_back(continentName + " " + continentBonus);
     }
