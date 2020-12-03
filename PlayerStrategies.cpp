@@ -49,7 +49,75 @@ void PlayerStrategy::setMap(Map *m){
 
 void HumanPlayerStrategy::issueOrder(Player* player) {
 
-     if(player->phase == 1) {
+    //DEPLOY
+
+    if (player->reinforcements > 0) {
+        Territory* toDeploy = toDefend(player).front();
+        player->deploy(toDeploy, player->reinforcements);
+        player->orderPhase++;
+        return;
+    }
+
+    //ADVANCE
+
+        cout << "Time to advance! Will you attack an enemy country or reinforce one of your own?\n\n1. Attack /n2.Defend";
+        int advanceOption;
+        cin >> advanceOption;
+
+        while((advanceOption != 1) && (advanceOption != 2)){
+            cout << "Error: Please enter a valid menu option";
+            cin >>advanceOption;
+        }
+
+        if(advanceOption == 1){
+            Territory* attackChoice = toAttack(player).front();
+
+            cout << "You have chosen to advance on " << attackChoice->name << "!\n\n";
+
+            cout << "Choose a territory to advance on by ID: ";
+            for(int i = 0; i < attackChoice->getAdjacentNodes().size(); i++){
+                if(player->hasTerritory(attackChoice->getAdjacentNodes().at(i)))
+                cout << attackChoice->getAdjacentNodes().at(i) << ": " << stratMap->getTerritoryById(attackChoice->getAdjacentNodes().at(i))->name << "\n" ;
+            }
+
+            string attackFromID;
+            cin >> attackFromID;
+            Territory *terrChoice = stratMap->getTerritoryById(attackFromID);
+            cout << "Units will be deployed from " << terrChoice->name << "\n\n";
+
+            cout << "Enter the number of units you want to deploy: \n\n";
+            int unitNum;
+            cin>> unitNum;
+            cout << "You will deploy " << unitNum << "units\n\n";
+            player->getMyOrders()->addOrder(new Advance(player, terrChoice, attackChoice, unitNum));
+        }
+
+
+
+    if(advanceOption == 2){
+        Territory* defendChoice = toDefend(player).front();
+
+        cout << "You have chosen to reinforce " << defendChoice->name << "\n\n";
+
+        cout << "Choose a territory to advance on by ID: ";
+        for(int i = 0; i < defendChoice->getAdjacentNodes().size(); i++){
+            if(player->hasTerritory(defendChoice->getAdjacentNodes().at(i)))
+                cout << defendChoice->getAdjacentNodes().at(i) << ": " << stratMap->getTerritoryById(defendChoice->getAdjacentNodes().at(i))->name << "\n" ;
+        }
+
+        string attackFromID;
+        cin >> attackFromID;
+        Territory *terrChoice = stratMap->getTerritoryById(attackFromID);
+        cout << "Units will be deployed from " << terrChoice->name << "\n\n";
+
+        cout << "Enter the number of units you want to deploy: \n\n";
+        int unitNum;
+        cin>> unitNum;
+        cout << "You will deploy " << unitNum << "units\n\n";
+        player->getMyOrders()->addOrder(new Advance(player, terrChoice, defendChoice, unitNum));
+    }
+
+        /**
          cout << "Enter the ID of the territory you want to deploy your units to: ";
          for(int i = 0; i < player->playerTerritories.size(); i++){
              cout << player->playerTerritories.at(i)->id << ": " << player->playerTerritories.at(i)->name << "\n";
@@ -58,49 +126,28 @@ void HumanPlayerStrategy::issueOrder(Player* player) {
          cin >> terrID;
          Territory *terrChoice = stratMap->getTerritoryById(terrID);
          cout << "Units will be deployed to " << terrChoice->name << "\n\n";
-         /**
+
          cout << "Enter the number of units you want to deploy: \n\n";
 
          int unitNum;
          cin>> unitNum;
          cout << unitNum << " Units will be deployed.\n\n";
-          */
+
          player->getMyOrders()->addOrder(new Deploy(player, terrChoice, 500));
-     }
-    else if(player->phase == 2) {
-         cout
-                 << "Choose an order by number: \n\n 1. Advance \n 2. Bomb \n 3. Blockade \n 4. Airlift \n 5. Negotiate \n\n";
+         */
+
+        //PLAYING CARDS
+        cout << "Time to play your cards! Choose an order by number: \n\n 1. Bomb \n 2. Blockade \n 3. Airlift \n 4. Negotiate \n\n";
 
          int menuChoice;
          cin >> menuChoice;
-         if(menuChoice == 1){
-             cout << "Choose a territory to attack from by ID: ";
-             for(int i = 0; i < player->playerTerritories.size(); i++){
-                 cout << player->playerTerritories.at(i)->id << ": " << player->playerTerritories.at(i)->name << "\n" ;
-             }
-             
-             string attackFromID;
-             cin >> attackFromID;
-             Territory *terrChoice = stratMap->getTerritoryById(attackFromID);
-             cout << "Units will be deployed from " << terrChoice->name << "\n\n";
 
-             cout << "Choose a territory to attack by ID: \n\n";
-             for(int i = 0; i < stratMap->getAdjacentTerritories(terrChoice->id).size(); i++){
-                 cout << stratMap->getAdjacentTerritories(terrChoice->id).at(i)->id << " " << stratMap->getAdjacentTerritories(terrChoice->id).at(i)->name << "\n";
-             }
-             string attackID;
-             cin >> attackID;
-             Territory *attackChoice = stratMap->getTerritoryById(attackID);
-             cout << "You issued an order to attack " << attackChoice->name << "!\n\n";
-
-             cout << "Enter the number of units you want to deploy: \n\n";
-             int unitNum;
-             cin>> unitNum;
-             cout << "You will deploy " << unitNum << "units\n\n";
-             player->getMyOrders()->addOrder(new Advance(player, terrChoice, attackChoice, unitNum));
+         while((menuChoice != 1) && (menuChoice != 2) && (menuChoice != 3) && (menuChoice != 4)){
+             cout << "Error: Please enter a valid menu option.";
+             cin >> menuChoice;
          }
 
-         if(menuChoice == 2){
+         if(menuChoice == 1){
              //Bomb(Player* pl, Territory* terr, Territory* attTerr)
              cout << "Choose a territory to bomb from by ID: \n\n";
              for(int i = 0; i < player->playerTerritories.size(); i++){
@@ -122,7 +169,7 @@ void HumanPlayerStrategy::issueOrder(Player* player) {
              player->getMyOrders()->addOrder(new Bomb(player, terrChoice, attackChoice));
          }
 
-         if(menuChoice == 3){
+         if(menuChoice == 2){
              cout << "Choose a territory to blockade by ID: ";
              for(int i = 0; i < player->playerTerritories.size(); i++){
                  cout << player->playerTerritories.at(i)->id << ": " << player->playerTerritories.at(i)->name << "\n";
@@ -135,7 +182,7 @@ void HumanPlayerStrategy::issueOrder(Player* player) {
                  player->getMyOrders()->addOrder(new Blockade(player, terrChoice));
          }
 
-         if(menuChoice == 4){
+         if(menuChoice == 3){
              cout << "Choose a territory to airlift from by ID: ";
              for(int i = 0; i < player->playerTerritories.size(); i++){
                  cout << player->playerTerritories.at(i)->id << ": " << player->playerTerritories.at(i)->name << "\n";
@@ -160,14 +207,14 @@ void HumanPlayerStrategy::issueOrder(Player* player) {
              player->getMyOrders()->addOrder(new Airlift(player, terrChoice, attackChoice, unitNum));
          }
 
-         if(menuChoice == 5){
+         if(menuChoice == 4){
              cout << "Enter the ID of the player you want to negotiate with: \n\n";
              int negotiateID;
              cin >> negotiateID;
              cout << "You will enter into negotiations with player " << negotiateID << "\n\n";
              player->getMyOrders()->addOrder(new Negotiate(player, negotiateID));
          }
-     }
+
 }
 
 vector<Territory*> HumanPlayerStrategy::toAttack(Player* player) {
