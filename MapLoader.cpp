@@ -411,7 +411,7 @@ vector<string> ConquestFileReader::adaptContinents(const vector<string> tempCont
     finalContinents.push_back(CONT_ID_WZ);
     for(auto & continent: tempContinents) {
         // if it is not newl line character
-        if(continent.size() != 1 || continent.size() != 0) {
+        if(continent.size() != 1) {
             pos = continent.find(EQUAL);
             continentName = continent.substr (0, pos);
             replace(continentName.begin(), continentName.end(), ' ', '-');

@@ -74,7 +74,6 @@ bool Map::validate() {
     vector<string> sequence;
     int idInt = 0;
     int nodeInt = 0;
-    bool isInvalid = false;
 
     sequence.push_back(territories[0]->id);
     for (auto & initialAdjacent : territories[0]->getAdjacentNodes()) {
@@ -137,8 +136,10 @@ vector<Continent*> Map::getContinents() {
 // set territories
 void Map::setTerritories(vector<string> _territoriesData, vector<string> _bordersData) {
     for (int i = 0; i < _territoriesData.size(); i++) {
-        Territory* tempTer = new Territory(_territoriesData[i], _bordersData[i]);
-        territories.push_back(tempTer);
+        if(_territoriesData[i].size() != 1) {
+            Territory* tempTer = new Territory(_territoriesData[i], _bordersData[i]);
+            territories.push_back(tempTer);
+        }
     }
 }
 
@@ -146,8 +147,10 @@ void Map::setTerritories(vector<string> _territoriesData, vector<string> _border
 void Map::setContinents(vector<string> _continentsData) {
     // create continent objects from map data
     for (int i = 0; i < _continentsData.size(); i++) {
-        Continent* tempCont = new Continent(to_string(i + 1), _continentsData[i]);
-        continents.push_back(tempCont);
+        if(_continentsData[i].size() != 1) {
+            Continent* tempCont = new Continent(to_string(i + 1), _continentsData[i]);
+            continents.push_back(tempCont);
+        }
     }
 
     for (auto & continent : continents) {
