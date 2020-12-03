@@ -239,6 +239,10 @@ vector<string> ConquestFileReader::getContent(const string &path) {
     finalVecStr.insert( finalVecStr.end(), finalTerritories.begin(), finalTerritories.end() );
     finalVecStr.insert( finalVecStr.end(), finalBorders.begin(), finalBorders.end() );
 
+    for(auto & t: finalVecStr) {
+        cout << t << endl;
+    }
+
     return finalVecStr;
 }
 
@@ -247,7 +251,6 @@ string ConquestFileReader::findIdOfTerritory(string terrName, const vector<strin
     for_each(name.begin(), name.end(), [name](char & c) {
         c = ::tolower(c);
     });
-    replace(name.begin(), name.end(), ' ', '-');
 
     for(auto & line: finalTerritories) {
         if(line != "[countries]") {
@@ -255,14 +258,17 @@ string ConquestFileReader::findIdOfTerritory(string terrName, const vector<strin
             for_each(tempLine.begin(), tempLine.end(), [tempLine](char & c) {
                 c = ::tolower(c);
             });
-            replace(tempLine.begin(), tempLine.end(), ' ', '-');
+
             if (tempLine.find(name) != std::string::npos) {
                 string substr;
+                string tempName;
                 stringstream ss(tempLine);
-                getline( ss, substr, '-');
+                getline( ss, substr, ' ');
+                getline( ss, tempName, ' ');
                 if(ss.good()) {
-//                    cout << name << " " << tempLine << ":::::" << endl;
-                    return substr;
+                    if(name.size() - tempName.size() < 2 || tempName.size() - name.size() < 2) {
+                        return substr;
+                    }
                 }
             }
         }
@@ -359,7 +365,7 @@ vector<string> ConquestFileReader::adaptBorders(const vector<string> tempTerrito
             previousWasEmpty = false;
             territoryCounter += 1;
 
-            // start at 3rd comma
+            // start at 4th comma
             initIndex = nthOccurrence(terr, COMMA, 4);
             string adjacentList = terr.substr (initIndex);
             stringstream ss(adjacentList);
@@ -408,11 +414,14 @@ vector<string> ConquestFileReader::adaptContinents(const vector<string> tempCont
 
     finalContinents.push_back(CONT_ID_WZ);
     for(auto & continent: tempContinents) {
-        pos = continent.find(EQUAL);
-        continentName = continent.substr (0, pos);
-        replace(continentName.begin(), continentName.end(), ' ', '-');
-        continentBonus = continent.substr (pos + 1);
-        finalContinents.push_back(continentName + " " + continentBonus);
+        // if it is not newl line character
+        if(continent.size() != 1) {
+            pos = continent.find(EQUAL);
+            continentName = continent.substr (0, pos);
+            replace(continentName.begin(), continentName.end(), ' ', '-');
+            continentBonus = continent.substr (pos + 1);
+            finalContinents.push_back(continentName + " " + continentBonus);
+        }
     }
 
     return finalContinents;

@@ -325,7 +325,7 @@ Continent::~Continent() = default;
 
 // stream insertion operator
 ostream &operator<<(ostream &os, const Continent& n) {
-    os << n.name << " is continent #" << n.id;
+    os << n.name << " is continent #" << n.id << ", it gives " << n.bonus << " bonus";
     os << " and has " << n.adjacent.size() << " adjacent continents -> ";
 
     for(int i = 0; i < n.adjacent.size(); i++) {

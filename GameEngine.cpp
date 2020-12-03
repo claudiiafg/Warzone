@@ -151,6 +151,22 @@ void GameEngine::selectMap() {
     MapLoader loader;
     loader.loadMaps();
     vector<MapFile*> rawMaps = loader.getMaps();
+    vector<Map*> maps;
+    ConquestFileReaderAdapter* adapter;
+
+
+    for (int i = 0; i < rawMaps.size(); i++) {
+        string firstLineOfMapFile = rawMaps[i]->content[0];
+        string conquestMapIdentifier = "[Map]";
+        size_t found = firstLineOfMapFile.find(conquestMapIdentifier);
+
+        if(found!=std::string::npos){
+            cout << rawMaps[i]->name << endl;
+            ConquestFileReader * toAdapt = new ConquestFileReader(rawMaps[i]);
+            adapter = new ConquestFileReaderAdapter(toAdapt);
+            rawMaps[i]->content = adapter->getContent(loader.mainPath);
+        }
+    }
 
     int option = 0;
     const int EXIT_SELECTION = rawMaps.size() + 1;
